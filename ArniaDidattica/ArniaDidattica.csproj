@@ -111,6 +111,21 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="site\default.htm" />
+    <Content Include="site\partials\intro.html" />
+    <Content Include="site\partials\players.html" />
+    <Content Include="site\Scripts\angular-route.min.js" />
+    <Content Include="site\Scripts\angular.min.js" />
+    <Content Include="site\Scripts\app.js" />
+    <Content Include="site\Scripts\controllers.js" />
+    <Content Include="site\Scripts\jquery-1.6.4-vsdoc.js" />
+    <Content Include="site\Scripts\jquery-1.6.4.js" />
+    <Content Include="site\Scripts\jquery-1.6.4.min.js" />
+    <Content Include="site\Scripts\jquery.signalR-2.0.3.js" />
+    <Content Include="site\Scripts\jquery.signalR-2.0.3.min.js" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

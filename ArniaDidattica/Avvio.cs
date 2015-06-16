@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNet.SignalR;
+using Microsoft.Owin;
+using Microsoft.Owin.FileSystems;
+using Microsoft.Owin.StaticFiles;
 using Owin;
 using System;
 using System.Collections.Generic;
@@ -10,21 +13,22 @@ namespace ArniaDidattica
 {
     public class Avvio
     {
-        // This method is required by Katana:
+        // Configuro OWIN (libreria per integrare in una console application sia le web api che un sito web)
         public void Configuration(IAppBuilder app)
         {
             var webApiConfiguration = ConfigureWebApi();
 
-            // Use the extension method provided by the WebApi.Owin library:
+            // Inizializzo le web api
             app.UseWebApi(webApiConfiguration);
 
-            //app.UseFileServer(new FileServerOptions()
-            //{
-            //    RequestPath = PathString.Empty,
-            //    FileSystem = new PhysicalFileSystem(@".\site"),
-            //});
+            // Inizializzo il server web che conterrà l'applicazione
+            app.UseFileServer(new FileServerOptions()
+            {
+                RequestPath = PathString.Empty,
+                FileSystem = new PhysicalFileSystem(@"..\..\site"),
+            });
 
-            //app.MapSignalR();
+            app.MapSignalR();
         }
 
         private HttpConfiguration ConfigureWebApi()
@@ -34,16 +38,17 @@ namespace ArniaDidattica
                 "DefaultApi",
                 "api/{controller}/{id}",
                 new { id = RouteParameter.Optional });
+
             return config;
         }
 
         public class MyHub : Hub
         {
             // Esempio
-            //public void Send(string value)
-            //{
-            //    Clients.All.addMessage(value);
-            //}
+            public void Send(string value)
+            {
+                Clients.All.addMessage(value);
+            }
         }
     }
 }
