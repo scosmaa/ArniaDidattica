@@ -2,41 +2,56 @@
 
 /* Controllers */
 
+
+
 var beehiveControllers = angular.module('beehiveControllers', []);
 
 beehiveControllers.controller('IntroCtrl', ['$scope','$location',
   function ($scope, $location) {
+     
       //Set the hubs URL for the connection
       $.connection.hub.url = "http://localhost:9999/signalr";
 
       // Declare a proxy to reference the hub.
-      var chat = $.connection.myHub;
+      var gioco = $.connection.arniaVirtualeHub;
 
       // Create a function that the hub can call to broadcast messages.
-      chat.client.addMessage = function (name) {
-          // Html encode display name and message.
-          var encodedName = $('<div />').text(name).html();
-          var encodedMsg = $('<div />').text(name).html();
-          // Add the message to the page.
-          $('#discussion').append('<li><strong>' + encodedName
-              + '</strong>:&nbsp;&nbsp;' + encodedMsg + '</li>');
-      };
-
-      $scope.reset = function () {
-          $.get("http://localhost:9999/api/Companies", "", function () {
-              $('#discussion').html("");
-          });
+      gioco.client.CaricaVideoUno = function () {
+          $location.path('videouno');
+          $scope.$apply()
       };
 
       $scope.changePage = function () {
-          $location.path('players')
+          $location.path('videouno')
       };
 
       // Start the connection.
-      $.connection.hub.start()
+      $.connection.hub.start()      
   }]);
 
 beehiveControllers.controller('PlayersCtrl', ['$scope', '$location',
   function ($scope, $location) {
      
+  }]);
+
+beehiveControllers.controller('VideoUnoCtrl', ['$scope', '$location',
+  function ($scope, $location) {
+      ////Set the hubs URL for the connection
+      $.connection.hub.url = "http://localhost:9999/signalr";
+
+      //// Declare a proxy to reference the hub.
+      var gioco = $.connection.arniaVirtualeHub;
+
+      // Create a function that the hub can call to broadcast messages.
+      gioco.client.TornaHome = function () {
+          console.log('torna home');
+          $location.path('/');
+          $scope.$apply()
+      };
+
+      // Start the connection.
+      $.connection.hub.start()
+      $scope.changePage = function () {
+          $location.path('/')
+      };
   }]);

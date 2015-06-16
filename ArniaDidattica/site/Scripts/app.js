@@ -18,6 +18,10 @@ phonecatApp.config(['$routeProvider',
           templateUrl: 'partials/players.html',
           controller: 'PlayersCtrl'
       })
+          .when('/videouno', {
+              templateUrl: 'partials/videouno.html',
+              controller: 'VideoUnoCtrl'
+          })
         .otherwise({
             redirectTo: '/'
         });

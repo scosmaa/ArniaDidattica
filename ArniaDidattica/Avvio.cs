@@ -34,21 +34,9 @@ namespace ArniaDidattica
         private HttpConfiguration ConfigureWebApi()
         {
             var config = new HttpConfiguration();
-            config.Routes.MapHttpRoute(
-                "DefaultApi",
-                "api/{controller}/{id}",
-                new { id = RouteParameter.Optional });
+            config.MapHttpAttributeRoutes();
 
             return config;
-        }
-
-        public class MyHub : Hub
-        {
-            // Esempio
-            public void Send(string value)
-            {
-                Clients.All.addMessage(value);
-            }
         }
     }
 }
