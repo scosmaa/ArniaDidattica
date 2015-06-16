@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Owin.Hosting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -12,6 +13,10 @@ namespace ArniaDidattica
 
         static void Main(string[] args)
         {
+            string baseUri = "http://localhost:9999";
+            Console.WriteLine("Starting web Server...");
+            WebApp.Start<Avvio>(baseUri);
+
             TcpListener server;
             int porta = 2020;
 
