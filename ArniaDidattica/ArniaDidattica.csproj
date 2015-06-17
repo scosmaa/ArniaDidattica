@@ -122,8 +122,12 @@
   <ItemGroup>
     <Content Include="domande\domande.txt" />
     <Content Include="site\default.htm" />
-    <Content Include="site\partials\intro.html" />
-    <Content Include="site\partials\players.html" />
+    <Content Include="site\partials\Final_Score.html" />
+    <Content Include="site\partials\Home.html" />
+    <Content Include="site\partials\New_Bee.html" />
+    <Content Include="site\partials\Next_Player.html" />
+    <Content Include="site\partials\Question.html" />
+    <Content Include="site\partials\Stats.html" />
     <Content Include="site\partials\videouno.html" />
     <Content Include="site\Scripts\angular-route.min.js" />
     <Content Include="site\Scripts\angular.min.js" />
