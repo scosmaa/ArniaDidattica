@@ -17,6 +17,7 @@ beehiveControllers.controller('IntroCtrl', ['$scope','$location',
 
       // Create a function that the hub can call to broadcast messages.
       gioco.client.CaricaVideoUno = function () {
+          $.connection.hub.stop();
           $location.path('videouno');
           $scope.$apply()
       };
@@ -45,6 +46,7 @@ beehiveControllers.controller('VideoUnoCtrl', ['$scope', '$location',
       // Create a function that the hub can call to broadcast messages.
       gioco.client.TornaHome = function () {
           console.log('torna home');
+          $.connection.hub.stop();
           $location.path('/');
           $scope.$apply()
       };
