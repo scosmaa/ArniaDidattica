@@ -22,15 +22,26 @@ namespace ArniaDidattica
             {
                 gruppetti = new Bambino[quanti, 2]; //2 gruppetti
             }
+
+            //riempio le righe
+            int colonne = gruppetti.Length / quanti;
+            for (int i = 0; i < colonne; i++)
+            {
+                for (int j = 0; j < quanti; j++)
+                {
+                    gruppetti[j, i] = gruppo[j];
+                }
+            }
         }
 
         public Bambino prendiBimbo(int qualeGruppetto)
         {
-            Random r = new Random(gruppo.Length);
+            Random r = new Random();
             Bambino b;
             do
             {
-                b = gruppetti[r.Next(), qualeGruppetto];
+                b = gruppetti[r.Next(gruppo.Length), qualeGruppetto];
+
 
             } while (!b.haGiocato());
             return b;

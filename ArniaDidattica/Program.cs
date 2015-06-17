@@ -88,6 +88,7 @@ namespace ArniaDidattica
                 }
             }
             arduinoBase = new Base(connesso);
+            Console.WriteLine("Base connessa.");
 
 
             //avvio server web
@@ -108,6 +109,7 @@ namespace ArniaDidattica
                 }
             }
             arduinoQuadro1 = new Quadro1(connesso);
+            Console.WriteLine("Quadro 1 connesso.");
 
             //avvio registrazione giocatori
 
@@ -115,63 +117,84 @@ namespace ArniaDidattica
             Bambino[] bimbi = new Bambino[NGIOCATORI];
             for (int i = 0; i < NGIOCATORI; i++)//per caricare velocemente (per il debug)
             {
-                bimbi[i] = new Bambino("Ragazzino " + i);
+                bimbi[i] = new Bambino("Ragazzino " + i.ToString());
             }
             gruppo = new Gruppo(bimbi);
+            Console.WriteLine("Giocatori inseriti.");
 
             //stampo di mettere le larve nelle cella
 
             while (!arduinoQuadro1.celleChiuse) { Thread.Sleep(500); }//aspetta fino a quando tutte le celle sono chiuse
+
+            Console.WriteLine("Celle chiuse.");
             //avvio video
+            Console.WriteLine("Avvio video.");
+
             Thread.Sleep(5000);//aspetto un po'
             arduinoQuadro1.invioMsg("A");//avvia servomotore
+            Console.WriteLine("Avvio servomotore.");
 
-            //fine video
             arduinoQuadro1.invioMsg("F");//fine video
+            Console.WriteLine("Fine video.");
+
             //stampo "prendete le api"
+            Console.WriteLine("Bimbi prendono le api");
 
             //stampo "inizio quiz"
             for (int i = 0; i < GESTIONEGRUPPI[10 - NGIOCATORI, 0]; i++)
             {
+                Thread.Sleep(500);
+                Console.WriteLine("Quiz " + i.ToString());
                 Bambino bimbo = gruppo.prendiBimbo(0);
                 string nomeBimbo = bimbo.nome;
                 //stampo a video il nome
 
+                Console.WriteLine("Gioca " + nomeBimbo);
+
                 //dal db prendo domanda e risposte
-                string domanda = "che colore sono le api?";
+                string domanda = "che colore sono le api? " +i.ToString();
+                Console.WriteLine(domanda);
                 string[] risposte = { "gialle", "nere" };//la prima è sempre giusta
+
                 Random r = new Random(2);
                 int giusta = -1;//contiene la risposta giusta, 0 o 1
                 if (r.Next() == 1)
                 {
-                    //giusta  adestra
+                    //giusta  a destra
                     giusta = 0;
+                    Console.WriteLine(risposte[0] + " o " + risposte[1]);
                     //invio prima quella giusta
                 }
                 else
                 {
                     //giusta a sinistra
                     giusta = 1;
+                    Console.WriteLine(risposte[1] + " o " + risposte[0]);
                     //invio prima quella sbaglaita
                 }
 
                 arduinoQuadro1.invioMsg("R");
+
                 while (arduinoQuadro1.risposta == -1) { Thread.Sleep(500); }
                 if (arduinoQuadro1.risposta == giusta)
                 {
                     //risposta corretta
+                    Console.WriteLine("Risposta corretta.");
                     //invio all'html che è corretto
                     PUNTI += 50;
                 }
                 else
                 {
                     //risposta errata
-
+                    Console.WriteLine("Risposta sbagliata.");
                     //invio all'html che è sbagliato
                 }
-
+                arduinoQuadro1.risposta = -1;//contiene la risposta giusta, 0 o 1
             }
-            #endregion 
+
+            arduinoQuadro1.invioMsg("F");
+            Console.WriteLine("Staccare quadro 1.");
+            #endregion
 
 
             //secondo quadro
