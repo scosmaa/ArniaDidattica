@@ -1,0 +1,4 @@
+﻿1	Di che colore sono le api?	Gialle	Nere
+1	Su cosa si posano le api?	Fiori	Frutta
+2	Cosa mangiano le api?	Pappa Reale	Miele
+3	Le api sono mammiferi?	Falso	Vero

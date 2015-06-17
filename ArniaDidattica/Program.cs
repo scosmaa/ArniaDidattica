@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -10,7 +11,11 @@ using System.Threading;
 
 namespace ArniaDidattica
 {
-
+    public struct Domanda
+    {
+        public string domanda, rispostaG, rispostaS;
+        public bool uscita;
+    }
     class Program
     {
         public const int NMAXQUADRI = 3;//numero massimo consentito di quadri
@@ -74,21 +79,22 @@ namespace ArniaDidattica
             server = new TcpListener(porta);//in ascolto
             server.Start();
 
+
             //faccio connettere l'arduino della base.
             int id = -1;
             TcpClient connesso = null;
-            while (id != 0)//controllo se è la base
-            {
-                connesso = server.AcceptTcpClient();
-                id = getId(connesso);
-                if (id != 0)
-                {
-                    Console.WriteLine("Inserito quadro sbagliato.");
-                    //inviare a video l'errore
-                }
-            }
-            arduinoBase = new Base(connesso);
-            Console.WriteLine("Base connessa.");
+            //while (id != 0)//controllo se è la base
+            //{
+            //    connesso = server.AcceptTcpClient();
+            //    id = getId(connesso);
+            //    if (id != 0)
+            //    {
+            //        Console.WriteLine("Inserito quadro sbagliato.");
+            //        //inviare a video l'errore
+            //    }
+            //}
+            //arduinoBase = new Base(connesso);
+            //Console.WriteLine("Base connessa.");
 
 
             //avvio server web
@@ -140,6 +146,9 @@ namespace ArniaDidattica
             //stampo "prendete le api"
             Console.WriteLine("Bimbi prendono le api");
 
+            //carico le domande per il quiz
+            Domanda[] domande = getDomande(1);
+
             //stampo "inizio quiz"
             for (int i = 0; i < GESTIONEGRUPPI[10 - NGIOCATORI, 0]; i++)
             {
@@ -151,14 +160,18 @@ namespace ArniaDidattica
 
                 Console.WriteLine("Gioca " + nomeBimbo);
 
-                //dal db prendo domanda e risposte
-                string domanda = "che colore sono le api? " +i.ToString();
-                Console.WriteLine(domanda);
-                string[] risposte = { "gialle", "nere" };//la prima è sempre giusta
+                //prendo domanda e risposte
+                Random r = new Random();
+                int n = r.Next(domande.Length);
+                while (domande[n].uscita) { n = r.Next(domande.Length); }//ne trovo una non uscita
 
-                Random r = new Random(2);
+                string domanda = domande[n].domanda;
+                Console.WriteLine(domanda);
+                string[] risposte = { domande[n].rispostaG, domande[n].rispostaS };//la prima è sempre giusta
+
+
                 int giusta = -1;//contiene la risposta giusta, 0 o 1
-                if (r.Next() == 1)
+                if (r.Next(2) == 0)//0 o 1
                 {
                     //giusta  a destra
                     giusta = 0;
@@ -199,6 +212,37 @@ namespace ArniaDidattica
 
             //secondo quadro
         }
+
+        private static Domanda[] getDomande(int idQuadro)
+        {
+            StreamReader sr = File.OpenText(@"..\..\domande\domande.txt");
+            int nDomande = 0;
+
+            while (!sr.EndOfStream)
+            {
+                int id = Convert.ToInt32(sr.ReadLine().Substring(0, 1));//leggo il 1 carattere
+                nDomande += id == idQuadro ? 1 : 0;
+            }
+            sr.Close();
+            Domanda[] domande = new Domanda[nDomande];
+
+            sr = File.OpenText(@"..\..\domande\domande.txt");
+            while (!sr.EndOfStream)
+            {
+                string s = sr.ReadLine();
+                string[] parti = s.Split('\t');
+
+                if (parti[0] == idQuadro.ToString())
+                {
+                    domande[--nDomande].domanda = parti[1];
+                    domande[nDomande].rispostaG = parti[2];
+                    domande[nDomande].rispostaS = parti[3];
+                    domande[nDomande].uscita = false;
+                }
+            }
+            return domande;
+        }
+
         static int getId(TcpClient socket)//da socket a id dell'arduino
         {
             IPAddress ip = ((IPEndPoint)socket.Client.RemoteEndPoint).Address;

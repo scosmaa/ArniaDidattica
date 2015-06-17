@@ -120,6 +120,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="domande\domande.txt" />
     <Content Include="site\default.htm" />
     <Content Include="site\partials\intro.html" />
     <Content Include="site\partials\players.html" />
