@@ -13,7 +13,7 @@ namespace ArniaDidattica
 
         public Bambino(string nome)
         {
-
+            this.nome = nome;
         }
 
         public bool haGiocato()
@@ -23,7 +23,6 @@ namespace ArniaDidattica
             else
             {
                 giocato = !giocato;
-
                 return true;
             }
         }

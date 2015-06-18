@@ -22,6 +22,11 @@ namespace ArniaDidattica
     {
         public const int NMAXQUADRI = 3;//numero massimo consentito di quadri
 
+        static public Base arduinoBase;
+        static public Quadro1 arduinoQuadro1;
+        static public Quadro2 arduinoQuadro2;
+        static public Quadro3 arduinoQuadro3;
+
         static void Main(string[] args)
         {
             string baseUri = "http://localhost:9999";
@@ -29,7 +34,6 @@ namespace ArniaDidattica
             int porta = 2020;
 
             Base arduinoBase;
-            Quadro1 arduinoQuadro1;
             Quadro2 arduinoQuadro2;
             Quadro3 arduinoQuadro3;
             Gruppo gruppo;
@@ -125,22 +129,22 @@ namespace ArniaDidattica
 
             GiocoController.RegistrazioneGiocatori();//avvio registrazione giocatori
 
-            NGIOCATORI = 8;//inventato, verrà preso dalla reg.
-            Bambino[] bimbi = new Bambino[NGIOCATORI];
-            for (int i = 0; i < NGIOCATORI; i++)//per caricare velocemente (per il debug)
-            {
-                bimbi[i] = new Bambino("Ragazzino " + i.ToString());
-            }
-            gruppo = new Gruppo(bimbi);
-            Console.WriteLine("Giocatori inseriti.");
+            //NGIOCATORI = 8;//inventato, verrà preso dalla reg.
+            //Bambino[] bimbi = new Bambino[NGIOCATORI];
+            //for (int i = 0; i < NGIOCATORI; i++)//per caricare velocemente (per il debug)
+            //{
+            //    bimbi[i] = new Bambino("Ragazzino " + i.ToString());
+            //}
+            //gruppo = new Gruppo(bimbi);
+            //Console.WriteLine("Giocatori inseriti.");
 
-            //stampo di mettere le larve nelle cella
+            //viene stampato di mettere le larve nelle cella
 
             while (!arduinoQuadro1.celleChiuse) { Thread.Sleep(500); }//aspetta fino a quando tutte le celle sono chiuse
-
             Console.WriteLine("Celle chiuse.");
             //avvio video
             Console.WriteLine("Avvio video.");
+            GiocoController.AvvioVideo();//avvio registrazione giocatori
 
             Thread.Sleep(5000);//aspetto un po'
             arduinoQuadro1.invioMsg("A");//avvia servomotore
@@ -152,67 +156,67 @@ namespace ArniaDidattica
             //stampo "prendete le api"
             Console.WriteLine("Bimbi prendono le api");
 
-            //carico le domande per il quiz
-            Domanda[] domande = getDomande(1);
+            ////carico le domande per il quiz
+            //Domanda[] domande = getDomande(1);
 
-            //stampo "inizio quiz"
-            for (int i = 0; i < GESTIONEGRUPPI[10 - NGIOCATORI, 0]; i++)
-            {
-                Thread.Sleep(500);
-                Console.WriteLine("Quiz " + i.ToString());
-                Bambino bimbo = gruppo.prendiBimbo(0);
-                string nomeBimbo = bimbo.nome;
-                //stampo a video il nome
+            ////stampo "inizio quiz"
+            //for (int i = 0; i < GESTIONEGRUPPI[10 - NGIOCATORI, 0]; i++)
+            //{
+            //    Thread.Sleep(500);
+            //    Console.WriteLine("Quiz " + i.ToString());
+            //    Bambino bimbo = gruppo.prendiBimbo(0);
+            //    string nomeBimbo = bimbo.nome;
+            //    //stampo a video il nome
 
-                Console.WriteLine("Gioca " + nomeBimbo);
+            //    Console.WriteLine("Gioca " + nomeBimbo);
 
-                //prendo domanda e risposte
-                Random r = new Random();
-                int n = r.Next(domande.Length);
-                while (domande[n].uscita) { n = r.Next(domande.Length); }//ne trovo una non uscita
+            //    //prendo domanda e risposte
+            //    Random r = new Random();
+            //    int n = r.Next(domande.Length);
+            //    while (domande[n].uscita) { n = r.Next(domande.Length); }//ne trovo una non uscita
 
-                string domanda = domande[n].domanda;
-                Console.WriteLine(domanda);
-                string[] risposte = { domande[n].rispostaG, domande[n].rispostaS };//la prima è sempre giusta
+            //    string domanda = domande[n].domanda;
+            //    Console.WriteLine(domanda);
+            //    string[] risposte = { domande[n].rispostaG, domande[n].rispostaS };//la prima è sempre giusta
 
 
-                int giusta = -1;//contiene la risposta giusta, 0 o 1
-                if (r.Next(2) == 0)//0 o 1
-                {
-                    //giusta  a destra
-                    giusta = 0;
-                    Console.WriteLine(risposte[0] + " o " + risposte[1]);
-                    //invio prima quella giusta
-                }
-                else
-                {
-                    //giusta a sinistra
-                    giusta = 1;
-                    Console.WriteLine(risposte[1] + " o " + risposte[0]);
-                    //invio prima quella sbaglaita
-                }
+            //    int giusta = -1;//contiene la risposta giusta, 0 o 1
+            //    if (r.Next(2) == 0)//0 o 1
+            //    {
+            //        //giusta  a destra
+            //        giusta = 0;
+            //        Console.WriteLine(risposte[0] + " o " + risposte[1]);
+            //        //invio prima quella giusta
+            //    }
+            //    else
+            //    {
+            //        //giusta a sinistra
+            //        giusta = 1;
+            //        Console.WriteLine(risposte[1] + " o " + risposte[0]);
+            //        //invio prima quella sbaglaita
+            //    }
 
-                arduinoQuadro1.invioMsg("R");
+            //    arduinoQuadro1.invioMsg("R");
 
-                while (arduinoQuadro1.risposta == -1) { Thread.Sleep(500); }
-                if (arduinoQuadro1.risposta == giusta)
-                {
-                    //risposta corretta
-                    Console.WriteLine("Risposta corretta.");
-                    //invio all'html che è corretto
-                    PUNTI += 50;
-                }
-                else
-                {
-                    //risposta errata
-                    Console.WriteLine("Risposta sbagliata.");
-                    //invio all'html che è sbagliato
-                }
-                arduinoQuadro1.risposta = -1;//contiene la risposta giusta, 0 o 1
-            }
+            //    while (arduinoQuadro1.risposta == -1) { Thread.Sleep(500); }
+            //    if (arduinoQuadro1.risposta == giusta)
+            //    {
+            //        //risposta corretta
+            //        Console.WriteLine("Risposta corretta.");
+            //        //invio all'html che è corretto
+            //        PUNTI += 50;
+            //    }
+            //    else
+            //    {
+            //        //risposta errata
+            //        Console.WriteLine("Risposta sbagliata.");
+            //        //invio all'html che è sbagliato
+            //    }
+            //    arduinoQuadro1.risposta = -1;//contiene la risposta giusta, 0 o 1
+            //}
 
-            arduinoQuadro1.invioMsg("F");
-            Console.WriteLine("Staccare quadro 1.");
+            //arduinoQuadro1.invioMsg("F");
+            //Console.WriteLine("Staccare quadro 1.");
             #endregion
 
 

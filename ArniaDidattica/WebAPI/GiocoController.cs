@@ -10,24 +10,8 @@ using System.Web.Http;
 namespace ArniaDidattica.WebAPI
 {
     [RoutePrefix("api")]
-    public  class GiocoController : ApiController
+    public class GiocoController : ApiController
     {
-        // Si chiama con url/api
-        [Route("")]
-        [HttpGet]
-        public static string GetMetodo()
-        {
-            return "Funziona!";
-        }
-
-        [Route("uno")]
-        [HttpGet]
-        public static void CaricaVideoUno()
-        {        
-            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
-            hubContext.Clients.All.CaricaVideoUno();
-        }
-
         [Route("home")]
         [HttpGet]
         public static void TornaHome()
@@ -40,6 +24,19 @@ namespace ArniaDidattica.WebAPI
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
             hubContext.Clients.All.RegistrazioneGiocatori();
+        }
+
+        public static void AvvioVideo()
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
+            hubContext.Clients.All.AvvioVideo();
+        }
+
+        [Route(@"invio/{msg}")]
+        [HttpGet]
+        public static void invioMsgArduino(string msg)
+        {
+            Program.arduinoBase.invioMsg(msg);
         }
     }
 }

@@ -12,32 +12,20 @@ phonecatApp.config(['$routeProvider',
       $routeProvider
         .when('/', {
             templateUrl: 'partials/home.html',
-            controller: 'IntroCtrl'
+            controller: 'home'
         })
         .when('/newbee', {
             templateUrl: 'partials/new_bee.html',
-            controller: 'PlayersCtrl'
-        })
-        .when('/nextplayer', {
-            templateUrl: 'partials/next_player.html',
-            controller: 'NewPlayerCtrl'
-        })
-        .when('/quiz', {
-            templateUrl: 'partials/quiz.html',
-            controller: 'PlayersCtrl'
-        })
-        .when('/score', {
-            templateUrl: 'partials/score.html',
-            controller: 'PlayersCtrl'
-        })
-        .when('/finalscore', {
-            templateUrl: 'partials/final_score.html',
-            controller: 'PlayersCtrl'
+            controller: 'newbee'
         })
         .when('/cellclose', {
             templateUrl: 'partials/close_cells.html',
-            controller: 'PlayersCtrl'
+            controller: 'cellclose'
         })
+           .when('/video1', {
+               templateUrl: 'partials/video1.html',
+               controller: 'video1'
+           })
         .otherwise({
             redirectTo: '/'
         });

@@ -3,8 +3,13 @@
 /* Controllers */
 
 var beehiveControllers = angular.module('beehiveControllers', []);
+var punti = 0;
 
-beehiveControllers.controller('IntroCtrl', ['$scope', '$location',
+var giocatori = [];
+var  gruppetti ;
+
+
+beehiveControllers.controller('home', ['$scope', '$location',
   function ($scope, $location) {
       //Set the hubs URL for the connection
       $.connection.hub.url = "http://localhost:9999/signalr";
@@ -14,7 +19,7 @@ beehiveControllers.controller('IntroCtrl', ['$scope', '$location',
 
       chat.client.registrazioneGiocatori = function (name) {
           $.connection.hub.stop();
-          $location.path('NewBee');
+          $location.path('newbee');
           $scope.$apply();
       };
 
@@ -22,11 +27,8 @@ beehiveControllers.controller('IntroCtrl', ['$scope', '$location',
       $.connection.hub.start()
   }]);
 
-
-beehiveControllers.controller('PlayersCtrl', ['$scope', '$location',
+beehiveControllers.controller('newbee', ['$scope', '$location',
   function ($scope, $location) {
-
-      var giocatori = [];
       $scope.AddNew = function () {
           var n_bee = $scope.nomeApe;
 
@@ -35,14 +37,25 @@ beehiveControllers.controller('PlayersCtrl', ['$scope', '$location',
               return false;
           }
           giocatori.push(n_bee);
+
+          document.getElementById("nomeApe").value="";
+          document.getElementById("nomeApe").focus();
       }
 
       $scope.End = function () {
           var n_bee = $scope.nomeApe;
 
-          if (giocatori > 6) {
+          if (giocatori.length > 5) {
+              if (giocatori.length < 8)
+              {
+                  gruppetti = new Array(giocatori, giocatori,giocatori);//3 gruppetti
+              }
+              else {
+                  gruppetti = new Array(giocatori, giocatori);//2 gruppetti
+              }
+          
               $.connection.hub.stop();
-              $location.path('NewBee');
+              $location.path('cellclose');
               $scope.$apply();
           }
           else {
@@ -50,10 +63,18 @@ beehiveControllers.controller('PlayersCtrl', ['$scope', '$location',
           }
       }
 
-      $scope.reset = function () {
-          $.get("http://localhost:9999/api/Companies", "", function () {
-              $('#discussion').html("");
-          });
-      };
+  }]);
 
+beehiveControllers.controller('cellclose', ['$scope', '$location',
+  function ($scope, $location) {    
+      $scope.avvioVideo = function () {
+          $.connection.hub.stop();
+          $location.path('video1');
+          $scope.$apply();
+      }
+  }]);
+
+beehiveControllers.controller('video1', ['$scope', '$location',
+  function ($scope, $location) {
+     
   }]);
