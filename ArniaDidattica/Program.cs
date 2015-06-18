@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin.Hosting;
+﻿using ArniaDidattica.WebAPI;
+using Microsoft.Owin.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,6 +17,7 @@ namespace ArniaDidattica
         public string domanda, rispostaG, rispostaS;
         public bool uscita;
     }
+
     class Program
     {
         public const int NMAXQUADRI = 3;//numero massimo consentito di quadri
@@ -81,20 +83,22 @@ namespace ArniaDidattica
 
 
             //faccio connettere l'arduino della base.
+
+            Console.WriteLine("In attesa della base");
             int id = -1;
             TcpClient connesso = null;
-            //while (id != 0)//controllo se è la base
-            //{
-            //    connesso = server.AcceptTcpClient();
-            //    id = getId(connesso);
-            //    if (id != 0)
-            //    {
-            //        Console.WriteLine("Inserito quadro sbagliato.");
-            //        //inviare a video l'errore
-            //    }
-            //}
-            //arduinoBase = new Base(connesso);
-            //Console.WriteLine("Base connessa.");
+            while (id != 0)//controllo se è la base
+            {
+                connesso = server.AcceptTcpClient();
+                id = getId(connesso);
+                if (id != 0)
+                {
+                    Console.WriteLine("Inserito quadro sbagliato.");
+                    //inviare a video l'errore
+                }
+            }
+            arduinoBase = new Base(connesso);
+            Console.WriteLine("Base connessa.");
 
 
             //avvio server web
@@ -104,6 +108,8 @@ namespace ArniaDidattica
 
             #region quadro 1
             //attendo l'arduino quadro 1.
+
+            Console.WriteLine("In attesa del quadro 1");
             while (id != 1)//controllo se è il quadro1
             {
                 connesso = server.AcceptTcpClient();
@@ -116,6 +122,10 @@ namespace ArniaDidattica
             }
             arduinoQuadro1 = new Quadro1(connesso);
             Console.WriteLine("Quadro 1 connesso.");
+
+
+            GiocoController g=new GiocoController();
+            g.RegistrazioneGiocatori();
 
             //avvio registrazione giocatori
 

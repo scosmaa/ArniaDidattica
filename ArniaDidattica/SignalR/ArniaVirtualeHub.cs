@@ -13,5 +13,10 @@ namespace ArniaDidattica.SignalR
         {
             Clients.All.tornaHome();
         }
+
+        public void RegistrazioneGiocatori()
+        {
+            Clients.All.registrazioneGiocatori();
+        }
     }
 }

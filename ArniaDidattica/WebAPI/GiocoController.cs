@@ -20,21 +20,6 @@ namespace ArniaDidattica.WebAPI
             return "Funziona!";
         }
 
-        // Si chiama con url/api/potenza/5
-        [Route("potenza/{numero}")]
-        [HttpGet]
-        public int provaPotenza(int numero)
-        {
-            return numero * numero;
-        }
-
-        [Route("leggi/{a}")]
-        [HttpGet]
-        public string aa(string a)
-        {
-            return "Hai scritto: " + a;
-        }
-
         [Route("uno")]
         [HttpGet]
         public void CaricaVideoUno()
@@ -49,6 +34,12 @@ namespace ArniaDidattica.WebAPI
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
             hubContext.Clients.All.TornaHome();
+        }
+
+        public void RegistrazioneGiocatori()
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
+            hubContext.Clients.All.RegistrazioneGiocatori();
         }
     }
 }

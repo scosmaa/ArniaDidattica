@@ -122,6 +122,10 @@
   <ItemGroup>
     <Content Include="domande\domande.txt" />
     <Content Include="site\default.htm" />
+    <Content Include="site\img\Back.png" />
+    <Content Include="site\img\Q1.png" />
+    <Content Include="site\img\Q2.png" />
+    <Content Include="site\img\Q3.png" />
     <Content Include="site\partials\Final_Score.html" />
     <Content Include="site\partials\Home.html" />
     <Content Include="site\partials\New_Bee.html" />
