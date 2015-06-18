@@ -1,10 +1,5 @@
 ﻿using ArniaDidattica.SignalR;
 using Microsoft.AspNet.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace ArniaDidattica.WebAPI
@@ -32,11 +27,32 @@ namespace ArniaDidattica.WebAPI
             hubContext.Clients.All.AvvioVideo();
         }
 
-        [Route("invio/{msg}")]
+        [Route("invio/0/{msg}")]
         [HttpGet]
-        public void invioMsgArduino(string msg)
+        public void invioMsgBase(string msg)
         {
             Program.arduinoBase.invioMsg(msg);
         }
+
+        [Route("invio/1/{msg}")]
+        [HttpGet]
+        public void invioMsgQuadro1(string msg)
+        {
+            Program.arduinoQuadro1.invioMsg(msg);
+        }
+
+        [Route("invio/2/{msg}")]
+        [HttpGet]
+        public void invioMsgQuadro2(string msg)
+        {
+            Program.arduinoQuadro2.invioMsg(msg);
+        }
+        [Route("invio/3/{msg}")]
+        [HttpGet]
+        public void invioMsgQuadro3(string msg)
+        {
+            Program.arduinoQuadro3.invioMsg(msg);
+        }
+
     }
 }

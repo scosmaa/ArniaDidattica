@@ -147,7 +147,7 @@ namespace ArniaDidattica
             arduinoQuadro1.invioMsg("A");//avvia servomotore
             Console.WriteLine("Avvio servomotore.");
 
-            arduinoQuadro1.invioMsg("F");//fine video
+
             Console.WriteLine("Fine video.");
 
             //stampo "prendete le api"
@@ -193,10 +193,10 @@ namespace ArniaDidattica
             //        //invio prima quella sbaglaita
             //    }
 
-            //    arduinoQuadro1.invioMsg("R");
+            //    arduinoBase.invioMsg("R");
 
-            //    while (arduinoQuadro1.risposta == -1) { Thread.Sleep(500); }
-            //    if (arduinoQuadro1.risposta == giusta)
+            //    while (arduinoBase.risposta == -1) { Thread.Sleep(500); }
+            //    if (arduinoBase.risposta == giusta)
             //    {
             //        //risposta corretta
             //        Console.WriteLine("Risposta corretta.");
@@ -209,7 +209,7 @@ namespace ArniaDidattica
             //        Console.WriteLine("Risposta sbagliata.");
             //        //invio all'html che è sbagliato
             //    }
-            //    arduinoQuadro1.risposta = -1;//contiene la risposta giusta, 0 o 1
+            //    arduinoBase.risposta = -1;//contiene la risposta giusta, 0 o 1
             //}
 
             //arduinoQuadro1.invioMsg("F");

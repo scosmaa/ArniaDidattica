@@ -9,7 +9,7 @@ namespace ArniaDidattica
     abstract class Client
     {
         protected TcpClient socket;
-        static protected NetworkStream stream;
+        protected NetworkStream stream;
         protected Thread ricezione;
         string msgDaInviare;
         public int id { get; protected set; }//id del quadro (0 se base, 1 2 3 4 5 se i quadri)
@@ -25,7 +25,7 @@ namespace ArniaDidattica
         }
 
 
-        public  void invioMsg(string msg)
+        public void invioMsg(string msg)
         {
             //vedo se è online, in caso riaspetto la connessione
             Byte[] sendBytes = Encoding.UTF8.GetBytes(msg);
