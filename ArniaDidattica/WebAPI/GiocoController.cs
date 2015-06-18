@@ -10,19 +10,19 @@ using System.Web.Http;
 namespace ArniaDidattica.WebAPI
 {
     [RoutePrefix("api")]
-    public class GiocoController : ApiController
+    public  class GiocoController : ApiController
     {
         // Si chiama con url/api
         [Route("")]
         [HttpGet]
-        public string GetMetodo()
+        public static string GetMetodo()
         {
             return "Funziona!";
         }
 
         [Route("uno")]
         [HttpGet]
-        public void CaricaVideoUno()
+        public static void CaricaVideoUno()
         {        
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
             hubContext.Clients.All.CaricaVideoUno();
@@ -30,13 +30,13 @@ namespace ArniaDidattica.WebAPI
 
         [Route("home")]
         [HttpGet]
-        public void TornaHome()
+        public static void TornaHome()
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
             hubContext.Clients.All.TornaHome();
         }
 
-        public void RegistrazioneGiocatori()
+        public static void RegistrazioneGiocatori()
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
             hubContext.Clients.All.RegistrazioneGiocatori();

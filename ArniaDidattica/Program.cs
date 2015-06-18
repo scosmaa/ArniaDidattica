@@ -123,11 +123,7 @@ namespace ArniaDidattica
             arduinoQuadro1 = new Quadro1(connesso);
             Console.WriteLine("Quadro 1 connesso.");
 
-
-            GiocoController g=new GiocoController();
-            g.RegistrazioneGiocatori();
-
-            //avvio registrazione giocatori
+            GiocoController.RegistrazioneGiocatori();//avvio registrazione giocatori
 
             NGIOCATORI = 8;//inventato, verrà preso dalla reg.
             Bambino[] bimbi = new Bambino[NGIOCATORI];
