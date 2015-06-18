@@ -78,3 +78,8 @@ beehiveControllers.controller('video1', ['$scope', '$location',
   function ($scope, $location) {
      
   }]);
+
+beehiveControllers.controller('quiz', ['$scope', '$location',
+  function ($scope, $location) {
+
+  }]);

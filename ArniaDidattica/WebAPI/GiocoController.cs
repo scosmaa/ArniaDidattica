@@ -14,27 +14,27 @@ namespace ArniaDidattica.WebAPI
     {
         [Route("home")]
         [HttpGet]
-        public static void TornaHome()
+        public void TornaHome()
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
             hubContext.Clients.All.TornaHome();
         }
 
-        public static void RegistrazioneGiocatori()
+        public void RegistrazioneGiocatori()
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
             hubContext.Clients.All.RegistrazioneGiocatori();
         }
 
-        public static void AvvioVideo()
+        public void AvvioVideo()
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
             hubContext.Clients.All.AvvioVideo();
         }
 
-        [Route(@"invio/{msg}")]
+        [Route("invio/{msg}")]
         [HttpGet]
-        public static void invioMsgArduino(string msg)
+        public void invioMsgArduino(string msg)
         {
             Program.arduinoBase.invioMsg(msg);
         }

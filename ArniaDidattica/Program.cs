@@ -33,11 +33,8 @@ namespace ArniaDidattica
             TcpListener server;
             int porta = 2020;
 
-            Base arduinoBase;
-            Quadro2 arduinoQuadro2;
-            Quadro3 arduinoQuadro3;
-            Gruppo gruppo;
-
+            GiocoController giocoController=new GiocoController();
+            
             int NGIOCATORI;
             int PUNTI = 0;//punti totali
 
@@ -127,7 +124,7 @@ namespace ArniaDidattica
             arduinoQuadro1 = new Quadro1(connesso);
             Console.WriteLine("Quadro 1 connesso.");
 
-            GiocoController.RegistrazioneGiocatori();//avvio registrazione giocatori
+            giocoController.RegistrazioneGiocatori();//avvio registrazione giocatori
 
             //NGIOCATORI = 8;//inventato, verrà preso dalla reg.
             //Bambino[] bimbi = new Bambino[NGIOCATORI];
@@ -144,7 +141,7 @@ namespace ArniaDidattica
             Console.WriteLine("Celle chiuse.");
             //avvio video
             Console.WriteLine("Avvio video.");
-            GiocoController.AvvioVideo();//avvio registrazione giocatori
+            giocoController.AvvioVideo();//avvio registrazione giocatori
 
             Thread.Sleep(5000);//aspetto un po'
             arduinoQuadro1.invioMsg("A");//avvia servomotore
