@@ -122,6 +122,9 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="domande\domande.txt" />
+    <Content Include="site\partials\video1.html" />
+    <Content Include="site\partials\video2.html" />
+    <Content Include="site\partials\video3.html" />
     <Content Include="site\video\video1.mp4" />
     <Content Include="site\default.htm" />
     <Content Include="site\img\Back.png" />
@@ -135,7 +138,6 @@
     <Content Include="site\partials\next_player.html" />
     <Content Include="site\partials\quiz.html" />
     <Content Include="site\partials\score.html" />
-    <Content Include="site\partials\videouno.html" />
     <Content Include="site\Scripts\angular-route.min.js" />
     <Content Include="site\Scripts\angular.min.js" />
     <Content Include="site\Scripts\app.js" />

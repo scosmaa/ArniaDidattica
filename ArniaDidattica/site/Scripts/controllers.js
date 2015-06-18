@@ -66,17 +66,28 @@ beehiveControllers.controller('newbee', ['$scope', '$location',
   }]);
 
 beehiveControllers.controller('cellclose', ['$scope', '$location',
-  function ($scope, $location) {    
-      $scope.avvioVideo = function () {
+  function ($scope, $location) {
+
+      //Set the hubs URL for the connection
+      $.connection.hub.url = "http://localhost:9999/signalr";
+
+      // Declare a proxy to reference the hub.
+      var chat = $.connection.arniaVirtualeHub;
+
+      chat.client.avvioVideo = function () {
           $.connection.hub.stop();
           $location.path('video1');
           $scope.$apply();
       }
+
+      // Start the connection.
+      $.connection.hub.start()
   }]);
 
 beehiveControllers.controller('video1', ['$scope', '$location',
   function ($scope, $location) {
-     
+      var vid = document.getElementById("video1");
+      video1.play();
   }]);
 
 beehiveControllers.controller('quiz', ['$scope', '$location',
