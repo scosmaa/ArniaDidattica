@@ -11,27 +11,31 @@ phonecatApp.config(['$routeProvider',
   function ($routeProvider) {
       $routeProvider
         .when('/', {
-            templateUrl: 'partials/Home.html',
+            templateUrl: 'partials/home.html',
             controller: 'IntroCtrl'
         })
-        .when('/NewBee', {
-            templateUrl: 'partials/New_Bee.html',
+        .when('/newbee', {
+            templateUrl: 'partials/new_bee.html',
             controller: 'PlayersCtrl'
         })
-        .when('/NextPlayer', {
-            templateUrl: 'partials/Next_Player.html',
+        .when('/nextplayer', {
+            templateUrl: 'partials/next_player.html',
             controller: 'NewPlayerCtrl'
         })
-        .when('/Ask', {
-            templateUrl: 'partials/Question.html',
+        .when('/quiz', {
+            templateUrl: 'partials/quiz.html',
             controller: 'PlayersCtrl'
         })
-        .when('/Score', {
-            templateUrl: 'partials/Stats.html',
+        .when('/score', {
+            templateUrl: 'partials/score.html',
             controller: 'PlayersCtrl'
         })
-        .when('/FinalScore', {
-            templateUrl: 'partials/Final_Score.html',
+        .when('/finalscore', {
+            templateUrl: 'partials/final_score.html',
+            controller: 'PlayersCtrl'
+        })
+        .when('/cellclose', {
+            templateUrl: 'partials/close_cells.html',
             controller: 'PlayersCtrl'
         })
         .otherwise({
