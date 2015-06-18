@@ -122,6 +122,7 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="domande\domande.txt" />
+    <Content Include="site\video\video1.mp4" />
     <Content Include="site\default.htm" />
     <Content Include="site\img\Back.png" />
     <Content Include="site\img\Q1.png" />
