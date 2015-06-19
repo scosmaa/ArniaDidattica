@@ -127,20 +127,62 @@ beehiveControllers.controller('video1', ['$scope', '$location',
   function ($scope, $location) {
       var vid = document.getElementById("video1");
       vid.focus();
-
-      video1.play();
+      
+      vid.play();
 
 
       vid.onended = function () {
-          $.get("http://localhost:9999/api/invio/0/R", "", function () {
-              $('#discussion').html("");
-          });
+          $location.path('quiz');
+          $scope.$apply();
       }
-
 
   }]);
 
 beehiveControllers.controller('quiz', ['$scope', '$location',
   function ($scope, $location) {
+      var domanda = "Di che colore sono le api?";
+      var rispostaG = "Gialle";
+      var rispostaS = "Nere";
+      var nomeBimbo = giocatori[0];
+      var giusta = 0;
+      
+      $scope.nomeBimbo = nomeBimbo;
+      $scope.domanda = domanda;
+      $scope.risp0 = rispostaG;
+      $scope.risp1 = rispostaS;
+
+
+      $.connection.hub.url = "http://localhost:9999/signalr";
+
+      // Declare a proxy to reference the hub.
+      var chat = $.connection.arniaVirtualeHub;
+
+      chat.client.risposta0 = function (name) {
+          if (giusta == 0) {              //gestione risposta 0
+              document.getElementById("risp0").style.backgroundColor = "green";
+              //risposta corretta
+          }
+          else {
+              document.getElementById("risp0").style.backgroundColor = "red";
+              //risposta sbagliata
+          }
+          //cambio domanda
+      };
+
+      chat.client.risposta1 = function (name) {
+          if (giusta == 1) {              //gestione risposta 1
+              document.getElementById("risp1").style.backgroundColor = "green";
+              //risposta corretta
+          }
+          else {
+
+              document.getElementById("risp1").style.backgroundColor = "red";
+              //risposta sbagliata
+          }
+          //cambio domanda
+      };
+
+      // Start the connection.
+      $.connection.hub.start()
 
   }]);

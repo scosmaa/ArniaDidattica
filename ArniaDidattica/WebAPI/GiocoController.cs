@@ -54,5 +54,16 @@ namespace ArniaDidattica.WebAPI
             Program.arduinoQuadro3.invioMsg(msg);
         }
 
+        public void risposta0()
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
+            hubContext.Clients.All.Risposta0();
+        }
+
+        public void risposta1()
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
+            hubContext.Clients.All.Risposta1();
+        }
     }
 }

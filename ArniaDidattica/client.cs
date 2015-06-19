@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ArniaDidattica.WebAPI;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -8,6 +9,9 @@ namespace ArniaDidattica
 {
     abstract class Client
     {
+
+       protected GiocoController giocoController;
+
         protected TcpClient socket;
         protected NetworkStream stream;
         protected Thread ricezione;
@@ -17,6 +21,7 @@ namespace ArniaDidattica
 
         public Client(TcpClient socket)
         {
+            giocoController = new GiocoController();
             this.socket = socket;
 
             stream = socket.GetStream();

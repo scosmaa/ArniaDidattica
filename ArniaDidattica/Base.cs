@@ -1,11 +1,12 @@
-﻿using System.Net.Sockets;
+﻿using ArniaDidattica.WebAPI;
+using System.Net.Sockets;
 
 namespace ArniaDidattica
 {
     class Base : Client
     {
         public int risposta;
-        
+
         public Base(TcpClient socket)
             : base(socket)
         {
@@ -20,12 +21,14 @@ namespace ArniaDidattica
             {
                 case "0":
                     {
-                        risposta = 0;//pulsande  a sx
+                      //  risposta = 0;//pulsande  a sx
+                        giocoController.risposta0();
                         break;
                     }
                 case "1":
                     {
-                        risposta = 1;//pulsande  a dx
+                       // risposta = 1;//pulsande  a dx
+                        giocoController.risposta1();
                         break;
                     }
             }
