@@ -11,15 +11,13 @@ var gruppetti;
 
 
 
-//var GESTIONEGRUPPI = new Array(5);
-//for (i = 0; i < 5; i++)
-//    GESTIONEGRUPPI[i] = new Array(6);
+var GESTIONEGRUPPI = [[], [], [], [], []];
 
+GESTIONEGRUPPI[0][0] = 5; GESTIONEGRUPPI[0][1] = 2; GESTIONEGRUPPI[0][2] = 3; GESTIONEGRUPPI[0][3] = 2; GESTIONEGRUPPI[0][4] = 3; GESTIONEGRUPPI[0][5] = 5;
+GESTIONEGRUPPI[1][0] = 5; GESTIONEGRUPPI[1][1] = 2; GESTIONEGRUPPI[1][2] = 3; GESTIONEGRUPPI[1][3] = 2; GESTIONEGRUPPI[1][4] = 2; GESTIONEGRUPPI[1][5] = 5;
+GESTIONEGRUPPI[2][0] = 4; GESTIONEGRUPPI[2][1] = 2; GESTIONEGRUPPI[2][2] = 2; GESTIONEGRUPPI[2][3] = 2; GESTIONEGRUPPI[2][4] = 2; GESTIONEGRUPPI[2][5] = 4;
+GESTIONEGRUPPI[3][0] = 4; GESTIONEGRUPPI[3][1] = 4; GESTIONEGRUPPI[3][2] = 3; GESTIONEGRUPPI[3][3] = 3; GESTIONEGRUPPI[3][4] = 4; GESTIONEGRUPPI[3][5] = 4; GESTIONEGRUPPI[4][0] = 3; GESTIONEGRUPPI[4][1] = 3; GESTIONEGRUPPI[4][2] = 3; GESTIONEGRUPPI[4][3] = 3; GESTIONEGRUPPI[4][4] = 3; GESTIONEGRUPPI[4][5] = 3;
 
-//GESTIONEGRUPPI[0][0] = 5; GESTIONEGRUPPI[0][1] = 2; GESTIONEGRUPPI[0][2] = 3; GESTIONEGRUPPI[0][3] = 2; GESTIONEGRUPPI[0][4] = 3; GESTIONEGRUPPI[0][5] = 5;
-//GESTIONEGRUPPI[1][0] = 5; GESTIONEGRUPPI[1][1] = 2; GESTIONEGRUPPI[1][2] = 3; GESTIONEGRUPPI[1][3] = 2; GESTIONEGRUPPI[1][4] = 2; GESTIONEGRUPPI[1][5] = 5;
-//GESTIONEGRUPPI[2][0] = 4; GESTIONEGRUPPI[2][1] = 2; GESTIONEGRUPPI[2][2] = 2; GESTIONEGRUPPI[2][3] = 2; GESTIONEGRUPPI[2][4] = 2; GESTIONEGRUPPI[2][5] = 4;
-//GESTIONEGRUPPI[3][0] = 4; GESTIONEGRUPPI[3][1] = 4; GESTIONEGRUPPI[3][2] = 3; GESTIONEGRUPPI[3][3] = 3; GESTIONEGRUPPI[3][4] = 4; GESTIONEGRUPPI[3][5] = 4; GESTIONEGRUPPI[4][0] = 3; GESTIONEGRUPPI[4][1] = 3; GESTIONEGRUPPI[4][2] = 3; GESTIONEGRUPPI[4][3] = 3; GESTIONEGRUPPI[4][4] = 3; GESTIONEGRUPPI[4][5] = 3;
 
 
 var nDomandeDaFare;
@@ -29,6 +27,8 @@ var giusta;
 
 beehiveControllers.controller('home', ['$scope', '$location',
   function ($scope, $location) {
+
+
       //Set the hubs URL for the connection
       $.connection.hub.url = "http://localhost:9999/signalr";
 
@@ -124,24 +124,33 @@ beehiveControllers.controller('video1', ['$scope', '$location',
 
 beehiveControllers.controller('quiz', ['$scope', '$location',
   function ($scope, $location) {
-      nDomandeDaFare = GESTIONEGRUPPI[ultimoQuadro, giocatori.length];
+      nDomandeDaFare = GESTIONEGRUPPI[(10 - giocatori.length)][ultimoQuadro-1];
       domandeFatte = 0;//contatore
+
+      var domanda;
+      var rispostaG;
+      var rispostaS;
+      var nomeBimbo = giocatori[0];//selezione giocatore random
 
       $.get("http://localhost:9999/api/domande/" + ultimoQuadro, "", function (domandeRicevute) {
           domande = domandeRicevute;
+
+          domanda = domande[domandeFatte][0];
+          rispostaG = domande[domandeFatte][1];
+          rispostaS = domande[domandeFatte][2];
+
+          
+          giusta = 0;
+
+          $scope.nomeBimbo = nomeBimbo;
+          $scope.domanda = domanda;
+          $scope.risp0 = rispostaG;
+          $scope.risp1 = rispostaS;
+          $scope.$apply();
       });
 
-      var domanda = domande[domandeFatte][0];
-      var rispostaG = domande[domandeFatte][1];
-      var rispostaS = domande[domandeFatte][2];
 
-      var nomeBimbo = giocatori[0];//selezione giocatore random
-      giusta = 0;
-
-      $scope.nomeBimbo = nomeBimbo;
-      $scope.domanda = domanda;
-      $scope.risp0 = rispostaG;
-      $scope.risp1 = rispostaS;
+      
 
 
       $.connection.hub.url = "http://localhost:9999/signalr";
@@ -157,8 +166,8 @@ beehiveControllers.controller('quiz', ['$scope', '$location',
           else {
               document.getElementById("risp0").style.backgroundColor = "red";
               //risposta sbagliata
-          }
-
+          };
+          domandeFatte++;
           if (domandeFatte < nDomandeDaFare) {          //cambio domanda
               var domanda = domande[domandeFatte][0];
               var rispostaG = domande[domandeFatte][1];
@@ -171,9 +180,10 @@ beehiveControllers.controller('quiz', ['$scope', '$location',
               $scope.domanda = domanda;
               $scope.risp0 = rispostaG;
               $scope.risp1 = rispostaS;
+              $scope.$apply();
 
-              domandeFatte++;
-          } else {
+          };
+          if (domandeFatte >= nDomandeDaFare) {
               $location.path('next');
               $scope.$apply();
           }
