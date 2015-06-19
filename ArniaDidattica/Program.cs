@@ -1,23 +1,14 @@
 ﻿using ArniaDidattica.WebAPI;
 using Microsoft.Owin.Hosting;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 
 namespace ArniaDidattica
 {
-    public struct Domanda
-    {
-        public string domanda, rispostaG, rispostaS;
-        public bool uscita;
-    }
-
     class Program
     {
         public const int NMAXQUADRI = 3;//numero massimo consentito di quadri
@@ -29,59 +20,18 @@ namespace ArniaDidattica
 
         static void Main(string[] args)
         {
+
             string baseUri = "http://localhost:9999";
             TcpListener server;
             int porta = 2020;
 
-            GiocoController giocoController=new GiocoController();
-            
+            GiocoController giocoController = new GiocoController();
+
             int NGIOCATORI;
             int PUNTI = 0;//punti totali
 
-
-            int[,] GESTIONEGRUPPI;
-            GESTIONEGRUPPI = new int[5, 6];
-
-            #region inizializzazione GESTIONEGRUPPI
-            GESTIONEGRUPPI[0, 0] = 5;
-            GESTIONEGRUPPI[0, 1] = 2;
-            GESTIONEGRUPPI[0, 2] = 3;
-            GESTIONEGRUPPI[0, 3] = 2;
-            GESTIONEGRUPPI[0, 4] = 3;
-            GESTIONEGRUPPI[0, 5] = 5;
-
-            GESTIONEGRUPPI[1, 0] = 5;
-            GESTIONEGRUPPI[1, 1] = 2;
-            GESTIONEGRUPPI[1, 2] = 3;
-            GESTIONEGRUPPI[1, 3] = 2;
-            GESTIONEGRUPPI[1, 4] = 2;
-            GESTIONEGRUPPI[1, 5] = 5;
-
-            GESTIONEGRUPPI[2, 0] = 4;
-            GESTIONEGRUPPI[2, 1] = 2;
-            GESTIONEGRUPPI[2, 2] = 2;
-            GESTIONEGRUPPI[2, 3] = 2;
-            GESTIONEGRUPPI[2, 4] = 2;
-            GESTIONEGRUPPI[2, 5] = 4;
-
-            GESTIONEGRUPPI[3, 0] = 4;
-            GESTIONEGRUPPI[3, 1] = 4;
-            GESTIONEGRUPPI[3, 2] = 3;
-            GESTIONEGRUPPI[3, 3] = 3;
-            GESTIONEGRUPPI[3, 4] = 4;
-            GESTIONEGRUPPI[3, 5] = 4;
-
-            GESTIONEGRUPPI[4, 0] = 3;
-            GESTIONEGRUPPI[4, 1] = 3;
-            GESTIONEGRUPPI[4, 2] = 3;
-            GESTIONEGRUPPI[4, 3] = 3;
-            GESTIONEGRUPPI[4, 4] = 3;
-            GESTIONEGRUPPI[4, 5] = 3;
-            #endregion
-
             server = new TcpListener(porta);//in ascolto
             server.Start();
-
 
             //faccio connettere l'arduino della base.
 
@@ -220,7 +170,7 @@ namespace ArniaDidattica
             //secondo quadro
         }
 
-        private static Domanda[] getDomande(int idQuadro)
+        public static string[,] getDomande(int idQuadro)
         {
             StreamReader sr = File.OpenText(@"..\..\domande\domande.txt");
             int nDomande = 0;
@@ -231,7 +181,7 @@ namespace ArniaDidattica
                 nDomande += id == idQuadro ? 1 : 0;
             }
             sr.Close();
-            Domanda[] domande = new Domanda[nDomande];
+            string[,] domande = new string[nDomande, 3];//domanda | risp vera | risp falsa
 
             sr = File.OpenText(@"..\..\domande\domande.txt");
             while (!sr.EndOfStream)
@@ -241,14 +191,34 @@ namespace ArniaDidattica
 
                 if (parti[0] == idQuadro.ToString())
                 {
-                    domande[--nDomande].domanda = parti[1];
-                    domande[nDomande].rispostaG = parti[2];
-                    domande[nDomande].rispostaS = parti[3];
-                    domande[nDomande].uscita = false;
+                    domande[--nDomande, 0] = parti[1];
+                    domande[nDomande, 1] = parti[2];
+                    domande[nDomande, 2] = parti[3];
                 }
             }
-            return domande;
+            return random(domande);
         }
+        public static string[,] random(string[,] vettore)
+        {
+            //lungo n e largo 3
+            Random r = new Random();
+
+            for (int j = 0; j < 5; j++)
+            {
+                int n = r.Next(vettore.Length / 3);
+                int n2 = r.Next(vettore.Length / 3);
+
+                for (int i = 0; i < 3; i++)
+                {
+                    string temp = vettore[n, i];
+                    vettore[n, i] = vettore[n2, i];
+                    vettore[n2, i] = temp;
+                }
+            }
+
+            return vettore;
+        }
+
 
         static int getId(TcpClient socket)//da socket a id dell'arduino
         {

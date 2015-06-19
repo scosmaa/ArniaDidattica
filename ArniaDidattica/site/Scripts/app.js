@@ -30,6 +30,10 @@ phonecatApp.config(['$routeProvider',
               templateUrl: 'partials/quiz.html',
               controller: 'quiz'
           })
+          .when('/next', {
+              templateUrl: 'partials/next_player.html',
+              controller: 'next'
+          })
         .otherwise({
             redirectTo: '/'
         });

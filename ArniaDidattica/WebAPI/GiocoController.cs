@@ -27,6 +27,13 @@ namespace ArniaDidattica.WebAPI
             hubContext.Clients.All.AvvioVideo();
         }
 
+        [Route("domande/{nQuadro}")]
+        [HttpGet]
+        public string[,] getDomande(int nQuadro)
+        {
+            return Program.getDomande(nQuadro);
+        }
+
         [Route("invio/0/{msg}")]
         [HttpGet]
         public void invioMsgBase(string msg)
