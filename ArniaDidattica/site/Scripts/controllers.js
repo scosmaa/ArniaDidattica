@@ -139,10 +139,10 @@ beehiveControllers.controller('quiz', ['$scope', '$location',
 
       // Temporanea
       giocatoriCheDevonoGiocare = giocatoriCheDevonoGiocare.length != 0 ? giocatoriCheDevonoGiocare : ['1', '2', '3', '4', '5', '6'];
+      totaleGiocatori = 6;
       giocatoriCheDevonoGiocare = shuffle(giocatoriCheDevonoGiocare);
       console.log(giocatoriCheDevonoGiocare);
       ultimoQuadro = ultimoQuadro != null ? ultimoQuadro : 1;
-      totaleGiocatori = giocatoriCheDevonoGiocare.length;
 
       nDomandeDaFare = GESTIONEGRUPPI[(10 - totaleGiocatori)][ultimoQuadro - 1];
       domandeFatte = 0;//contatore
@@ -204,7 +204,8 @@ beehiveControllers.controller('quiz', ['$scope', '$location',
           };
           if (domandeFatte >= nDomandeDaFare) {
               $.connection.hub.stop();
-              $location.path('quadro2');
+              var schermataSuccessiva = calcolaPaginaSuccessivaAlQuiz(ultimoQuadro);
+              $location.path(schermataSuccessiva);
               $scope.$apply();
           }
       };
@@ -237,7 +238,8 @@ beehiveControllers.controller('quiz', ['$scope', '$location',
               domandeFatte++;
           } else {
               $.connection.hub.stop();
-              $location.path('quadro2');
+              var schermataSuccessiva = calcolaPaginaSuccessivaAlQuiz(ultimoQuadro);
+              $location.path(schermataSuccessiva);
               $scope.$apply();
           }
       };
@@ -278,6 +280,10 @@ beehiveControllers.controller('video2', ['$scope', '$location',
 
   }]);
 
+beehiveControllers.controller('giocoC', ['$scope', '$location',
+  function ($scope, $location) {
+  }]);
+
 beehiveControllers.controller('next', ['$scope', '$location',
   function ($scope, $location) {
   }]);
@@ -306,7 +312,7 @@ function shuffle(array) {
 }
 
 // Restituisce le pagina corretta da visualizzare una volta terminato il quiz
-function CalcolaPaginaSuccessivaAlQuiz(quadroCorrente) {
+function calcolaPaginaSuccessivaAlQuiz(quadroCorrente) {
     switch (quadroCorrente) {
         case 1:
             return 'quadro2';

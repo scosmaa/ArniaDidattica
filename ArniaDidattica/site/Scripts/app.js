@@ -38,6 +38,10 @@ phonecatApp.config(['$routeProvider',
               templateUrl: 'partials/video2.html',
               controller: 'video2'
           })
+          .when('/giocoC', {
+              templateUrl: 'partials/giocoC.html',
+              controller: 'giocoC'
+          })
           .when('/next', {
               templateUrl: 'partials/next_player.html',
               controller: 'next'
