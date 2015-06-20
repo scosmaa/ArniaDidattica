@@ -123,15 +123,16 @@
   <ItemGroup>
     <Content Include="domande\domande.txt" />
     <Content Include="site\partials\inserimento_quadro_2.html" />
+    <Content Include="site\img\Q1.png" />
+    <Content Include="site\img\Q2.png" />
+    <Content Include="site\img\Q3.png" />
+    <Content Include="site\img\Q4.png" />
     <Content Include="site\partials\video1.html" />
     <Content Include="site\partials\video2.html" />
     <Content Include="site\partials\video3.html" />
     <Content Include="site\video\video1.mp4" />
     <Content Include="site\default.htm" />
     <Content Include="site\img\Back.png" />
-    <Content Include="site\img\Q1.png" />
-    <Content Include="site\img\Q2.png" />
-    <Content Include="site\img\Q3.png" />
     <Content Include="site\partials\final_score.html" />
     <Content Include="site\partials\home.html" />
     <Content Include="site\partials\new_bee.html" />
