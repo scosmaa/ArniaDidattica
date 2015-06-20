@@ -5,10 +5,21 @@
 var beehiveControllers = angular.module('beehiveControllers', []);
 var punti = 0;
 var ultimoQuadro;
+// Gestione dei punteggi per ogni tipo di gioco
+var puntiPerDomandaIndovinataQuizA = 1;
+var pallineVintePerRispostaGiustaQuizB = 1;
+var pallineVintePerPuntoGiocoC = 1;
+var puntiPerDomandaIndovinataQuizD = 1;
+var valorePuntoGiocoE = 1;
+var puntiPerDomandaIndovinataQuizF = 1;
 
+// Contiene i giocatori che devono ancora giocare
 var giocatoriCheDevonoGiocare = [];
+// Contiene i giocatori che hanno già giocato
 var giocatoriCheHannoGiocato = [];
+// numero di giocatori totali
 var totaleGiocatori;
+
 var gruppetti;
 
 
@@ -271,6 +282,10 @@ beehiveControllers.controller('next', ['$scope', '$location',
   function ($scope, $location) {
   }]);
 
+
+// Utility
+
+// Randomizza glie elementi di un array (utile per cambiare l'ordine di inserimento dei giocatori)
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -288,4 +303,15 @@ function shuffle(array) {
     }
 
     return array;
+}
+
+// Restituisce le pagina corretta da visualizzare una volta terminato il quiz
+function CalcolaPaginaSuccessivaAlQuiz(quadroCorrente) {
+    switch (quadroCorrente) {
+        case 1:
+            return 'quadro2';
+            break;
+        case 2:
+            return 'giocoC'
+    }
 }
