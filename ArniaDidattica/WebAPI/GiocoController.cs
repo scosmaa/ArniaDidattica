@@ -27,6 +27,14 @@ namespace ArniaDidattica.WebAPI
             hubContext.Clients.All.AvvioVideo();
         }
 
+        [Route("avvioVideo2")]
+        [HttpGet]
+        public void AvvioVideo2()
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
+            hubContext.Clients.All.AvvioVideo2();
+        }
+
         [Route("domande/{nQuadro}")]
         [HttpGet]
         public string[,] getDomande(int nQuadro)
@@ -61,12 +69,16 @@ namespace ArniaDidattica.WebAPI
             Program.arduinoQuadro3.invioMsg(msg);
         }
 
+        [Route("risposta0")]
+        [HttpGet]
         public void risposta0()
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
             hubContext.Clients.All.Risposta0();
         }
 
+        [Route("risposta1")]
+        [HttpGet]
         public void risposta1()
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();

@@ -122,6 +122,7 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="domande\domande.txt" />
+    <Content Include="site\partials\inserimento_quadro_2.html" />
     <Content Include="site\partials\video1.html" />
     <Content Include="site\partials\video2.html" />
     <Content Include="site\partials\video3.html" />

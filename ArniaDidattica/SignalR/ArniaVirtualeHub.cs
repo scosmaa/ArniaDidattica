@@ -19,6 +19,11 @@ namespace ArniaDidattica.SignalR
             Clients.All.avvioVideo();
         }
 
+        public void AvvioVideo2()
+        {
+            Clients.All.avvioVideo2();
+        }
+
         public void Risposta0()
         {
             Clients.All.risposta0();

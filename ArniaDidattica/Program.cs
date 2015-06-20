@@ -24,7 +24,7 @@ namespace ArniaDidattica
             string baseUri = "http://localhost:9999";
             TcpListener server;
             int porta = 2020;
-
+            WebApp.Start<Avvio>(baseUri);
             GiocoController giocoController = new GiocoController();
 
             int NGIOCATORI;

@@ -6,7 +6,9 @@ var beehiveControllers = angular.module('beehiveControllers', []);
 var punti = 0;
 var ultimoQuadro;
 
-var giocatori = [];
+var giocatoriCheDevonoGiocare = [];
+var giocatoriCheHannoGiocato = [];
+var totaleGiocatori;
 var gruppetti;
 
 
@@ -57,7 +59,7 @@ beehiveControllers.controller('newbee', ['$scope', '$location',
               alert("Inserire un nome per l'ape!");
               return false;
           }
-          giocatori.push(n_bee);
+          giocatoriCheDevonoGiocare.push(n_bee);
 
           document.getElementById("nomeApe").value = "";
           document.getElementById("nomeApe").focus();
@@ -66,14 +68,14 @@ beehiveControllers.controller('newbee', ['$scope', '$location',
       $scope.End = function () {
           var n_bee = $scope.nomeApe;
 
-          if (giocatori.length > 5) {
-              if (giocatori.length < 8) {
-                  gruppetti = new Array(giocatori, giocatori, giocatori);//3 gruppetti
+          if (giocatoriCheDevonoGiocare.length > 5) {
+              if (giocatoriCheDevonoGiocare.length < 8) {
+                  gruppetti = new Array(giocatoriCheDevonoGiocare, giocatoriCheDevonoGiocare, giocatoriCheDevonoGiocare);//3 gruppetti
               }
               else {
-                  gruppetti = new Array(giocatori, giocatori);//2 gruppetti
+                  gruppetti = new Array(giocatoriCheDevonoGiocare, giocatoriCheDevonoGiocare);//2 gruppetti
               }
-
+              totaleGiocatori = giocatoriCheDevonoGiocare.length;
               $.connection.hub.stop();
               $location.path('cellclose');
               $scope.$apply();
@@ -113,7 +115,6 @@ beehiveControllers.controller('video1', ['$scope', '$location',
 
       vid.play();
 
-
       vid.onended = function () {
           ultimoQuadro = 1;
           $location.path('quiz');
@@ -124,14 +125,22 @@ beehiveControllers.controller('video1', ['$scope', '$location',
 
 beehiveControllers.controller('quiz', ['$scope', '$location',
   function ($scope, $location) {
-      nDomandeDaFare = GESTIONEGRUPPI[(10 - giocatori.length)][ultimoQuadro-1];
+
+      // Temporanea
+      giocatoriCheDevonoGiocare = giocatoriCheDevonoGiocare.length != 0 ? giocatoriCheDevonoGiocare : ['1', '2', '3', '4', '5', '6'];
+      giocatoriCheDevonoGiocare = shuffle(giocatoriCheDevonoGiocare);
+      console.log(giocatoriCheDevonoGiocare);
+      ultimoQuadro = ultimoQuadro != null ? ultimoQuadro : 1;
+      totaleGiocatori = giocatoriCheDevonoGiocare.length;
+
+      nDomandeDaFare = GESTIONEGRUPPI[(10 - totaleGiocatori)][ultimoQuadro - 1];
       domandeFatte = 0;//contatore
 
       var domanda;
       var rispostaG;
       var rispostaS;
-      var nomeBimbo = giocatori[0];//selezione giocatore random
-
+      var nomeBimbo = giocatoriCheDevonoGiocare.pop();//selezione giocatore random
+      giocatoriCheHannoGiocato.push(nomeBimbo);
       $.get("http://localhost:9999/api/domande/" + ultimoQuadro, "", function (domandeRicevute) {
           domande = domandeRicevute;
 
@@ -148,9 +157,6 @@ beehiveControllers.controller('quiz', ['$scope', '$location',
           $scope.risp1 = rispostaS;
           $scope.$apply();
       });
-
-
-      
 
 
       $.connection.hub.url = "http://localhost:9999/signalr";
@@ -173,9 +179,11 @@ beehiveControllers.controller('quiz', ['$scope', '$location',
               var rispostaG = domande[domandeFatte][1];
               var rispostaS = domande[domandeFatte][2];
 
-              var nomeBimbo = giocatori[0];//selezione giocatore random
+              var nomeBimbo = nomeBimbo = giocatoriCheDevonoGiocare.pop();//selezione giocatore random
+              giocatoriCheHannoGiocato.push(nomeBimbo);
               giusta = 0;
-
+              console.log(giocatoriCheHannoGiocato);
+              console.log(giocatoriCheDevonoGiocare);
               $scope.nomeBimbo = nomeBimbo;
               $scope.domanda = domanda;
               $scope.risp0 = rispostaG;
@@ -184,7 +192,8 @@ beehiveControllers.controller('quiz', ['$scope', '$location',
 
           };
           if (domandeFatte >= nDomandeDaFare) {
-              $location.path('next');
+              $.connection.hub.stop();
+              $location.path('quadro2');
               $scope.$apply();
           }
       };
@@ -199,13 +208,14 @@ beehiveControllers.controller('quiz', ['$scope', '$location',
               //risposta sbagliata
           }
 
-
+          domandeFatte++;
           if (domandeFatte < nDomandeDaFare) {          //cambio domanda
               var domanda = domande[domandeFatte][0];
               var rispostaG = domande[domandeFatte][1];
               var rispostaS = domande[domandeFatte][2];
 
-              var nomeBimbo = giocatori[0];//selezione giocatore random
+              var nomeBimbo = nomeBimbo = giocatoriCheDevonoGiocare.pop();//selezione giocatore random
+              giocatoriCheHannoGiocato.push(nomeBimbo);
               giusta = 0;
 
               $scope.nomeBimbo = nomeBimbo;
@@ -215,7 +225,8 @@ beehiveControllers.controller('quiz', ['$scope', '$location',
 
               domandeFatte++;
           } else {
-              $location.path('next');
+              $.connection.hub.stop();
+              $location.path('quadro2');
               $scope.$apply();
           }
       };
@@ -224,3 +235,57 @@ beehiveControllers.controller('quiz', ['$scope', '$location',
       $.connection.hub.start()
 
   }]);
+
+beehiveControllers.controller('quadro2', ['$scope', '$location',
+  function ($scope, $location) {
+      //Set the hubs URL for the connection
+      $.connection.hub.url = "http://localhost:9999/signalr";
+
+      // Declare a proxy to reference the hub.
+      var chat = $.connection.arniaVirtualeHub;
+
+      chat.client.avvioVideo2 = function () {
+          $.connection.hub.stop();
+          $location.path('video2');
+          $scope.$apply();
+      };
+
+      // Start the connection.
+      $.connection.hub.start()
+  }]);
+
+beehiveControllers.controller('video2', ['$scope', '$location',
+  function ($scope, $location) {
+      var vid = document.getElementById("video2");
+      vid.focus();
+      vid.play();
+      vid.onended = function () {
+          ultimoQuadro = 2;
+          $location.path('quiz');
+          $scope.$apply();
+      }
+
+  }]);
+
+beehiveControllers.controller('next', ['$scope', '$location',
+  function ($scope, $location) {
+  }]);
+
+function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+}
