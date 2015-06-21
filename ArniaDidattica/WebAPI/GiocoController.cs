@@ -15,12 +15,15 @@ namespace ArniaDidattica.WebAPI
             hubContext.Clients.All.TornaHome();
         }
 
+        [Route("registrazioneGiocatori")]
+        [HttpGet]
         public void RegistrazioneGiocatori()
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
             hubContext.Clients.All.RegistrazioneGiocatori();
         }
-
+        [Route("avvioVideo1")]
+        [HttpGet]
         public void AvvioVideo()
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
