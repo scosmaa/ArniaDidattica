@@ -1,13 +1,13 @@
 ﻿'use strict';
 
-/* App Module */
-
-var phonecatApp = angular.module('beehiveApp', [
+/* Iniziallizzazione dell'applicazione angulaJS*/
+var beehiveApp = angular.module('beehiveApp', [
   'ngRoute',
   'beehiveControllers'
 ]);
 
-phonecatApp.config(['$routeProvider',
+/* Definisco le pagine da visualizzare in base all'URL richiesto */
+beehiveApp.config(['$routeProvider',
   function ($routeProvider) {
       $routeProvider
         .when('/', {

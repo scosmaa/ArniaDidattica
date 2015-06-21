@@ -1,10 +1,12 @@
-﻿
-'use strict';
+﻿'use strict';
 
-/* Controllers */
+/* Controller utilizzati dall'applicazione di angularJS*/
 var beehiveControllers = angular.module('beehiveControllers', []);
+/* Punti fatti durante i quiz/giochi */
 var punti = 0;
-var ultimoQuadro;
+/* Fase del gioco - QuizA = 1, QuizB = 2 ecc. */
+var faseDelGioco;
+
 // Gestione dei punteggi per ogni tipo di gioco
 var puntiPerDomandaIndovinataQuizA = 1;
 var pallineVintePerRispostaGiustaQuizB = 1;
@@ -13,54 +15,48 @@ var puntiPerDomandaIndovinataQuizD = 1;
 var valorePuntoGiocoE = 1;
 var puntiPerDomandaIndovinataQuizF = 1;
 
+/* Palline guadagnate per i giochi */
 var pallineGiocoC = 0;
 var pallineGiocoE = 0;
+
 // Contiene i giocatori che devono ancora giocare
 var giocatoriCheDevonoGiocare = [];
 // Contiene i giocatori che hanno già giocato
 var giocatoriCheHannoGiocato = [];
 // numero di giocatori totali
-var totaleGiocatori;
+var numeroTotaleGiocatori;
 
 var gruppetti;
 
-
-
+/* Modalità di gioco in base al numero di giocatori */
 var GESTIONEGRUPPI = [[], [], [], [], []];
 
 GESTIONEGRUPPI[0][0] = 5; GESTIONEGRUPPI[0][1] = 2; GESTIONEGRUPPI[0][2] = 3; GESTIONEGRUPPI[0][3] = 2; GESTIONEGRUPPI[0][4] = 3; GESTIONEGRUPPI[0][5] = 5;
 GESTIONEGRUPPI[1][0] = 5; GESTIONEGRUPPI[1][1] = 2; GESTIONEGRUPPI[1][2] = 3; GESTIONEGRUPPI[1][3] = 2; GESTIONEGRUPPI[1][4] = 2; GESTIONEGRUPPI[1][5] = 5;
 GESTIONEGRUPPI[2][0] = 4; GESTIONEGRUPPI[2][1] = 2; GESTIONEGRUPPI[2][2] = 2; GESTIONEGRUPPI[2][3] = 2; GESTIONEGRUPPI[2][4] = 2; GESTIONEGRUPPI[2][5] = 4;
-GESTIONEGRUPPI[3][0] = 4; GESTIONEGRUPPI[3][1] = 4; GESTIONEGRUPPI[3][2] = 3; GESTIONEGRUPPI[3][3] = 3; GESTIONEGRUPPI[3][4] = 4; GESTIONEGRUPPI[3][5] = 4; GESTIONEGRUPPI[4][0] = 3; GESTIONEGRUPPI[4][1] = 3; GESTIONEGRUPPI[4][2] = 3; GESTIONEGRUPPI[4][3] = 3; GESTIONEGRUPPI[4][4] = 3; GESTIONEGRUPPI[4][5] = 3;
+GESTIONEGRUPPI[3][0] = 4; GESTIONEGRUPPI[3][1] = 4; GESTIONEGRUPPI[3][2] = 3; GESTIONEGRUPPI[3][3] = 3; GESTIONEGRUPPI[3][4] = 4; GESTIONEGRUPPI[3][5] = 4;
+GESTIONEGRUPPI[4][0] = 3; GESTIONEGRUPPI[4][1] = 3; GESTIONEGRUPPI[4][2] = 3; GESTIONEGRUPPI[4][3] = 3; GESTIONEGRUPPI[4][4] = 3; GESTIONEGRUPPI[4][5] = 3;
 
+/* Inizializzazione signalR (tecnologia che permette al client di ricevere dati dal server) */
+$.connection.hub.url = "http://localhost:9999/signalr";
+var hub = $.connection.arniaVirtualeHub;
 
-
-var nDomandeDaFare;
-var domandeFatte;
-var domande;
-var giusta;
-
+/* Home page */
 beehiveControllers.controller('home', ['$scope', '$location',
   function ($scope, $location) {
-
-
-      //Set the hubs URL for the connection
-      $.connection.hub.url = "http://localhost:9999/signalr";
-
-      // Declare a proxy to reference the hub.
-      var chat = $.connection.arniaVirtualeHub;
-
-      chat.client.registrazioneGiocatori = function (name) {
+      /* Quando arriva l'evento  registrazioneGiocatori passo alla pagina successiva*/
+      hub.client.registrazioneGiocatori = function (name) {
+          // Interrompo la connessione signalR (migliora l'efficienza)
           $.connection.hub.stop();
+          // Vado nella pagina successiva
           $location.path('newbee');
           $scope.$apply();
       };
-
       // Start the connection.
-      $.connection.hub.start()
+      $.connection.hub.start();
   }]);
 
-
+/* Inserimento api */
 beehiveControllers.controller('newbee', ['$scope', '$location',
   function ($scope, $location) {
       document.getElementById("nomeApe").focus();
@@ -74,7 +70,7 @@ beehiveControllers.controller('newbee', ['$scope', '$location',
           }
           giocatoriCheDevonoGiocare.push(n_bee);
 
-          document.getElementById("nomeApe").value = "";
+          $scope.nomeApe = "";
           document.getElementById("nomeApe").focus();
       }
 
@@ -82,41 +78,26 @@ beehiveControllers.controller('newbee', ['$scope', '$location',
           var n_bee = $scope.nomeApe;
 
           if (giocatoriCheDevonoGiocare.length > 5) {
-              if (giocatoriCheDevonoGiocare.length < 8) {
-                  gruppetti = new Array(giocatoriCheDevonoGiocare, giocatoriCheDevonoGiocare, giocatoriCheDevonoGiocare);//3 gruppetti
-              }
-              else {
-                  gruppetti = new Array(giocatoriCheDevonoGiocare, giocatoriCheDevonoGiocare);//2 gruppetti
-              }
-              totaleGiocatori = giocatoriCheDevonoGiocare.length;
+              numeroTotaleGiocatori = giocatoriCheDevonoGiocare.length;
+              giocatoriCheDevonoGiocare = shuffle(giocatoriCheDevonoGiocare);
               $.connection.hub.stop();
               $location.path('cellclose');
-              $scope.$apply();
           }
           else {
               alert("Inserire minimo 6 api!");
-
               document.getElementById("nomeApe").focus();
           }
       }
-
   }]);
 
 beehiveControllers.controller('cellclose', ['$scope', '$location',
   function ($scope, $location) {
 
-      //Set the hubs URL for the connection
-      $.connection.hub.url = "http://localhost:9999/signalr";
-
-      // Declare a proxy to reference the hub.
-      var chat = $.connection.arniaVirtualeHub;
-
-      chat.client.avvioVideo = function () {
+      hub.client.avvioVideo = function () {
           $.connection.hub.stop();
           $location.path('video1');
           $scope.$apply();
       }
-
       // Start the connection.
       $.connection.hub.start()
   }]);
@@ -125,132 +106,105 @@ beehiveControllers.controller('video1', ['$scope', '$location',
   function ($scope, $location) {
       var vid = document.getElementById("video1");
       vid.focus();
-
       vid.play();
-
       vid.onended = function () {
-          ultimoQuadro = 1;
+          faseDelGioco = 1;
           $location.path('quiz');
           $scope.$apply();
       }
 
   }]);
 
-beehiveControllers.controller('quiz', ['$scope', '$location','$http',
-function ($scope, $location,$http) {    
-// Temporanea
-      giocatoriCheDevonoGiocare = giocatoriCheDevonoGiocare.length != 0 ? giocatoriCheDevonoGiocare : ['1', '2', '3', '4', '5', '6'];
-      totaleGiocatori = 6;
-      giocatoriCheDevonoGiocare = shuffle(giocatoriCheDevonoGiocare);
-      console.log(giocatoriCheDevonoGiocare);
-      ultimoQuadro = ultimoQuadro != null ? ultimoQuadro : 1;
+beehiveControllers.controller('quiz', ['$scope', '$location', '$http',
+function ($scope, $location, $http) {
 
-      nDomandeDaFare = GESTIONEGRUPPI[(10 - totaleGiocatori)][ultimoQuadro - 1];
-      domandeFatte = 0;//contatore
+    var nDomandeDaFare = 0;
+    var domandeFatte = 0;
+    var domandeCaricate;
 
-      var domanda;
-      var rispostaG;
-      var rispostaS;
-      var nomeBimbo = giocatoriCheDevonoGiocare.pop();//selezione giocatore random
-      giocatoriCheHannoGiocato.push(nomeBimbo);
+    // Temporanea
+    //giocatoriCheDevonoGiocare = giocatoriCheDevonoGiocare.length != 0 ? giocatoriCheDevonoGiocare : ['1', '2', '3', '4', '5', '6'];
+    //numeroTotaleGiocatori = 6;
+    //faseDelGioco = faseDelGioco != null ? faseDelGioco : 1;
 
-      $http.get('/domande/' + calcolaDomandeDaFare(ultimoQuadro) + '.json').success(function (domandeQuizCorrente) {
-          // Mischio le domande
-          domande = shuffle(domandeQuizCorrente);
-          
-          $scope.nomeBimbo = nomeBimbo;
-          $scope.domandaCorrente = domande.pop();
+    // Leggo le domande che devono essere fatte in questa fase del gioco
+    nDomandeDaFare = GESTIONEGRUPPI[(10 - numeroTotaleGiocatori)][faseDelGioco - 1];
 
-      });
-    
-      $.connection.hub.url = "http://localhost:9999/signalr";
+    // Carico le domande di questa fase di gioco
+    $http.get('/domande/' + calcolaDomandeDaFare(faseDelGioco) + '.json').success(function (domandeQuizCorrente) {
+        // Mischio le domande
+        domandeCaricate = shuffle(domandeQuizCorrente);
 
-      // Declare a proxy to reference the hub.
-      var chat = $.connection.arniaVirtualeHub;
+        // Seleziono il giocatore e lo inserisco tra quelli che hanno già giocato
+        $scope.nomeBimbo = prendiProssimoGiocatore();            
+        // Estraggo la domanda corrente
+        $scope.domandaCorrente = domandeCaricate.pop();
+    });
+    /* Evento che viene chiamato se il giocatore ha premuto il bottone 0 */
+    hub.client.risposta0 = function() {
+        if ($scope.domandaCorrente.corretta == 1) {
+            document.getElementById("risp0").style.backgroundColor = "green";
+            //risposta corretta
+            rispostaGiustaAlQuiz(faseDelGioco);
+        }
+        else {
+            document.getElementById("risp0").style.backgroundColor = "red";
+            //risposta sbagliata
+        };
+        domandeFatte++;
 
-      chat.client.risposta0 = function (name) {
-          if ($scope.domandaCorrente.corretta == 1) {              //gestione risposta 0
-              document.getElementById("risp0").style.backgroundColor = "green";
-              //risposta corretta
-              rispostaGiustaAlQuiz(ultimoQuadro);
-              console.log(punti);
-              console.log(pallineGiocoC);
-          }
-          else {
-              document.getElementById("risp0").style.backgroundColor = "red";
-              //risposta sbagliata
-          };
-          domandeFatte++;
+        if (domandeFatte < nDomandeDaFare) {          //cambio domanda
+            // Cambio domanda e giocatore
+            $scope.nomeBimbo = prendiProssimoGiocatore();
+            $scope.domandaCorrente = domandeCaricate.pop();
+            $scope.$apply();
 
-          if (domandeFatte < nDomandeDaFare) {          //cambio domanda
-             
-              var nomeBimbo = giocatoriCheDevonoGiocare.pop();//selezione giocatore random
-              giocatoriCheHannoGiocato.push(nomeBimbo);
+        }else {
+            $.connection.hub.stop();
+            var schermataSuccessiva = calcolaPaginaSuccessivaAlQuiz(faseDelGioco);
+            $location.path(schermataSuccessiva);
+            console.log(punti);
+            $scope.$apply();
+        }
+    };
+    /* Evento che viene chiamato se il giocatore ha premuto il bottone 1 */
+    hub.client.risposta1 = function (name) {
+        if ($scope.domandaCorrente.corretta == 2) {              //gestione risposta 1
+            document.getElementById("risp1").style.backgroundColor = "green";
+            //risposta corretta
+            rispostaGiustaAlQuiz(faseDelGioco);
+        }
+        else {
+            document.getElementById("risp1").style.backgroundColor = "red";
+            //risposta sbagliata
+        }
 
-              $scope.nomeBimbo = nomeBimbo;
-              $scope.domandaCorrente = domande.pop();
-              $scope.$apply();
-
-          };
-          if (domandeFatte >= nDomandeDaFare) {
-              $.connection.hub.stop();
-              var schermataSuccessiva = calcolaPaginaSuccessivaAlQuiz(ultimoQuadro);
-              $location.path(schermataSuccessiva);
-              $scope.$apply();
-          }
-      };
-
-      chat.client.risposta1 = function (name) {
-          if ($scope.domandaCorrente.corretta == 2) {              //gestione risposta 1
-              document.getElementById("risp1").style.backgroundColor = "green";
-              //risposta corretta
-              rispostaGiustaAlQuiz(ultimoQuadro);
-          }
-          else {
-              document.getElementById("risp1").style.backgroundColor = "red";
-              //risposta sbagliata
-          }
-
-          domandeFatte++;
-          if (domandeFatte < nDomandeDaFare) {          //cambio domanda
-              
-              var nomeBimbo = nomeBimbo = giocatoriCheDevonoGiocare.pop();//selezione giocatore random
-              giocatoriCheHannoGiocato.push(nomeBimbo);
-              giusta = 0;
-
-              $scope.nomeBimbo = nomeBimbo;
-              $scope.domandaCorrente = domande.pop();
-              $scope.$apply();
-
-              domandeFatte++;
-          } else {
-              $.connection.hub.stop();
-              var schermataSuccessiva = calcolaPaginaSuccessivaAlQuiz(ultimoQuadro);
-              $location.path(schermataSuccessiva);
-              $scope.$apply();
-          }
-      };
-
-      // Start the connection.
-      $.connection.hub.start()
-
-  }]);
+        domandeFatte++;
+        if (domandeFatte < nDomandeDaFare) {          //cambio domanda
+            // Cambio domanda e giocatore
+            $scope.nomeBimbo = prendiProssimoGiocatore();
+            $scope.domandaCorrente = domandeCaricate.pop();
+            $scope.$apply();
+        } else {
+            $.connection.hub.stop();
+            var schermataSuccessiva = calcolaPaginaSuccessivaAlQuiz(faseDelGioco);
+            $location.path(schermataSuccessiva);
+            console.log(punti);
+            $scope.$apply();
+        }
+    };
+    // Apro la connessione con signalR
+    $.connection.hub.start()
+}]);
 
 beehiveControllers.controller('quadro2', ['$scope', '$location',
   function ($scope, $location) {
-      //Set the hubs URL for the connection
-      $.connection.hub.url = "http://localhost:9999/signalr";
-
-      // Declare a proxy to reference the hub.
-      var chat = $.connection.arniaVirtualeHub;
-
-      chat.client.avvioVideo2 = function () {
+      hub.client.avvioVideo2 = function () {
           $.connection.hub.stop();
           $location.path('video2');
           $scope.$apply();
       };
-
-      // Start the connection.
+      // Apro la connessione con signalR
       $.connection.hub.start()
   }]);
 
@@ -260,7 +214,7 @@ beehiveControllers.controller('video2', ['$scope', '$location',
       vid.focus();
       vid.play();
       vid.onended = function () {
-          ultimoQuadro = 2;
+          faseDelGioco = 2;
           $location.path('quiz');
           $scope.$apply();
       }
@@ -271,67 +225,51 @@ beehiveControllers.controller('giocoC', ['$scope', '$location',
   function ($scope, $location) {
 
       // Temporanea
-      pallineGiocoC = 3;
-      giocatoriCheDevonoGiocare = giocatoriCheDevonoGiocare.length != 0 ? giocatoriCheDevonoGiocare : ['1', '2', '3', '4', '5', '6'];
-      totaleGiocatori = 6;
-      giocatoriCheDevonoGiocare = shuffle(giocatoriCheDevonoGiocare);
-      console.log(giocatoriCheDevonoGiocare);
+      //pallineGiocoC = 3;
+      //giocatoriCheDevonoGiocare = giocatoriCheDevonoGiocare.length != 0 ? giocatoriCheDevonoGiocare : ['1', '2', '3', '4', '5', '6'];
+      //numeroTotaleGiocatori = 6;
+      //giocatoriCheDevonoGiocare = shuffle(giocatoriCheDevonoGiocare);
+      //console.log(giocatoriCheDevonoGiocare);
 
-
-     ultimoQuadro = 3
+      faseDelGioco = 3
       $scope.pallineTotali = pallineGiocoC;
 
-      var ripetizioniDaFare = GESTIONEGRUPPI[(10 - totaleGiocatori)][ultimoQuadro - 1];
+      var ripetizioniDaFare = GESTIONEGRUPPI[(10 - numeroTotaleGiocatori)][faseDelGioco - 1];
 
-      if (giocatoriCheDevonoGiocare.length == 0) {
-          giocatoriCheDevonoGiocare = shuffle(giocatoriCheHannoGiocato);
-          giocatoriCheHannoGiocato = [];
-      }
-
-      var giocatoreCorrente = giocatoriCheDevonoGiocare.pop();
-      $scope.giocatore = giocatoreCorrente;
+      $scope.giocatore = prendiProssimoGiocatore();
       $scope.pallineRimanenti = pallineGiocoC;
 
-
-      //Set the hubs URL for the connection
-      $.connection.hub.url = "http://localhost:9999/signalr";
-
-      // Declare a proxy to reference the hub.
-      var chat = $.connection.arniaVirtualeHub;
-
-      chat.client.puntoGiocoC = function () {
+      hub.client.puntoGiocoC = function () {
           $scope.esitoTiro = "preso!";
           pallineGiocoE = pallineGiocoE + pallineVintePerPuntoGiocoC;
           $scope.pallineRimanenti--;
 
-          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare > 0) {
-              var giocatoreCorrente = giocatoriCheDevonoGiocare.pop();
-              $scope.giocatore = giocatoreCorrente;
+          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare > 1) {              
+              $scope.giocatore = prendiProssimoGiocatore();
               $scope.pallineRimanenti = pallineGiocoC;
               ripetizioniDaFare--;
           }
           $scope.$apply();
-          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare == 0) {
+          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare-1 == 0) {
               $.connection.hub.stop();
               $location.path('quadro3');
               $scope.$apply();
           }
 
-          
+
       };
 
-      chat.client.tiroGiocoC = function () {
+      hub.client.tiroGiocoC = function () {
           $scope.esitoTiro = "mancato!";
           $scope.pallineRimanenti--;
 
-          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare > 0) {
-              var giocatoreCorrente = giocatoriCheDevonoGiocare.pop();
-              $scope.giocatore = giocatoreCorrente;
+          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare > 1) {              
+              $scope.giocatore = prendiProssimoGiocatore();
               $scope.pallineRimanenti = pallineGiocoC;
               ripetizioniDaFare--;
           }
           $scope.$apply();
-          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare == 0) {
+          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare-1 == 0) {
               $.connection.hub.stop();
               $location.path('quadro3');
               $scope.$apply();
@@ -346,13 +284,7 @@ beehiveControllers.controller('giocoC', ['$scope', '$location',
 
 beehiveControllers.controller('quadro3', ['$scope', '$location',
   function ($scope, $location) {
-      //Set the hubs URL for the connection
-      $.connection.hub.url = "http://localhost:9999/signalr";
-
-      // Declare a proxy to reference the hub.
-      var chat = $.connection.arniaVirtualeHub;
-
-      chat.client.avvioVideo3 = function () {
+      hub.client.avvioVideo3 = function () {
           $.connection.hub.stop();
           $location.path('video3');
           $scope.$apply();
@@ -368,7 +300,7 @@ beehiveControllers.controller('video3', ['$scope', '$location',
       vid.focus();
       vid.play();
       vid.onended = function () {
-          ultimoQuadro = 4;
+          faseDelGioco = 4;
           $location.path('quiz');
           $scope.$apply();
       }
@@ -379,49 +311,39 @@ beehiveControllers.controller('giocoE', ['$scope', '$location',
   function ($scope, $location) {
 
       // Temporanea
-      pallineGiocoC = 3;
-      giocatoriCheDevonoGiocare = giocatoriCheDevonoGiocare.length != 0 ? giocatoriCheDevonoGiocare : ['1', '2', '3', '4', '5', '6'];
-      totaleGiocatori = 6;
-      giocatoriCheDevonoGiocare = shuffle(giocatoriCheDevonoGiocare);
-      console.log(giocatoriCheDevonoGiocare);
+      //pallineGiocoC = 3;
+      //giocatoriCheDevonoGiocare = giocatoriCheDevonoGiocare.length != 0 ? giocatoriCheDevonoGiocare : ['1', '2', '3', '4', '5', '6'];
+      //numeroTotaleGiocatori = 6;
+      //giocatoriCheDevonoGiocare = shuffle(giocatoriCheDevonoGiocare);
+      //console.log(giocatoriCheDevonoGiocare);
+      
+      faseDelGioco = 5
+      $scope.pallineTotali = pallineGiocoE;
 
-
-      ultimoQuadro = 5
-      $scope.pallineTotali = pallineGiocoC;
-
-      var ripetizioniDaFare = GESTIONEGRUPPI[(10 - totaleGiocatori)][ultimoQuadro - 1];
+      var ripetizioniDaFare = GESTIONEGRUPPI[(10 - numeroTotaleGiocatori)][faseDelGioco - 1];
 
       if (giocatoriCheDevonoGiocare.length == 0) {
           giocatoriCheDevonoGiocare = shuffle(giocatoriCheHannoGiocato);
           giocatoriCheHannoGiocato = [];
       }
 
-      var giocatoreCorrente = giocatoriCheDevonoGiocare.pop();
-      $scope.giocatore = giocatoreCorrente;
-      $scope.pallineRimanenti = pallineGiocoC;
+      $scope.giocatore = prendiProssimoGiocatore();
+      $scope.pallineRimanenti = pallineGiocoE;
 
-
-      //Set the hubs URL for the connection
-      $.connection.hub.url = "http://localhost:9999/signalr";
-
-      // Declare a proxy to reference the hub.
-      var chat = $.connection.arniaVirtualeHub;
-
-      chat.client.puntoGiocoC = function () {
+      hub.client.puntoGiocoC = function () {
           $scope.esitoTiro = "preso!";
-          pallineGiocoE = pallineGiocoE + pallineVintePerPuntoGiocoC;
+          punti = punti + valorePuntoGiocoE;
           $scope.pallineRimanenti--;
 
-          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare > 0) {
-              var giocatoreCorrente = giocatoriCheDevonoGiocare.pop();
-              $scope.giocatore = giocatoreCorrente;
-              $scope.pallineRimanenti = pallineGiocoC;
+          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare > 1) {              
+              $scope.giocatore = prendiProssimoGiocatore();
+              $scope.pallineRimanenti = pallineGiocoE;
               ripetizioniDaFare--;
           }
           $scope.$apply();
-          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare == 0) {
+          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare-1 == 0) {
               $.connection.hub.stop();
-              ultimoQuadro = 6;
+              faseDelGioco = 6;
               $location.path('quiz');
               $scope.$apply();
           }
@@ -429,20 +351,19 @@ beehiveControllers.controller('giocoE', ['$scope', '$location',
 
       };
 
-      chat.client.tiroGiocoC = function () {
+      hub.client.tiroGiocoC = function () {
           $scope.esitoTiro = "mancato!";
           $scope.pallineRimanenti--;
 
-          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare > 0) {
-              var giocatoreCorrente = giocatoriCheDevonoGiocare.pop();
-              $scope.giocatore = giocatoreCorrente;
-              $scope.pallineRimanenti = pallineGiocoC;
+          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare > 1) {              
+              $scope.giocatore = prendiProssimoGiocatore();
+              $scope.pallineRimanenti = pallineGiocoE;
               ripetizioniDaFare--;
           }
           $scope.$apply();
-          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare == 0) {
+          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare-1 == 0) {
               $.connection.hub.stop();
-              ultimoQuadro = 6;
+              faseDelGioco = 6;
               $location.path('quiz');
               $scope.$apply();
           }
@@ -456,7 +377,7 @@ beehiveControllers.controller('giocoE', ['$scope', '$location',
 
 beehiveControllers.controller('risultato', ['$scope', '$location',
   function ($scope, $location) {
-      $scope.punteggioFinale = 50;
+      $scope.punteggioFinale = punti;
   }]);
 
 
@@ -519,11 +440,28 @@ function calcolaDomandeDaFare(quadroCorrente) {
 }
 
 // Aggiorna il punteggio in base al valore di una risposta giusta
-function rispostaGiustaAlQuiz(quadroCorrente) {
-    if (quadroCorrente == 1) {
+function rispostaGiustaAlQuiz(quizCorrente) {
+    if (quizCorrente == 1) {
         punti = punti + puntiPerDomandaIndovinataQuizA;
     };
-    if (quadroCorrente == 2) {
+    if (quizCorrente == 2) {
         pallineGiocoC = pallineGiocoC + pallineVintePerRispostaGiustaQuizB;
+    };
+    if (quizCorrente == 4) {
+        punti = punti + puntiPerDomandaIndovinataQuizD;
+    };
+    if (quizCorrente == 6) {
+        punti = punti + puntiPerDomandaIndovinataQuizF;
     }
+}
+
+/* Calcola il prossimo giocatore in maniera random */
+function prendiProssimoGiocatore() {    
+    if (giocatoriCheDevonoGiocare.length == 0) {
+        giocatoriCheDevonoGiocare = giocatoriCheDevonoGiocare.concat(shuffle(giocatoriCheHannoGiocato));
+        giocatoriCheHannoGiocato.length = 0;
+    };
+    var giocatore = giocatoriCheDevonoGiocare.pop();
+    giocatoriCheHannoGiocato.push(giocatore);
+    return giocatore;
 }
