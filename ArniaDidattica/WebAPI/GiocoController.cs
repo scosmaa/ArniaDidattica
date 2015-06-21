@@ -84,5 +84,38 @@ namespace ArniaDidattica.WebAPI
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
             hubContext.Clients.All.Risposta1();
         }
+
+        #region GiocoC
+
+        [Route("tiroGiocoC")]
+        [HttpGet]
+        public void TiroGiocoC()
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
+            hubContext.Clients.All.TiroGiocoC();
+        }
+
+
+        [Route("puntoGiocoC")]
+        [HttpGet]
+        public void PuntoGiocoC()
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
+            hubContext.Clients.All.puntoGiocoC();
+        }
+
+        #endregion
+
+        #region Quadro3
+
+        [Route("avvioVideo3")]
+        [HttpGet]
+        public void AvvioVideo3()
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
+            hubContext.Clients.All.AvvioVideo3();
+        }
+
+        #endregion
     }
 }

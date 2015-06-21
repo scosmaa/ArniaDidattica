@@ -2,9 +2,9 @@
     <p>{{nomeBimbo}}</p>
 </div>
 <div id="textLarge">
-    <p ng-model="domanda">{{domanda}}</p>
+    <p>{{domandaCorrente.domanda}}</p>
 </div>
 <div id="textSmall">
-    <button value="risp0" ng-model="risp0" id="risp0" class="textBorder"> {{risp0}} </button><br><br>
-    <button value="risp1" ng-model="risp1" id="risp1" class="textBorder"> {{risp1}} </button>
+    <button value="risp0" ng-model="domandaCorrente.risposta1" id="risp0" class="textBorder"> {{domandaCorrente.risposta1}} </button><br><br>
+    <button value="risp1" ng-model="domandaCorrente.risposta2" id="risp1" class="textBorder"> {{domandaCorrente.risposta2}} </button>
 </div>

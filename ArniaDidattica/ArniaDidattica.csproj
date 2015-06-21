@@ -117,20 +117,29 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="site\domande\quizA.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="site\domande\quizB.json" />
+    <None Include="site\domande\quizD.json" />
+    <None Include="site\domande\quizF.json" />
     <None Include="site\fonts\CODE_Bold.otf" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <Content Include="domande\domande.txt" />
     <Content Include="site\partials\giocoC.html" />
+    <Content Include="site\partials\giocoE.html" />
     <Content Include="site\partials\inserimento_quadro_2.html" />
     <Content Include="site\img\Q1.png" />
     <Content Include="site\img\Q2.png" />
     <Content Include="site\img\Q3.png" />
     <Content Include="site\img\Q4.png" />
+    <Content Include="site\partials\inserimento_quadro_3.html" />
     <Content Include="site\partials\video1.html" />
     <Content Include="site\partials\video2.html" />
     <Content Include="site\partials\video3.html" />
+    <Content Include="site\suoni\pulsante_premuto.mp3" />
     <Content Include="site\video\video1.mp4" />
     <Content Include="site\default.htm" />
     <Content Include="site\img\Back.png" />
@@ -138,7 +147,6 @@
     <Content Include="site\partials\home.html" />
     <Content Include="site\partials\new_bee.html" />
     <Content Include="site\partials\close_cells.html" />
-    <Content Include="site\partials\next_player.html" />
     <Content Include="site\partials\quiz.html" />
     <Content Include="site\partials\score.html" />
     <Content Include="site\Scripts\angular-route.min.js" />

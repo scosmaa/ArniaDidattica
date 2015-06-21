@@ -1,0 +1,32 @@
+﻿[
+    {
+        "domanda": "Non è importante rispettare le api",
+        "risposta1": "Vero",
+        "risposta2": "Falso",
+        "corretta": 2
+    },
+    {
+        "domanda": "L'impollinazione parte dagli stami o dallo stigma del fiore?",
+        "risposta1": "Stami",
+        "risposta2": "Stigma",
+        "corretta": 1
+    },
+    {
+        "domanda": "I tipi principali di impollinazione sono due",
+        "risposta1": "Vero",
+        "risposta2": "Falso",
+        "corretta": 1
+    },
+    {
+        "domanda": "Nell'impollinazione incrociata, il polline viene trasportato dagli stami di un fiore allo stigma del fiore di un individuo differente .... specie",
+        "risposta1": "Di un'altra",
+        "risposta2": "Della stessa",
+        "corretta": 1
+    },
+    {
+        "domanda": "Sono o non sono importani le api per l'impollinazione?",
+        "risposta1": "NON sono importanti",
+        "risposta2": "Sono importanti",
+        "corretta": 2
+    }
+]

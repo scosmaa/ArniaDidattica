@@ -42,9 +42,21 @@ phonecatApp.config(['$routeProvider',
               templateUrl: 'partials/giocoC.html',
               controller: 'giocoC'
           })
-          .when('/next', {
-              templateUrl: 'partials/next_player.html',
-              controller: 'next'
+          .when('/quadro3', {
+              templateUrl: 'partials/inserimento_quadro_3.html',
+              controller: 'quadro3'
+          })
+          .when('/video3', {
+              templateUrl: 'partials/video3.html',
+              controller: 'video3'
+          })
+          .when('/giocoE', {
+              templateUrl: 'partials/giocoE.html',
+              controller: 'giocoE'
+          })
+          .when('/risultato', {
+              templateUrl: 'partials/final_score.html',
+              controller: 'risultato'
           })
         .otherwise({
             redirectTo: '/'

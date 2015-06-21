@@ -2,6 +2,7 @@
 using Microsoft.Owin;
 using Microsoft.Owin.FileSystems;
 using Microsoft.Owin.StaticFiles;
+using Microsoft.Owin.StaticFiles.ContentTypes;
 using Owin;
 using System;
 using System.Collections.Generic;
@@ -21,12 +22,18 @@ namespace ArniaDidattica
             // Inizializzo le web api
             app.UseWebApi(webApiConfiguration);
 
-            // Inizializzo il server web che conterrà l'applicazione
-            app.UseFileServer(new FileServerOptions()
+
+            var fileServerOptions = new FileServerOptions()
             {
                 RequestPath = PathString.Empty,
-                FileSystem = new PhysicalFileSystem(@"..\..\site"),
-            });
+                FileSystem = new PhysicalFileSystem(@"..\..\site")
+            };
+
+            fileServerOptions.StaticFileOptions.ServeUnknownFileTypes = true;
+
+
+            // Inizializzo il server web che conterrà l'applicazione
+            app.UseFileServer(fileServerOptions);
 
             app.MapSignalR();
         }
