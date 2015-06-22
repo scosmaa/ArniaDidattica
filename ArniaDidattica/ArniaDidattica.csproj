@@ -128,8 +128,10 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="domande\domande.txt" />
+    <Content Include="site\img\Logo.png" />
     <Content Include="site\partials\giocoC.html" />
     <Content Include="site\partials\giocoE.html" />
+    <Content Include="site\partials\logo.html" />
     <Content Include="site\partials\inserimento_quadro_2.html" />
     <Content Include="site\img\Q1.png" />
     <Content Include="site\img\Q2.png" />
