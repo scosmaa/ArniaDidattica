@@ -7,6 +7,12 @@ var punti = 0;
 /* Fase del gioco - QuizA = 1, QuizB = 2 ecc. */
 var faseDelGioco;
 
+
+var nDomandeDaFare;//domande da fare, prese dalla matrice riempita manualmente
+var domandeFatte;//domande fatte
+var domandeCaricate;//vettore contente le domande in ordine random caricate dal file json
+var devoRispondere;//indica se la pressone di uno dei pulsanti sulla base è per rispondere o per caricare la prossima domanda
+
 // Gestione dei punteggi per ogni tipo di gioco
 var puntiPerDomandaIndovinataQuizA = 1;
 var pallineVintePerRispostaGiustaQuizB = 1;
@@ -16,8 +22,8 @@ var valorePuntoGiocoE = 1;
 var puntiPerDomandaIndovinataQuizF = 1;
 
 /* Palline guadagnate per i giochi */
-var pallineGiocoC = 0;
-var pallineGiocoE = 0;
+var pallineGiocoC = 1;//inizia da 1
+var pallineGiocoE = 1;
 
 // Contiene i giocatori che devono ancora giocare
 var giocatoriCheDevonoGiocare = [];
@@ -56,22 +62,63 @@ beehiveControllers.controller('home', ['$scope', '$location',
       $.connection.hub.start();
   }]);
 
+beehiveControllers.controller('quiz', ['$scope', '$location', '$http',
+function ($scope, $location, $http) {
+
+    nDomandeDaFare = 0;
+    domandeFatte = 0;
+    devoRispondere = true;
+
+    //Temporanea
+    giocatoriCheDevonoGiocare = giocatoriCheDevonoGiocare.length != 0 ? giocatoriCheDevonoGiocare : ['1', '2', '3', '4', '5', '6'];
+    numeroTotaleGiocatori = 6;
+    faseDelGioco = faseDelGioco != null ? faseDelGioco : 1;
+
+    // Leggo le domande che devono essere fatte in questa fase del gioco
+    nDomandeDaFare = GESTIONEGRUPPI[(10 - numeroTotaleGiocatori)][faseDelGioco - 1];
+
+    // Carico le domande di questa fase di gioco
+    $http.get('/domande/' + calcolaDomandeDaFare(faseDelGioco) + '.json').success(function (domandeQuizCorrente) {
+        // Mischio le domande
+        domandeCaricate = shuffle(domandeQuizCorrente);
+
+        // Seleziono il giocatore e lo inserisco tra quelli che hanno già giocato
+        $scope.nomeBimbo = prendiProssimoGiocatore();
+        // Estraggo la domanda corrente
+        $scope.domandaCorrente = domandeCaricate.pop();
+    });
+
+    /* Evento che viene chiamato se il giocatore ha premuto il bottone 0 */
+    hub.client.risposta0 = function () { gestioneRisposta($scope, $location, 0); };
+    /* Evento che viene chiamato se il giocatore ha premuto il bottone 1 */
+    hub.client.risposta1 = function () { gestioneRisposta($scope, $location, 1); };
+
+    // Apro la connessione con signalR
+    $.connection.hub.start();
+}]);
+
+/* Primo Quadro */
 /* Inserimento api */
 beehiveControllers.controller('newbee', ['$scope', '$location',
   function ($scope, $location) {
       document.getElementById("nomeApe").focus();
 
       $scope.AddNew = function () {
-          var n_bee = $scope.nomeApe;
+          if (giocatoriCheDevonoGiocare.length <= 10) {
+              var n_bee = $scope.nomeApe;
 
-          if (n_bee == "" || n_bee == null) {
-              alert("Inserire un nome per l'ape!");
-              return false;
+              if (n_bee == "" || n_bee == null) {
+                  alert("Inserisci un nome!");
+                  return false;
+              }
+              giocatoriCheDevonoGiocare.push(n_bee);
+
+              $scope.nomeApe = "";
+              document.getElementById("nomeApe").focus();
+          } else {
+              alert("Non si possono inserire più di 10 nomi!");
+              document.getElementById("btn1").focus();
           }
-          giocatoriCheDevonoGiocare.push(n_bee);
-
-          $scope.nomeApe = "";
-          document.getElementById("nomeApe").focus();
       }
 
       $scope.End = function () {
@@ -115,88 +162,7 @@ beehiveControllers.controller('video1', ['$scope', '$location',
 
   }]);
 
-beehiveControllers.controller('quiz', ['$scope', '$location', '$http',
-function ($scope, $location, $http) {
-
-    var nDomandeDaFare = 0;
-    var domandeFatte = 0;
-    var domandeCaricate;
-
-    // Temporanea
-    //giocatoriCheDevonoGiocare = giocatoriCheDevonoGiocare.length != 0 ? giocatoriCheDevonoGiocare : ['1', '2', '3', '4', '5', '6'];
-    //numeroTotaleGiocatori = 6;
-    //faseDelGioco = faseDelGioco != null ? faseDelGioco : 1;
-
-    // Leggo le domande che devono essere fatte in questa fase del gioco
-    nDomandeDaFare = GESTIONEGRUPPI[(10 - numeroTotaleGiocatori)][faseDelGioco - 1];
-
-    // Carico le domande di questa fase di gioco
-    $http.get('/domande/' + calcolaDomandeDaFare(faseDelGioco) + '.json').success(function (domandeQuizCorrente) {
-        // Mischio le domande
-        domandeCaricate = shuffle(domandeQuizCorrente);
-
-        // Seleziono il giocatore e lo inserisco tra quelli che hanno già giocato
-        $scope.nomeBimbo = prendiProssimoGiocatore();            
-        // Estraggo la domanda corrente
-        $scope.domandaCorrente = domandeCaricate.pop();
-    });
-    /* Evento che viene chiamato se il giocatore ha premuto il bottone 0 */
-    hub.client.risposta0 = function() {
-        if ($scope.domandaCorrente.corretta == 1) {
-            document.getElementById("risp0").style.backgroundColor = "green";
-            //risposta corretta
-            rispostaGiustaAlQuiz(faseDelGioco);
-        }
-        else {
-            document.getElementById("risp0").style.backgroundColor = "red";
-            //risposta sbagliata
-        };
-        domandeFatte++;
-
-        if (domandeFatte < nDomandeDaFare) {          //cambio domanda
-            // Cambio domanda e giocatore
-            $scope.nomeBimbo = prendiProssimoGiocatore();
-            $scope.domandaCorrente = domandeCaricate.pop();
-            $scope.$apply();
-
-        }else {
-            $.connection.hub.stop();
-            var schermataSuccessiva = calcolaPaginaSuccessivaAlQuiz(faseDelGioco);
-            $location.path(schermataSuccessiva);
-            console.log(punti);
-            $scope.$apply();
-        }
-    };
-    /* Evento che viene chiamato se il giocatore ha premuto il bottone 1 */
-    hub.client.risposta1 = function (name) {
-        if ($scope.domandaCorrente.corretta == 2) {              //gestione risposta 1
-            document.getElementById("risp1").style.backgroundColor = "green";
-            //risposta corretta
-            rispostaGiustaAlQuiz(faseDelGioco);
-        }
-        else {
-            document.getElementById("risp1").style.backgroundColor = "red";
-            //risposta sbagliata
-        }
-
-        domandeFatte++;
-        if (domandeFatte < nDomandeDaFare) {          //cambio domanda
-            // Cambio domanda e giocatore
-            $scope.nomeBimbo = prendiProssimoGiocatore();
-            $scope.domandaCorrente = domandeCaricate.pop();
-            $scope.$apply();
-        } else {
-            $.connection.hub.stop();
-            var schermataSuccessiva = calcolaPaginaSuccessivaAlQuiz(faseDelGioco);
-            $location.path(schermataSuccessiva);
-            console.log(punti);
-            $scope.$apply();
-        }
-    };
-    // Apro la connessione con signalR
-    $.connection.hub.start()
-}]);
-
+/* Secondo Quadro */
 beehiveControllers.controller('quadro2', ['$scope', '$location',
   function ($scope, $location) {
       hub.client.avvioVideo2 = function () {
@@ -244,13 +210,13 @@ beehiveControllers.controller('giocoC', ['$scope', '$location',
           pallineGiocoE = pallineGiocoE + pallineVintePerPuntoGiocoC;
           $scope.pallineRimanenti--;
 
-          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare > 1) {              
+          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare > 1) {
               $scope.giocatore = prendiProssimoGiocatore();
               $scope.pallineRimanenti = pallineGiocoC;
               ripetizioniDaFare--;
           }
           $scope.$apply();
-          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare-1 == 0) {
+          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare - 1 == 0) {
               $.connection.hub.stop();
               $location.path('quadro3');
               $scope.$apply();
@@ -263,13 +229,13 @@ beehiveControllers.controller('giocoC', ['$scope', '$location',
           $scope.esitoTiro = "mancato!";
           $scope.pallineRimanenti--;
 
-          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare > 1) {              
+          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare > 1) {
               $scope.giocatore = prendiProssimoGiocatore();
               $scope.pallineRimanenti = pallineGiocoC;
               ripetizioniDaFare--;
           }
           $scope.$apply();
-          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare-1 == 0) {
+          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare - 1 == 0) {
               $.connection.hub.stop();
               $location.path('quadro3');
               $scope.$apply();
@@ -282,6 +248,7 @@ beehiveControllers.controller('giocoC', ['$scope', '$location',
 
   }]);
 
+/* Terzo Quadro */
 beehiveControllers.controller('quadro3', ['$scope', '$location',
   function ($scope, $location) {
       hub.client.avvioVideo3 = function () {
@@ -316,7 +283,7 @@ beehiveControllers.controller('giocoE', ['$scope', '$location',
       //numeroTotaleGiocatori = 6;
       //giocatoriCheDevonoGiocare = shuffle(giocatoriCheDevonoGiocare);
       //console.log(giocatoriCheDevonoGiocare);
-      
+
       faseDelGioco = 5
       $scope.pallineTotali = pallineGiocoE;
 
@@ -335,13 +302,13 @@ beehiveControllers.controller('giocoE', ['$scope', '$location',
           punti = punti + valorePuntoGiocoE;
           $scope.pallineRimanenti--;
 
-          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare > 1) {              
+          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare > 1) {
               $scope.giocatore = prendiProssimoGiocatore();
               $scope.pallineRimanenti = pallineGiocoE;
               ripetizioniDaFare--;
           }
           $scope.$apply();
-          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare-1 == 0) {
+          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare - 1 == 0) {
               $.connection.hub.stop();
               faseDelGioco = 6;
               $location.path('quiz');
@@ -355,13 +322,13 @@ beehiveControllers.controller('giocoE', ['$scope', '$location',
           $scope.esitoTiro = "mancato!";
           $scope.pallineRimanenti--;
 
-          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare > 1) {              
+          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare > 1) {
               $scope.giocatore = prendiProssimoGiocatore();
               $scope.pallineRimanenti = pallineGiocoE;
               ripetizioniDaFare--;
           }
           $scope.$apply();
-          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare-1 == 0) {
+          if ($scope.pallineRimanenti == 0 && ripetizioniDaFare - 1 == 0) {
               $.connection.hub.stop();
               faseDelGioco = 6;
               $location.path('quiz');
@@ -375,6 +342,7 @@ beehiveControllers.controller('giocoE', ['$scope', '$location',
 
   }]);
 
+/* Ultimo Quadro */
 beehiveControllers.controller('risultato', ['$scope', '$location',
   function ($scope, $location) {
       $scope.punteggioFinale = punti;
@@ -382,6 +350,45 @@ beehiveControllers.controller('risultato', ['$scope', '$location',
 
 
 // Utility
+
+
+// Gestisce la ripsosta della base (0 o 1)
+function gestioneRisposta($scope, $location, risp) {//risp è 0 o 1
+    if (devoRispondere) {
+        if ($scope.domandaCorrente.corretta == risp + 1) {
+            document.getElementById("risp" + risp).style.backgroundColor = "green";
+            //risposta corretta
+            rispostaGiustaAlQuiz(faseDelGioco);
+        }
+        else {
+            document.getElementById("risp" + risp).style.backgroundColor = "red";
+            //risposta sbagliata
+        };
+        document.getElementById("prossimo").style.display = "block";
+        devoRispondere = false;
+    }
+    else {//va qui se la pressione del pulsante corrisponde al caricamento della prossima domanda
+        document.getElementById("risp" + risp).style.backgroundColor = "#FFE70A";
+        document.getElementById("prossimo").style.display = "none";
+
+        domandeFatte++;
+        if (domandeFatte < nDomandeDaFare) {          //cambio domanda
+            // Cambio domanda e giocatore
+            $scope.nomeBimbo = prendiProssimoGiocatore();
+            $scope.domandaCorrente = domandeCaricate.pop();
+            $scope.$apply();
+
+        } else {
+            $.connection.hub.stop();
+            var schermataSuccessiva = calcolaPaginaSuccessivaAlQuiz(faseDelGioco);
+            $location.path(schermataSuccessiva);
+            console.log(punti);
+            $scope.$apply();
+        }
+
+        devoRispondere = true;
+    }
+}
 
 // Randomizza glie elementi di un array (utile per cambiare l'ordine di inserimento dei giocatori)
 function shuffle(array) {
@@ -426,16 +433,12 @@ function calcolaDomandeDaFare(quadroCorrente) {
     switch (quadroCorrente) {
         case 1:
             return 'quizA';
-            break;
         case 2:
             return 'quizB';
-            break;
         case 4:
             return 'quizD';
-            break;
         case 6:
-            return 'quizF'
-            break;
+            return 'quizF';
     }
 }
 
@@ -456,7 +459,7 @@ function rispostaGiustaAlQuiz(quizCorrente) {
 }
 
 /* Calcola il prossimo giocatore in maniera random */
-function prendiProssimoGiocatore() {    
+function prendiProssimoGiocatore() {
     if (giocatoriCheDevonoGiocare.length == 0) {
         giocatoriCheDevonoGiocare = giocatoriCheDevonoGiocare.concat(shuffle(giocatoriCheHannoGiocato));
         giocatoriCheHannoGiocato.length = 0;
