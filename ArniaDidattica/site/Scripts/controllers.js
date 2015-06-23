@@ -340,7 +340,9 @@ function gestioneRisposta($scope, $location, risp) {//risp è 0 o 1
             //risposta sbagliata
         };
 
-        $.playSound('../suoni/pulsante_premuto.mp3');
+        var sound = document.getElementById("click");
+        sound.play();
+
         document.getElementById("prossimo").style.display = "block";
         devoRispondere = false;
     }
