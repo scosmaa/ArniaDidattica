@@ -1,13 +1,15 @@
-<div id="textSmallRight">
-    <p>{{nomeBimbo}}</p>
-</div>
-<div id="textLarge">
-    <p>{{domandaCorrente.domanda}}</p>
-</div>
-<div id="textSmall">
-    <button value="risp0" ng-model="domandaCorrente.risposta1" id="risp0" class="textBorder"> {{domandaCorrente.risposta1}} </button>
-    <button value="risp1" ng-model="domandaCorrente.risposta2" id="risp1" class="textBorder"> {{domandaCorrente.risposta2}} </button>
-</div>
-<div id="textMedium">
-    <p id="prossimo" style="display:none;">Premi uno dei due pulsanti per passare al prossimo QUIZ</p>
+<div onload="location.reload()">
+    <div id="textSmallRight">
+        <p>{{nomeBimbo}}</p>
+    </div>
+    <div id="textLarge">
+        <p>{{domandaCorrente.domanda}}</p>
+    </div>
+    <div id="textSmall">
+        <button value="risp0" ng-model="domandaCorrente.risposta1" id="risp0" class="textBorder"> {{domandaCorrente.risposta1}} </button>
+        <button value="risp1" ng-model="domandaCorrente.risposta2" id="risp1" class="textBorder"> {{domandaCorrente.risposta2}} </button>
+    </div>
+    <div id="textMedium">
+        <p id="prossimo" style="display:none;">Premi uno dei due pulsanti per passare al prossimo QUIZ</p>
+    </div>
 </div>
