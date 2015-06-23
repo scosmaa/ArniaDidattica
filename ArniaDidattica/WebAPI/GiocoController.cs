@@ -38,13 +38,7 @@ namespace ArniaDidattica.WebAPI
             hubContext.Clients.All.AvvioVideo2();
         }
 
-        [Route("domande/{nQuadro}")]
-        [HttpGet]
-        public string[,] getDomande(int nQuadro)
-        {
-            return Program.getDomande(nQuadro);
-        }
-
+        #region messaggi agli arduini
         [Route("invio/0/{msg}")]
         [HttpGet]
         public void invioMsgBase(string msg)
@@ -71,7 +65,9 @@ namespace ArniaDidattica.WebAPI
         {
             Program.arduinoQuadro3.invioMsg(msg);
         }
+        #endregion
 
+        #region messaggi
         [Route("risposta0")]
         [HttpGet]
         public void risposta0()
@@ -87,20 +83,16 @@ namespace ArniaDidattica.WebAPI
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
             hubContext.Clients.All.Risposta1();
         }
+        #endregion
 
         #region GiocoC
 
-        [Route("tiroGiocoC")]
-        [HttpGet]
-        public void TiroGiocoC()
+        public void finePallinaGiocoC()
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
-            hubContext.Clients.All.TiroGiocoC();
+            hubContext.Clients.All.finePallinaGiocoC();
         }
 
-
-        [Route("puntoGiocoC")]
-        [HttpGet]
         public void PuntoGiocoC()
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
@@ -111,12 +103,17 @@ namespace ArniaDidattica.WebAPI
 
         #region Quadro3
 
-        [Route("avvioVideo3")]
-        [HttpGet]
         public void AvvioVideo3()
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
             hubContext.Clients.All.AvvioVideo3();
+        }
+
+
+        public void PuntoGiocoE(int p)
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
+            hubContext.Clients.All.puntoGiocoE(p);
         }
 
         #endregion

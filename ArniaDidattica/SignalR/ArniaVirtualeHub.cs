@@ -36,9 +36,9 @@ namespace ArniaDidattica.SignalR
 
         #region GiocoC
 
-        public void TiroGiocoC()
+        public void finePallinaGiocoC()
         {
-            Clients.All.tiroGiocoC();
+            Clients.All.finePallinaGiocoC();
         }
 
         public void PuntoGiocoC()
@@ -53,6 +53,11 @@ namespace ArniaDidattica.SignalR
         public void AvvioVideo3()
         {
             Clients.All.avvioVideo3();
+        }
+
+        public void PuntoGiocoE(int p)
+        {
+            Clients.All.puntoGiocoC(p);
         }
 
         #endregion

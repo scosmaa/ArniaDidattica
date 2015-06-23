@@ -34,32 +34,39 @@ namespace ArniaDidattica
             server = new TcpListener(porta);//in ascolto
             server.Start();
 
-            int q_prec = -1;    //Quadro precedente
+
             int id = -1;
             TcpClient connesso = null;
 
-            while(true)
-            {
-                if (q_prec < 0)
-                {
-                    //Attendo base
-                    Console.WriteLine("In attesa della base...");
-                    connesso = server.AcceptTcpClient();        
-                    id = getId(connesso);
-                    if(id == 0)                    
-                        q_prec = 0;
-                }
-                else
-                {
-                    connesso = server.AcceptTcpClient();
-                    id = getId(connesso);
 
-                    //Quadro connesso
-                    switch (id)
-                    {
-                        case 1:
-                            if(q_prec == 0)
-                            {
+            //connetto base
+            while (id != 0)//controllo se è la base
+            {
+                connesso = server.AcceptTcpClient();
+                id = getId(connesso);
+                if (id != 0)
+                {
+                    Console.WriteLine("Inserito quadro sbagliato.");
+                    //inviare a video l'errore
+                }
+            }
+            arduinoBase = new Base(connesso);
+            Console.WriteLine("Base connessa.");
+
+            int q_prec = 0;    //Quadro precedente (base)
+
+            while (true)
+            {
+                connesso = server.AcceptTcpClient();
+                id = getId(connesso);
+
+                //Quadro connesso
+                switch (id)
+                {
+                    case 1:
+                        {//quadro1
+                            if (q_prec == 0)
+                            {//corretto ordine
                                 Console.WriteLine("Quadro 1 connesso.");
                                 Console.WriteLine("Starting web Server...");
                                 WebApp.Start<Avvio>(baseUri);
@@ -67,39 +74,43 @@ namespace ArniaDidattica
                                 q_prec++;
                             }
                             else if (q_prec > 0)
-                            {
+                            {//attaccato quadro 1 dopo altro quadro
+                                //chiedo conferma
+                                //chiudere il vecchio tab
                                 Process.Start(baseUri);                 //Restart
                                 q_prec = 0;
                                 break;
                             }
-                            else
-                                Console.WriteLine("Inserito quadro sbagliato.");
                             break;
+                        }
+                    case 2:
+                        if (q_prec == 1)
+                        {
+                            Console.WriteLine("Quadro 2 connesso.");
+                            q_prec++;
+                            giocoController.AvvioVideo2();
+                        }
+                        else
+                            Console.WriteLine("Inserito quadro sbagliato.");
+                        break;
 
-                        case 2:
-                            if(q_prec == 1)
-                            {
-                                Console.WriteLine("Quadro 2 connesso.");
-                                q_prec++;
-                                //Niente?
-                            }
-                            break;
-
-                        case 3:
-                            if(q_prec == 2)
-                            {
-                                Console.WriteLine("Quadro 3 connesso.");
-                                q_prec++;
-                                //Niente?
-                            }
-                            break;
-                    }
+                    case 3:
+                        if (q_prec == 2)
+                        {
+                            Console.WriteLine("Quadro 3 connesso.");
+                            q_prec++;
+                            giocoController.AvvioVideo3();
+                        }
+                        else
+                            Console.WriteLine("Inserito quadro sbagliato.");
+                        break;
                 }
+
             }
             #region old_connection
             ////faccio connettere l'arduino della base.
 
-            
+
             //while (id != 0)//controllo se è la base
             //{
             //    connesso = server.AcceptTcpClient();
@@ -232,56 +243,6 @@ namespace ArniaDidattica
             //secondo quadro
             #endregion
         }
-
-        public static string[,] getDomande(int idQuadro)
-        {
-            StreamReader sr = File.OpenText(@"..\..\domande\domande.txt");
-            int nDomande = 0;
-
-            while (!sr.EndOfStream)
-            {
-                int id = Convert.ToInt32(sr.ReadLine().Substring(0, 1));//leggo il 1 carattere
-                nDomande += id == idQuadro ? 1 : 0;
-            }
-            sr.Close();
-            string[,] domande = new string[nDomande, 3];//domanda | risp vera | risp falsa
-
-            sr = File.OpenText(@"..\..\domande\domande.txt");
-            while (!sr.EndOfStream)
-            {
-                string s = sr.ReadLine();
-                string[] parti = s.Split('\t');
-
-                if (parti[0] == idQuadro.ToString())
-                {
-                    domande[--nDomande, 0] = parti[1];
-                    domande[nDomande, 1] = parti[2];
-                    domande[nDomande, 2] = parti[3];
-                }
-            }
-            return random(domande);
-        }
-        public static string[,] random(string[,] vettore)
-        {
-            //lungo n e largo 3
-            Random r = new Random();
-
-            for (int j = 0; j < 5; j++)
-            {
-                int n = r.Next(vettore.Length / 3);
-                int n2 = r.Next(vettore.Length / 3);
-
-                for (int i = 0; i < 3; i++)
-                {
-                    string temp = vettore[n, i];
-                    vettore[n, i] = vettore[n2, i];
-                    vettore[n2, i] = temp;
-                }
-            }
-
-            return vettore;
-        }
-
 
         static int getId(TcpClient socket)//da socket a id dell'arduino
         {

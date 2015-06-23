@@ -56,13 +56,6 @@ namespace ArniaDidattica
                     Console.WriteLine("Arduino " + nome + " > " + msg);
 
                     gestioneMsg(msg);
-                    //if (msgDaInviare == "")
-                    //    invioMsg(".");
-                    //else
-                    //{
-                    //    invioMsg(msgDaInviare);
-                    //    msgDaInviare = "";
-                    //}
                 }
             }
             catch (System.IO.IOException)

@@ -20,8 +20,19 @@ namespace ArniaDidattica
         {
             switch (msg)
             {
-                case "":
+                case "0":
                     {
+                        giocoController.PuntoGiocoE(0);
+                        break;
+                    }
+                case "1":
+                    {
+                        giocoController.PuntoGiocoE(1);
+                        break;
+                    }
+                default:
+                    {
+                        Console.WriteLine("messaggio non riconosciuto ({0})", msg);
                         break;
                     }
             }

@@ -15,15 +15,27 @@ namespace ArniaDidattica
         {
             base.id = 2;
             base.nome = "quadro 2";
-
         }
 
         public override void gestioneMsg(string msg)
         {
             switch (msg)
             {
-                case "":
-                    { break; }
+                case "0":
+                    {//fine pallina
+                        giocoController.finePallinaGiocoC();
+                        break;
+                    }
+                case "1":
+                    {//preso un fiore
+                        giocoController.PuntoGiocoC();
+                        break;
+                    }
+                default:
+                    {
+                        Console.WriteLine("messaggio non riconosciuto ({0})", msg);
+                        break;
+                    }
             }
         }
     }
