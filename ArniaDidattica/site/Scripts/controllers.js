@@ -337,7 +337,8 @@ function gestioneRisposta($scope, $location, risp) {//risp è 0 o 1
             document.getElementById("risp" + risp).style.backgroundColor = "red";
             //risposta sbagliata
         };
-        
+
+        $.playSound('../suoni/pulsante_premuto.mp3');
         document.getElementById("prossimo").style.display = "block";
         devoRispondere = false;
     }
