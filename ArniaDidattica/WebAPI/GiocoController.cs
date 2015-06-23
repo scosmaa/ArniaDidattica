@@ -127,7 +127,7 @@ namespace ArniaDidattica.WebAPI
 
         #endregion
 
-        public void reset()
+        public void Reset()
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
             hubContext.Clients.All.reset();

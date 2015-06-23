@@ -1,18 +1,23 @@
 ﻿'use strict';
 
-/* Controller utilizzati dall'applicazione di angularJS*/
-var beehiveControllers = angular.module('beehiveControllers', []);
-/* Punti fatti durante i quiz/giochi */
-var punti = 0;
-/* Fase del gioco - QuizA = 1, QuizB = 2 ecc. */
-var faseDelGioco;
+var beehiveControllers = angular.module('beehiveControllers', []);/* Controller utilizzati dall'applicazione di angularJS*/
 
+//Variabili
+var punti = 0;      /* Punti fatti durante i quiz/giochi */
+var faseDelGioco;   /* Fase del gioco - QuizA = 1, QuizB = 2 ecc. */
 
 var nDomandeDaFare;//domande da fare, prese dalla matrice riempita manualmente
 var domandeFatte;//domande fatte
 var domandeCaricate;//vettore contente le domande in ordine random caricate dal file json
 var devoRispondere;//indica se la pressone di uno dei pulsanti sulla base è per rispondere o per caricare la prossima domanda
 
+
+var numeroTotaleGiocatori;
+var gruppetti;//vettore con N volte classe
+
+var classe = [];
+
+//Costanti
 // Gestione dei punteggi per ogni tipo di gioco
 var puntiPerDomandaIndovinataQuizA = 1;
 var pallineVintePerRispostaGiustaQuizB = 1;
@@ -21,12 +26,8 @@ var puntiPerDomandaIndovinataQuizD = 1;
 var valorePuntoGiocoE = 1;
 var puntiPerDomandaIndovinataQuizF = 1;
 
-/* Palline guadagnate per i giochi */
-var pallineGiocoC = 1;//inizia da 1
+var pallineGiocoC = 1;  // Palline guadagnate per i giochi
 var pallineGiocoE = 1;
-
-var numeroTotaleGiocatori;
-var gruppetti;//vettore con N volte classe
 
 /* Modalità di gioco in base al numero di giocatori */
 var GESTIONEGRUPPI = [[], [], [], [], []];
@@ -41,10 +42,11 @@ GESTIONEGRUPPI[4][0] = 3; GESTIONEGRUPPI[4][1] = 3; GESTIONEGRUPPI[4][2] = 3; GE
 $.connection.hub.url = "http://localhost:9999/signalr";
 var hub = $.connection.arniaVirtualeHub;
 
+
 //per il debug
-var classe = ["1", "2", "3", "4", "5", "6"];
-numeroTotaleGiocatori = classe.length;
-creaGruppetti(classe);
+//var classe = ["1", "2", "3", "4", "5", "6"];
+//numeroTotaleGiocatori = classe.length - 1;
+//creaGruppetti(classe);
 
 /* Home page */
 beehiveControllers.controller('home', ['$scope', '$location',
@@ -98,11 +100,10 @@ function ($scope, $location, $http) {
 /* Inserimento api */
 beehiveControllers.controller('newbee', ['$scope', '$location',
   function ($scope, $location) {
-      var classe = [];//la classe
       document.getElementById("nomeApe").focus();
 
       $scope.AddNew = function () {
-          if (classe.length <= 10) {
+          if (classe.length < 10) {
               var n_bee = $scope.nomeApe;
 
               if (n_bee == "" || n_bee == null) {
@@ -230,8 +231,6 @@ function ($scope, $location, $http) {
 
     // Start the connection.
     $.connection.hub.start()
-
-
 }]);
 
 /* Terzo Quadro */
@@ -442,9 +441,9 @@ function rispostaGiustaAlQuiz(quizCorrente) {
 /* crea i gruppetti */
 function creaGruppetti(classe) {
     if (classe.length < 8) {
-        gruppetti = [shuffle(classe), shuffle(classe), shuffle(classe)]; //3 gruppetti
+        gruppetti = [shuffle(classe), shuffle(classe), shuffle(classe)];    //3 gruppetti
     } else {
-        gruppetti = [shuffle(classe), shuffle(classe)];        //2 gruppetti
+        gruppetti = [shuffle(classe), shuffle(classe)];                     //2 gruppetti
     }
 }
 
@@ -533,4 +532,23 @@ function prendiProssimoGiocatore(gioco) {//dato il numero del gioco ti da il gio
     }
 
     return giocatore;
+}
+
+
+function Reset() {
+    var punti = 0;      /* Punti fatti durante i quiz/giochi */
+    var faseDelGioco =  null;   /* Fase del gioco - QuizA = 1, QuizB = 2 ecc. */
+    var nDomandeDaFare = null;//domande da fare, prese dalla matrice riempita manualmente
+    var domandeFatte = null;//domande fatte
+    var domandeCaricate = null;//vettore contente le domande in ordine random caricate dal file json
+    var devoRispondere = null;//indica se la pressone di uno dei pulsanti sulla base è per rispondere o per caricare la prossima domanda
+    var numeroTotaleGiocatori = null;
+    var gruppetti = null;//vettore con N volte classe
+
+    arduinoQuadro1 = null;
+    arduinoQuadro2 = null;
+    arduinoQuadro3 = null;
+    q_prec = 0;
+
+
 }

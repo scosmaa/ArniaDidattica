@@ -79,6 +79,7 @@ namespace ArniaDidattica
                             {//attaccato quadro 1 dopo altro quadro
                                 //chiedo conferma
                                 //chiudere il vecchio tab
+                                giocoController.Reset();
                                 Process.Start(baseUri);                 //Restart
                                 q_prec = 0;
                                 break;

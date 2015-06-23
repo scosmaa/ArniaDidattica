@@ -22,42 +22,42 @@ beehiveApp.config(['$routeProvider',
             templateUrl: 'partials/close_cells.html',
             controller: 'cellclose'
         })
-           .when('/video1', {
-               templateUrl: 'partials/video1.html',
-               controller: 'video1'
-           })
-          .when('/quiz', {
-              templateUrl: 'partials/quiz.html',
-              controller: 'quiz'
-          })
-          .when('/quadro2', {
-              templateUrl: 'partials/inserimento_quadro_2.html',
-              controller: 'quadro2'
-          })
-          .when('/video2', {
-              templateUrl: 'partials/video2.html',
-              controller: 'video2'
-          })
-          .when('/giocoC', {
-              templateUrl: 'partials/giocoC.html',
-              controller: 'giocoC'
-          })
-          .when('/quadro3', {
-              templateUrl: 'partials/inserimento_quadro_3.html',
-              controller: 'quadro3'
-          })
-          .when('/video3', {
-              templateUrl: 'partials/video3.html',
-              controller: 'video3'
-          })
-          .when('/giocoE', {
-              templateUrl: 'partials/giocoE.html',
-              controller: 'giocoE'
-          })
-          .when('/risultato', {
-              templateUrl: 'partials/final_score.html',
-              controller: 'risultato'
-          })
+        .when('/video1', {
+            templateUrl: 'partials/video1.html',
+            controller: 'video1'
+        })
+        .when('/quiz', {
+            templateUrl: 'partials/quiz.html',
+            controller: 'quiz'
+        })
+        .when('/quadro2', {
+            templateUrl: 'partials/inserimento_quadro_2.html',
+            controller: 'quadro2'
+        })
+        .when('/video2', {
+            templateUrl: 'partials/video2.html',
+            controller: 'video2'
+        })
+        .when('/giocoC', {
+            templateUrl: 'partials/giocoC.html',
+            controller: 'giocoC'
+        })
+        .when('/quadro3', {
+            templateUrl: 'partials/inserimento_quadro_3.html',
+            controller: 'quadro3'
+        })
+        .when('/video3', {
+            templateUrl: 'partials/video3.html',
+            controller: 'video3'
+        })
+        .when('/giocoE', {
+            templateUrl: 'partials/giocoE.html',
+            controller: 'giocoE'
+        })
+        .when('/risultato', {
+            templateUrl: 'partials/final_score.html',
+            controller: 'risultato'
+        })
         .otherwise({
             redirectTo: '/'
         });
