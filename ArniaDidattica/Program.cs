@@ -49,7 +49,7 @@ namespace ArniaDidattica
             }
             arduinoBase = new Base(connesso);
             Console.WriteLine("Base connessa.");
-            
+            Console.WriteLine("Starting web Server...");
             Process.Start(baseUrl);     //avvio homepage
 
             q_prec = 0;                 //Quadro precedente (base)
@@ -68,13 +68,11 @@ namespace ArniaDidattica
                             {//corretto ordine
                                 arduinoQuadro1 = new Quadro1(connesso);
                                 Console.WriteLine("Quadro 1 connesso.");
-                                Console.WriteLine("Starting web Server...");
                                 q_prec++;
                             }
                             else if (q_prec > 0)
                             {//attaccato quadro 1 dopo altro quadro
                                 //chiedo conferma
-                                
                                 giocoController.Reset();
                                 q_prec = 0;
                                 break;
