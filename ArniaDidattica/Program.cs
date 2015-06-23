@@ -21,27 +21,23 @@ namespace ArniaDidattica
         static void Main(string[] args)
         {
 
-            string baseUri = "http://localhost:9999";
+            int q_prec;
+            int id = -1;
+            string baseUrl = "http://localhost:9999";
             TcpListener server;
             int porta = 2020;
             GiocoController giocoController = new GiocoController();
 
-            WebApp.Start<Avvio>(baseUri);//debug
-
-            int NGIOCATORI;
-            int PUNTI = 0;//punti totali
+            WebApp.Start<Avvio>(baseUrl);//debug
 
             server = new TcpListener(porta);//in ascolto
             server.Start();
 
-
-            int id = -1;
+            //Attendo base
+            Console.WriteLine("In attesa della base.");
             TcpClient connesso = null;
 
-            Console.WriteLine("In attesa della base.");
-
-            //connetto base
-            while (id != 0)//controllo se è la base
+            while (id != 0)     //controllo se è la base
             {
                 connesso = server.AcceptTcpClient();
                 id = getId(connesso);
@@ -53,10 +49,10 @@ namespace ArniaDidattica
             }
             arduinoBase = new Base(connesso);
             Console.WriteLine("Base connessa.");
+            
+            Process.Start(baseUrl);     //avvio homepage
 
-            Process.Start(baseUri);    //avvio homepage
-
-            int q_prec = 0;    //Quadro precedente (base)
+            q_prec = 0;                 //Quadro precedente (base)
 
             while (true)
             {
@@ -67,7 +63,7 @@ namespace ArniaDidattica
                 switch (id)
                 {
                     case 1:
-                        {//quadro1
+                        {//quadro 1
                             if (q_prec == 0)
                             {//corretto ordine
                                 arduinoQuadro1 = new Quadro1(connesso);
@@ -78,39 +74,40 @@ namespace ArniaDidattica
                             else if (q_prec > 0)
                             {//attaccato quadro 1 dopo altro quadro
                                 //chiedo conferma
-                                //chiudere il vecchio tab
+                                
                                 giocoController.Reset();
-                                Process.Start(baseUri);                 //Restart
                                 q_prec = 0;
                                 break;
                             }
                             break;
                         }
                     case 2:
-                        if (q_prec == 1)
-                        {
-                            arduinoQuadro2 = new Quadro2(connesso);
-                            Console.WriteLine("Quadro 2 connesso.");
-                            q_prec++;
-                            giocoController.AvvioVideo2();
+                        {//quadro 2
+                            if (q_prec == 1)
+                            {
+                                arduinoQuadro2 = new Quadro2(connesso);
+                                Console.WriteLine("Quadro 2 connesso.");
+                                q_prec++;
+                                giocoController.AvvioVideo2();
+                            }
+                            else
+                                Console.WriteLine("Inserito quadro sbagliato.");
+                            break;
                         }
-                        else
-                            Console.WriteLine("Inserito quadro sbagliato.");
-                        break;
-
                     case 3:
-                        if (q_prec == 2)
-                        {
-                            arduinoQuadro3 = new Quadro3(connesso);
-                            Console.WriteLine("Quadro 3 connesso.");
-                            q_prec++;
-                            giocoController.AvvioVideo3();
+                        {//quadro 3
+                            if (q_prec == 2)
+                            {
+                                arduinoQuadro3 = new Quadro3(connesso);
+                                Console.WriteLine("Quadro 3 connesso.");
+                                q_prec++;
+                                giocoController.AvvioVideo3();
+                            }
+                            else
+                                Console.WriteLine("Inserito quadro sbagliato.");
+                            break;
                         }
-                        else
-                            Console.WriteLine("Inserito quadro sbagliato.");
-                        break;
                 }
-
             }
             #region old_connection
             ////faccio connettere l'arduino della base.

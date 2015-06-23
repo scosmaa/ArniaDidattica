@@ -5,16 +5,12 @@ var beehiveControllers = angular.module('beehiveControllers', []);/* Controller 
 //Variabili
 var punti = 0;      /* Punti fatti durante i quiz/giochi */
 var faseDelGioco;   /* Fase del gioco - QuizA = 1, QuizB = 2 ecc. */
-
 var nDomandeDaFare;//domande da fare, prese dalla matrice riempita manualmente
 var domandeFatte;//domande fatte
 var domandeCaricate;//vettore contente le domande in ordine random caricate dal file json
 var devoRispondere;//indica se la pressone di uno dei pulsanti sulla base è per rispondere o per caricare la prossima domanda
-
-
 var numeroTotaleGiocatori;
 var gruppetti;//vettore con N volte classe
-
 var classe = [];
 
 //Costanti
@@ -25,7 +21,6 @@ var pallineVintePerPuntoGiocoC = 1;
 var puntiPerDomandaIndovinataQuizD = 1;
 var valorePuntoGiocoE = 1;
 var puntiPerDomandaIndovinataQuizF = 1;
-
 var pallineGiocoC = 1;  // Palline guadagnate per i giochi
 var pallineGiocoE = 1;
 
@@ -100,6 +95,7 @@ function ($scope, $location, $http) {
 /* Inserimento api */
 beehiveControllers.controller('newbee', ['$scope', '$location',
   function ($scope, $location) {
+
       document.getElementById("nomeApe").focus();
 
       $scope.AddNew = function () {
@@ -305,7 +301,7 @@ function ($scope, $location, $http) {
             $scope.$apply();
         }
     };
-
+    beehiveControllers.controller
     //console.log(giocatoriCheDevonoGiocare);
     // Start the connection.
     $.connection.hub.start()
@@ -313,24 +309,36 @@ function ($scope, $location, $http) {
 
 }]);
 
-/* Ultimo Quadro */
+//Reset
 beehiveControllers.controller('risultato', ['$scope', '$location',
   function ($scope, $location) {
-    $scope.punteggioFinale = punti;
-      
-    setInterval(function () {
+    if ($location.url() == "/risultato")
+    {
+        $scope.punteggioFinale = punti;
+            setInterval(function () {
+            Reset();
+            $.connection.hub.stop();
+            //faseDelGioco = 6;
+            $location.path('home');
+            $scope.$apply();
+        }, 10000); //timeout
+    }
+   
+    $scope.BtnReset = function () {
         Reset();
         $.connection.hub.stop();
         //faseDelGioco = 6;
         $location.path('home');
         $scope.$apply();
-    }, 10000); //timeout
+    }
+
+    $scope.BtnReturn = function () {
+
+    }
   }]);
 
 
 // Utility
-
-
 // Gestisce la ripsosta della base (0 o 1)
 function gestioneRisposta($scope, $location, risp) {//risp è 0 o 1
     if (devoRispondere) {
@@ -550,10 +558,4 @@ function Reset()
     var devoRispondere = null;//indica se la pressone di uno dei pulsanti sulla base è per rispondere o per caricare la prossima domanda
     var numeroTotaleGiocatori = null;
     var gruppetti = null;//vettore con N volte classe
-
-    arduinoQuadro1 = null;
-    arduinoQuadro2 = null;
-    arduinoQuadro3 = null;
-    q_prec = 0;
-    
 }

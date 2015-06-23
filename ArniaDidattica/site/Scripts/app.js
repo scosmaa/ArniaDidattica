@@ -31,7 +31,7 @@ beehiveApp.config(['$routeProvider',
             controller: 'quiz'
         })
         .when('/quadro2', {
-            templateUrl: 'partials/inserimento_quadro_2.html',
+            templateUrl: 'partials/insert_q2.html',
             controller: 'quadro2'
         })
         .when('/video2', {
@@ -43,7 +43,7 @@ beehiveApp.config(['$routeProvider',
             controller: 'giocoC'
         })
         .when('/quadro3', {
-            templateUrl: 'partials/inserimento_quadro_3.html',
+            templateUrl: 'partials/insert_q3.html',
             controller: 'quadro3'
         })
         .when('/video3', {

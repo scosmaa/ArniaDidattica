@@ -132,12 +132,12 @@
     <Content Include="site\partials\reset.html" />
     <Content Include="site\partials\giocoC.html" />
     <Content Include="site\partials\giocoE.html" />
-    <Content Include="site\partials\inserimento_quadro_2.html" />
+    <Content Include="site\partials\insert_q2.html" />
     <Content Include="site\img\Q1.png" />
     <Content Include="site\img\Q2.png" />
     <Content Include="site\img\Q3.png" />
     <Content Include="site\img\Q4.png" />
-    <Content Include="site\partials\inserimento_quadro_3.html" />
+    <Content Include="site\partials\insert_q3.html" />
     <Content Include="site\partials\video1.html" />
     <Content Include="site\partials\video2.html" />
     <Content Include="site\partials\video3.html" />
@@ -150,7 +150,6 @@
     <Content Include="site\partials\new_bee.html" />
     <Content Include="site\partials\close_cells.html" />
     <Content Include="site\partials\quiz.html" />
-    <Content Include="site\partials\score.html" />
     <Content Include="site\Scripts\angular-route.min.js" />
     <Content Include="site\Scripts\angular.min.js" />
     <Content Include="site\Scripts\app.js" />
