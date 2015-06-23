@@ -9,13 +9,11 @@ namespace ArniaDidattica
 {
     abstract class Client
     {
-
-       protected GiocoController giocoController;
+        protected GiocoController giocoController;
 
         protected TcpClient socket;
         protected NetworkStream stream;
         protected Thread ricezione;
-        string msgDaInviare;
         public int id { get; protected set; }//id del quadro (0 se base, 1 2 3 4 5 se i quadri)
         public string nome { get; protected set; }//nome del quadro
 
