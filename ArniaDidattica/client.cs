@@ -30,9 +30,16 @@ namespace ArniaDidattica
 
         public void invioMsg(string msg)
         {
-            //vedo se è online, in caso riaspetto la connessione
-            Byte[] sendBytes = Encoding.UTF8.GetBytes(msg);
-            stream.Write(sendBytes, 0, sendBytes.Length);
+            try
+            {
+                //vedo se è online, in caso riaspetto la connessione
+                Byte[] sendBytes = Encoding.UTF8.GetBytes(msg);
+                stream.Write(sendBytes, 0, sendBytes.Length);
+            }
+            catch (System.NullReferenceException)
+            {
+                //quadro non connesso
+            }
         }
 
 

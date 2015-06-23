@@ -50,20 +50,29 @@ namespace ArniaDidattica.WebAPI
         [HttpGet]
         public void invioMsgQuadro1(string msg)
         {
-            Program.arduinoQuadro1.invioMsg(msg);
+            if (Program.arduinoQuadro1 != null)
+            {
+                Program.arduinoQuadro1.invioMsg(msg);
+            }
         }
 
         [Route("invio/2/{msg}")]
         [HttpGet]
         public void invioMsgQuadro2(string msg)
         {
-            Program.arduinoQuadro2.invioMsg(msg);
+            if (Program.arduinoQuadro2 != null)
+            {
+                Program.arduinoQuadro2.invioMsg(msg);
+            }
         }
         [Route("invio/3/{msg}")]
         [HttpGet]
         public void invioMsgQuadro3(string msg)
         {
-            Program.arduinoQuadro3.invioMsg(msg);
+            if (Program.arduinoQuadro3 != null)
+            {
+                Program.arduinoQuadro3.invioMsg(msg);
+            }
         }
         #endregion
 

@@ -67,16 +67,18 @@ function ($scope, $location, $http) {
     domandeFatte = 0;
     devoRispondere = true;
 
-    faseDelGioco = faseDelGioco != null ? faseDelGioco : 1;
+    faseDelGioco = faseDelGioco != null ? faseDelGioco : 2;
+    console.log("fase :" + faseDelGioco);
 
     // Leggo le domande che devono essere fatte in questa fase del gioco
     nDomandeDaFare = GESTIONEGRUPPI[(10 - numeroTotaleGiocatori)][faseDelGioco - 1];
+    console.log("domande da fare :" + nDomandeDaFare);
 
     // Carico le domande di questa fase di gioco
     $http.get('/domande/' + calcolaDomandeDaFare(faseDelGioco) + '.json').success(function (domandeQuizCorrente) {
         // Mischio le domande
         domandeCaricate = shuffle(domandeQuizCorrente);
-
+        console.log("lunghezza vettore domande caricato :" + domandeCaricate.length);
         // Seleziono il giocatore e lo inserisco tra quelli che hanno già giocato
         $scope.nomeBimbo = prendiProssimoGiocatore(faseDelGioco);
         // Estraggo la domanda corrente
@@ -181,56 +183,56 @@ beehiveControllers.controller('video2', ['$scope', '$location',
 
   }]);
 
-beehiveControllers.controller('giocoC', ['$scope', '$location',
-  function ($scope, $location) {
+beehiveControllers.controller('giocoC', ['$scope', '$location', '$http',
+function ($scope, $location, $http) {
 
-      faseDelGioco = 3
-      $scope.fioriPresi = pallineGiocoC;
+    faseDelGioco = 3
+    $scope.fioriPresi = pallineGiocoC;
 
-      var nBambiniCheDevonoGiocare = GESTIONEGRUPPI[(10 - numeroTotaleGiocatori)][faseDelGioco - 1];
+    var nBambiniCheDevonoGiocare = GESTIONEGRUPPI[(10 - numeroTotaleGiocatori)][faseDelGioco - 1];
 
-      $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
-      $scope.pallineRimanenti = pallineGiocoC;
+    $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
+    $scope.pallineRimanenti = pallineGiocoC;
 
-      $http.get('invio/2/' + pallineGiocoC).success(function () { });//invio lo start all'arduino
+    $http.get('api/invio/2/' + pallineGiocoC).success(function () { });//invio lo start all'arduino
 
-      hub.client.puntoGiocoC = function () {
-          $scope.esitoTiro = "preso un fiore!";
-          pallineGiocoE = pallineGiocoE + pallineVintePerPuntoGiocoC;
-          $scope.fioriPresi++;
-      };
+    hub.client.puntoGiocoC = function () {
+        $scope.esitoTiro = "preso un fiore!";
+        pallineGiocoE = pallineGiocoE + pallineVintePerPuntoGiocoC;
+        $scope.fioriPresi++;
+    };
 
-      hub.client.finePallinaGiocoC = function () {
-          $scope.pallineRimanenti--;//decremento le palline disponibili
+    hub.client.finePallinaGiocoC = function () {
+        $scope.pallineRimanenti--;//decremento le palline disponibili
 
-          if ($scope.pallineRimanenti == 0 && nBambiniCheDevonoGiocare > 1) {
-              //cambio giocatore
-              $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
+        if ($scope.pallineRimanenti == 0 && nBambiniCheDevonoGiocare > 1) {
+            //cambio giocatore
+            $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
 
-              //azzero scritte
-              $scope.fioriPresi = 0;
-              $scope.pallineRimanenti = pallineGiocoC;
+            //azzero scritte
+            $scope.fioriPresi = 0;
+            $scope.pallineRimanenti = pallineGiocoC;
 
-              //da provare
-              $http.get('invio/2/' + pallineGiocoC).success(function () { });//invio lo start all'arduino
+            //da provare
+            $http.get('api/invio/2/' + pallineGiocoC).success(function () { });//invio lo start all'arduino
 
-              nBambiniCheDevonoGiocare--;
-          }
-          $scope.$apply();
-          if ($scope.pallineRimanenti == 0 && nBambiniCheDevonoGiocare - 1 == 0) {//se era l'ultimo bimbo
-              //passo al quadro 3
-              $.connection.hub.stop();
-              $location.path('quadro3');
-              $scope.$apply();
-          }
-      };
-
-
-      // Start the connection.
-      $.connection.hub.start()
+            nBambiniCheDevonoGiocare--;
+        }
+        $scope.$apply();
+        if ($scope.pallineRimanenti == 0 && nBambiniCheDevonoGiocare - 1 == 0) {//se era l'ultimo bimbo
+            //passo al quadro 3
+            $.connection.hub.stop();
+            $location.path('quadro3');
+            $scope.$apply();
+        }
+    };
 
 
-  }]);
+    // Start the connection.
+    $.connection.hub.start()
+
+
+}]);
 
 /* Terzo Quadro */
 beehiveControllers.controller('quadro3', ['$scope', '$location',
@@ -258,58 +260,58 @@ beehiveControllers.controller('video3', ['$scope', '$location',
 
   }]);
 
-beehiveControllers.controller('giocoE', ['$scope', '$location',
-  function ($scope, $location) {
-      faseDelGioco = 5;
-      $scope.puntiFatti = 0;
+beehiveControllers.controller('giocoE', ['$scope', '$location', '$http',
+function ($scope, $location, $http) {
+    faseDelGioco = 5;
+    $scope.puntiFatti = 0;
 
-      var nBambiniCheDevonoGiocare = GESTIONEGRUPPI[(10 - numeroTotaleGiocatori)][faseDelGioco - 1];
+    var nBambiniCheDevonoGiocare = GESTIONEGRUPPI[(10 - numeroTotaleGiocatori)][faseDelGioco - 1];
 
-      $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
+    $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
 
-      $scope.pallineRimanenti = pallineGiocoE;
+    $scope.pallineRimanenti = pallineGiocoE;
 
-      $http.get('invio/3/' + pallineGiocoE).success(function () { });//invio lo start all'arduino
+    $http.get('api/invio/3/' + pallineGiocoE).success(function () { });//invio lo start all'arduino
 
-      hub.client.puntoGiocoE = function (punto) {
-          punti = punti + valorePuntoGiocoE;
-          $scope.puntiFatti++;
-          $scope.pallineRimanenti--;
+    hub.client.puntoGiocoE = function (punto) {
+        punti = punti + valorePuntoGiocoE;
+        $scope.puntiFatti++;
+        $scope.pallineRimanenti--;
 
-          if ($scope.pallineRimanenti == 0 && nBambiniCheDevonoGiocare > 1) {
-              //cambio giocatore
-              $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
-              
-              $scope.puntiFatti = 0;
-              $scope.pallineRimanenti = pallineGiocoE;
+        if ($scope.pallineRimanenti == 0 && nBambiniCheDevonoGiocare > 1) {
+            //cambio giocatore
+            $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
 
-              $http.get('invio/3/' + pallineGiocoE).success(function () { });//invio lo start all'arduino
+            $scope.puntiFatti = 0;
+            $scope.pallineRimanenti = pallineGiocoE;
 
-              nBambiniCheDevonoGiocare--;
-          }
-          $scope.$apply();
-          if ($scope.pallineRimanenti == 0 && nBambiniCheDevonoGiocare - 1 == 0) {
-              //fine gioco
-              $.connection.hub.stop();
-              faseDelGioco = 6;
-              $location.path('quiz');
-              $scope.$apply();
-          }
-      };
+            $http.get('api/invio/3/' + pallineGiocoE).success(function () { });//invio lo start all'arduino
 
-      //console.log(giocatoriCheDevonoGiocare);
-      // Start the connection.
-      $.connection.hub.start()
+            nBambiniCheDevonoGiocare--;
+        }
+        $scope.$apply();
+        if ($scope.pallineRimanenti == 0 && nBambiniCheDevonoGiocare - 1 == 0) {
+            //fine gioco
+            $.connection.hub.stop();
+            faseDelGioco = 6;
+            $location.path('quiz');
+            $scope.$apply();
+        }
+    };
+
+    //console.log(giocatoriCheDevonoGiocare);
+    // Start the connection.
+    $.connection.hub.start()
 
 
-  }]);
+}]);
 
 /* Ultimo Quadro */
 beehiveControllers.controller('risultato', ['$scope', '$location',
   function ($scope, $location) {
       $scope.punteggioFinale = punti;
 
-      hub.client.reset = function () {         
+      hub.client.reset = function () {
           //fine gioco
           $.connection.hub.stop();
           faseDelGioco = 6;

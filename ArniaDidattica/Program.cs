@@ -70,6 +70,7 @@ namespace ArniaDidattica
                         {//quadro1
                             if (q_prec == 0)
                             {//corretto ordine
+                                arduinoQuadro1 = new Quadro1(connesso);
                                 Console.WriteLine("Quadro 1 connesso.");
                                 Console.WriteLine("Starting web Server...");
                                 q_prec++;
@@ -87,6 +88,7 @@ namespace ArniaDidattica
                     case 2:
                         if (q_prec == 1)
                         {
+                            arduinoQuadro2 = new Quadro2(connesso);
                             Console.WriteLine("Quadro 2 connesso.");
                             q_prec++;
                             giocoController.AvvioVideo2();
@@ -98,6 +100,7 @@ namespace ArniaDidattica
                     case 3:
                         if (q_prec == 2)
                         {
+                            arduinoQuadro3 = new Quadro3(connesso);
                             Console.WriteLine("Quadro 3 connesso.");
                             q_prec++;
                             giocoController.AvvioVideo3();
