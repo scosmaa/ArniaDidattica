@@ -111,7 +111,15 @@ beehiveControllers.controller('newbee', ['$scope', '$location',
                   return false;
               }
               classe.push(n_bee);
-
+              
+              if ($scope.giocatore == "" || $scope.giocatore == null)
+              {
+                  $scope.giocatore = n_bee ;
+              }
+              else {
+                  $scope.giocatore +=', ' + n_bee;
+              }
+              
               $scope.nomeApe = "";
               document.getElementById("nomeApe").focus();
           } else {
