@@ -308,6 +308,17 @@ beehiveControllers.controller('giocoE', ['$scope', '$location',
 beehiveControllers.controller('risultato', ['$scope', '$location',
   function ($scope, $location) {
       $scope.punteggioFinale = punti;
+
+      hub.client.reset = function () {         
+          //fine gioco
+          $.connection.hub.stop();
+          faseDelGioco = 6;
+          $location.path('home');
+          $scope.$apply();
+
+          //cancello tutte le variabili
+      };
+
   }]);
 
 

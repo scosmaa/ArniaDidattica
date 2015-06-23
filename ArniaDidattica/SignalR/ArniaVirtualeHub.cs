@@ -62,5 +62,11 @@ namespace ArniaDidattica.SignalR
 
         #endregion
 
+        public void reset()
+        {
+            Clients.All.reset();
+        }
+
+
     }
 }
