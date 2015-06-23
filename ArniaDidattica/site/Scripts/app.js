@@ -58,6 +58,10 @@ beehiveApp.config(['$routeProvider',
             templateUrl: 'partials/final_score.html',
             controller: 'risultato'
         })
+        .when('/reset', {
+            templateUrl: 'partials/reset.html',
+            controller: 'risultato'
+        })
         .otherwise({
             redirectTo: '/'
         });

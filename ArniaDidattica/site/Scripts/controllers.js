@@ -308,18 +308,14 @@ function ($scope, $location, $http) {
 /* Ultimo Quadro */
 beehiveControllers.controller('risultato', ['$scope', '$location',
   function ($scope, $location) {
-      $scope.punteggioFinale = punti;
-
-      hub.client.reset = function () {
-          //fine gioco
-          $.connection.hub.stop();
-          faseDelGioco = 6;
-          $location.path('home');
-          $scope.$apply();
-
-          //cancello tutte le variabili
-      };
-
+    $scope.punteggioFinale = punti;
+      
+    setInterval(Reset, 13000);
+   
+    $.connection.hub.stop();
+    //faseDelGioco = 6;
+    $location.path('home');
+    $scope.$apply();
   }]);
 
 
@@ -545,10 +541,9 @@ function Reset() {
     var numeroTotaleGiocatori = null;
     var gruppetti = null;//vettore con N volte classe
 
-    arduinoQuadro1 = null;
-    arduinoQuadro2 = null;
-    arduinoQuadro3 = null;
-    q_prec = 0;
-
+    //arduinoQuadro1 = null;
+    //arduinoQuadro2 = null;
+    //arduinoQuadro3 = null;
+    //q_prec = 0;
 
 }
