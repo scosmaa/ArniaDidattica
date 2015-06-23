@@ -340,7 +340,7 @@ function gestioneRisposta($scope, $location, risp) {//risp è 0 o 1
             //risposta sbagliata
         };
 
-        var sound = document.getElementById("click");
+        var sound = document.getElementById("suono");
         sound.play();
 
         document.getElementById("prossimo").style.display = "block";
