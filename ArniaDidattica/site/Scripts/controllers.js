@@ -318,12 +318,13 @@ beehiveControllers.controller('risultato', ['$scope', '$location',
   function ($scope, $location) {
     $scope.punteggioFinale = punti;
       
-    setInterval(Reset, 13000);
-   
-    $.connection.hub.stop();
-    //faseDelGioco = 6;
-    $location.path('home');
-    $scope.$apply();
+    setInterval(function () {
+        Reset();
+        $.connection.hub.stop();
+        //faseDelGioco = 6;
+        $location.path('home');
+        $scope.$apply();
+    }, 10000); //timeout
   }]);
 
 
@@ -539,8 +540,9 @@ function prendiProssimoGiocatore(gioco) {//dato il numero del gioco ti da il gio
 }
 
 
-function Reset() {
-    var punti = 0;      /* Punti fatti durante i quiz/giochi */
+function Reset()
+{
+    var punti = 5;      /* Punti fatti durante i quiz/giochi */
     var faseDelGioco =  null;   /* Fase del gioco - QuizA = 1, QuizB = 2 ecc. */
     var nDomandeDaFare = null;//domande da fare, prese dalla matrice riempita manualmente
     var domandeFatte = null;//domande fatte
@@ -549,9 +551,9 @@ function Reset() {
     var numeroTotaleGiocatori = null;
     var gruppetti = null;//vettore con N volte classe
 
-    //arduinoQuadro1 = null;
-    //arduinoQuadro2 = null;
-    //arduinoQuadro3 = null;
-    //q_prec = 0;
-
+    arduinoQuadro1 = null;
+    arduinoQuadro2 = null;
+    arduinoQuadro3 = null;
+    q_prec = 0;
+    
 }
