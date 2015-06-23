@@ -38,6 +38,7 @@ namespace ArniaDidattica
             int id = -1;
             TcpClient connesso = null;
 
+            Console.WriteLine("In attesa della base.");
 
             //connetto base
             while (id != 0)//controllo se è la base
@@ -52,6 +53,8 @@ namespace ArniaDidattica
             }
             arduinoBase = new Base(connesso);
             Console.WriteLine("Base connessa.");
+
+            Process.Start(baseUri);    //avvio homepage
 
             int q_prec = 0;    //Quadro precedente (base)
 
@@ -69,8 +72,6 @@ namespace ArniaDidattica
                             {//corretto ordine
                                 Console.WriteLine("Quadro 1 connesso.");
                                 Console.WriteLine("Starting web Server...");
-                                WebApp.Start<Avvio>(baseUri);
-                                Process.Start(baseUri);                 //avvio homepage con le tappe
                                 q_prec++;
                             }
                             else if (q_prec > 0)

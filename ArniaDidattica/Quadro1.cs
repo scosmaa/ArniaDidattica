@@ -25,6 +25,11 @@ namespace ArniaDidattica
                         celleChiuse = true;
                         break;
                     }
+                default:
+                    {
+                        Console.WriteLine("messaggio non riconosciuto ({0})", msg);
+                        break;
+                    }
             }
         }
     }

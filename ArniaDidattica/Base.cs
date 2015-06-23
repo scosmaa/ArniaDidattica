@@ -1,4 +1,5 @@
 ﻿using ArniaDidattica.WebAPI;
+using System;
 using System.Net.Sockets;
 
 namespace ArniaDidattica
@@ -29,6 +30,11 @@ namespace ArniaDidattica
                     {
                        // risposta = 1;//pulsande  a dx
                         giocoController.risposta1();
+                        break;
+                    }
+                default:
+                    {
+                        Console.WriteLine("messaggio non riconosciuto ({0})", msg);
                         break;
                     }
             }
