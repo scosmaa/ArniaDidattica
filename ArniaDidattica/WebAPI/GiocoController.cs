@@ -117,6 +117,8 @@ namespace ArniaDidattica.WebAPI
 
         #region Quadro3
 
+        [Route("avvioVideo3")]
+        [HttpGet]
         public void AvvioVideo3()
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();

@@ -47,10 +47,11 @@ namespace ArniaDidattica
                     //inviare a video l'errore
                 }
             }
+
             arduinoBase = new Base(connesso);
             Console.WriteLine("Base connessa.");
             Console.WriteLine("Starting web Server...");
-            Process.Start(baseUrl);     //avvio homepage
+            Process.Start(baseUrl, "-fullscreen");     //avvio homepage
 
             q_prec = 0;                 //Quadro precedente (base)
 
@@ -62,11 +63,22 @@ namespace ArniaDidattica
                 //Quadro connesso
                 switch (id)
                 {
+                    case 0:
+                        {//base connessa
+                            if (arduinoBase==null)
+                            {
+                                arduinoBase = new Base(connesso);
+                                Console.WriteLine("Base connessa.");
+                            }
+                            break;
+                        }
+
                     case 1:
                         {//quadro 1
                             if (q_prec == 0)
                             {//corretto ordine
                                 arduinoQuadro1 = new Quadro1(connesso);
+                                giocoController.RegistrazioneGiocatori();//avvio registrazione giocatori
                                 Console.WriteLine("Quadro 1 connesso.");
                                 q_prec++;
                             }
