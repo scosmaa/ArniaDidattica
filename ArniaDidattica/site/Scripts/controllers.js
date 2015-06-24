@@ -11,7 +11,7 @@ var domandeCaricate;//vettore contente le domande in ordine random caricate dal 
 var devoRispondere;//indica se la pressone di uno dei pulsanti sulla base è per rispondere o per caricare la prossima domanda
 var numeroTotaleGiocatori;
 var gruppetti;//vettore con N volte classe
-var classe = [];
+var classe;
 
 //Costanti
 // Gestione dei punteggi per ogni tipo di gioco
@@ -98,9 +98,9 @@ function ($scope, $location, $http) {
 /* Inserimento api */
 beehiveControllers.controller('newbee', ['$scope', '$location',
   function ($scope, $location) {
-
+      var classe = [];
       document.getElementById("nomeApe").focus();
-
+      
       $scope.AddNew = function () {
           if (classe.length < 10) {
               var n_bee = $scope.nomeApe;
@@ -185,7 +185,6 @@ beehiveControllers.controller('video2', ['$scope', '$location',
       vid.focus();
       vid.play();
       vid.onended = function () {
-
           $.connection.hub.stop();
           faseDelGioco = 2;
           $location.path('quiz');
@@ -287,7 +286,7 @@ function ($scope, $location, $http) {
 
     hub.client.puntoGiocoE = function (punto) {
         punti = punti + valorePuntoGiocoE * punto;
-        $scope.puntiFatti++;
+        $scope.puntiFatti = punti;
         $scope.pallineRimanenti--;
 
         if ($scope.pallineRimanenti == 0 && nBambiniCheDevonoGiocare > 1) {
@@ -389,26 +388,6 @@ function gestioneRisposta($scope, $location, risp) {//risp è 0 o 1
     }
 }
 
-// Randomizza glie elementi di un array (utile per cambiare l'ordine di inserimento dei giocatori)
-function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
-
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-
-        // Pick a remaining element...
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-
-        // And swap it with the current element.
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
-
-    return array;
-}
-
 // Restituisce le pagina corretta da visualizzare una volta terminato il quiz
 function calcolaPaginaSuccessivaAlQuiz(quadroCorrente) {
     switch (quadroCorrente) {
@@ -464,6 +443,26 @@ function creaGruppetti(classe) {
     } else {
         gruppetti = [shuffle(classe.slice()), shuffle(classe.slice())];                     //2 gruppetti
     }
+}
+
+// Randomizza glie elementi di un array (utile per cambiare l'ordine di inserimento dei giocatori)
+function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+
+    return array;
 }
 
 /* Prende il prossimo giocatore dato il gruppetti */
@@ -563,5 +562,5 @@ function Reset() {
     var devoRispondere = null;//indica se la pressone di uno dei pulsanti sulla base è per rispondere o per caricare la prossima domanda
     var numeroTotaleGiocatori = null;
     var gruppetti = null;//vettore con N volte classe
-    var classe = [];
+    var classe = null;
 }

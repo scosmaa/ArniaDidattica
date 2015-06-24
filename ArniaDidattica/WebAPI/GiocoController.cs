@@ -22,6 +22,7 @@ namespace ArniaDidattica.WebAPI
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
             hubContext.Clients.All.RegistrazioneGiocatori();
         }
+
         [Route("avvioVideo1")]
         [HttpGet]
         public void AvvioVideo()
@@ -111,7 +112,7 @@ namespace ArniaDidattica.WebAPI
             hubContext.Clients.All.finePallinaGiocoC();
         }
 
-       
+
         #endregion
 
         #region Quadro3
