@@ -40,7 +40,7 @@ var hub = $.connection.arniaVirtualeHub;
 
 //per il debug
 //var classe = ["1", "2", "3", "4", "5", "6"];
-//numeroTotaleGiocatori = classe.length - 1;
+//numeroTotaleGiocatori = classe.length;
 //creaGruppetti(classe);
 
 /* Home page */
@@ -60,11 +60,13 @@ beehiveControllers.controller('home', ['$scope', '$location',
 
 beehiveControllers.controller('quiz', ['$scope', '$location', '$http',
 function ($scope, $location, $http) {
+    // $.connection.hub.stop(); da chiedere a Simone
+
     nDomandeDaFare = 0;
     domandeFatte = 0;
     devoRispondere = true;
 
-    faseDelGioco = faseDelGioco != null ? faseDelGioco : 2;
+    faseDelGioco = faseDelGioco != null ? faseDelGioco : 1;
     console.log("fase :" + faseDelGioco);
 
     // Leggo le domande che devono essere fatte in questa fase del gioco
@@ -81,6 +83,7 @@ function ($scope, $location, $http) {
         // Estraggo la domanda corrente
         $scope.domandaCorrente = domandeCaricate.pop();
     });
+
 
     /* Evento che viene chiamato se il giocatore ha premuto il bottone 0 */
     hub.client.risposta0 = function () { gestioneRisposta($scope, $location, 0); };
@@ -107,15 +110,14 @@ beehiveControllers.controller('newbee', ['$scope', '$location',
                   return false;
               }
               classe.push(n_bee);
-              
-              if ($scope.giocatore == "" || $scope.giocatore == null)
-              {
-                  $scope.giocatore = n_bee ;
+
+              if ($scope.giocatore == "" || $scope.giocatore == null) {
+                  $scope.giocatore = n_bee;
               }
               else {
-                  $scope.giocatore +=', ' + n_bee;
+                  $scope.giocatore += ', ' + n_bee;
               }
-              
+
               $scope.nomeApe = "";
               document.getElementById("nomeApe").focus();
           } else {
@@ -130,9 +132,10 @@ beehiveControllers.controller('newbee', ['$scope', '$location',
               creaGruppetti(classe);
               $.connection.hub.stop();
               $location.path('cellclose');
+              $scope.$apply();
           }
           else {
-              alert("Inserire minimo 6 api!");
+              alert("Inserire minimo 6 nomi!");
               document.getElementById("nomeApe").focus();
           }
       }
@@ -153,9 +156,10 @@ beehiveControllers.controller('cellclose', ['$scope', '$location',
 beehiveControllers.controller('video1', ['$scope', '$location',
   function ($scope, $location) {
       var vid = document.getElementById("video1");
-
+      vid.focus();
       vid.play();
       vid.onended = function () {
+          $.connection.hub.stop();
           faseDelGioco = 1;
           $location.path('quiz');
           $scope.$apply();
@@ -178,9 +182,11 @@ beehiveControllers.controller('quadro2', ['$scope', '$location',
 beehiveControllers.controller('video2', ['$scope', '$location',
   function ($scope, $location) {
       var vid = document.getElementById("video2");
-
+      vid.focus();
       vid.play();
       vid.onended = function () {
+
+          $.connection.hub.stop();
           faseDelGioco = 2;
           $location.path('quiz');
           $scope.$apply();
@@ -192,7 +198,7 @@ beehiveControllers.controller('giocoC', ['$scope', '$location', '$http',
 function ($scope, $location, $http) {
 
     faseDelGioco = 3
-    $scope.fioriPresi = pallineGiocoC;
+    $scope.fioriPresi = 0;
 
     var nBambiniCheDevonoGiocare = GESTIONEGRUPPI[(10 - numeroTotaleGiocatori)][faseDelGioco - 1];
 
@@ -204,7 +210,8 @@ function ($scope, $location, $http) {
     hub.client.puntoGiocoC = function () {
         $scope.esitoTiro = "preso un fiore!";
         pallineGiocoE = pallineGiocoE + pallineVintePerPuntoGiocoC;
-        $scope.fioriPresi++;
+        $scope.fioriPresi = $scope.fioriPresi + pallineVintePerPuntoGiocoC;
+        $scope.$apply();
     };
 
     hub.client.finePallinaGiocoC = function () {
@@ -222,6 +229,7 @@ function ($scope, $location, $http) {
             $http.get('api/invio/2/' + pallineGiocoC).success(function () { });//invio lo start all'arduino
 
             nBambiniCheDevonoGiocare--;
+            $scope.$apply();
         }
         $scope.$apply();
         if ($scope.pallineRimanenti == 0 && nBambiniCheDevonoGiocare - 1 == 0) {//se era l'ultimo bimbo
@@ -253,9 +261,10 @@ beehiveControllers.controller('quadro3', ['$scope', '$location',
 beehiveControllers.controller('video3', ['$scope', '$location',
   function ($scope, $location) {
       var vid = document.getElementById("video3");
-
+      vid.focus();
       vid.play();
       vid.onended = function () {
+          $.connection.hub.stop();
           faseDelGioco = 4;
           $location.path('quiz');
           $scope.$apply();
@@ -277,7 +286,7 @@ function ($scope, $location, $http) {
     $http.get('api/invio/3/' + pallineGiocoE).success(function () { });//invio lo start all'arduino
 
     hub.client.puntoGiocoE = function (punto) {
-        punti = punti + valorePuntoGiocoE;
+        punti = punti + valorePuntoGiocoE * punto;
         $scope.puntiFatti++;
         $scope.pallineRimanenti--;
 
@@ -292,49 +301,46 @@ function ($scope, $location, $http) {
 
             nBambiniCheDevonoGiocare--;
         }
-        $scope.$apply();
         if ($scope.pallineRimanenti == 0 && nBambiniCheDevonoGiocare - 1 == 0) {
             //fine gioco
             $.connection.hub.stop();
             faseDelGioco = 6;
             $location.path('quiz');
-            $scope.$apply();
         }
+        $scope.$apply();
     };
     beehiveControllers.controller
     //console.log(giocatoriCheDevonoGiocare);
     // Start the connection.
-    $.connection.hub.start()
-
+    $.connection.hub.start();
 
 }]);
 
 //Reset
 beehiveControllers.controller('risultato', ['$scope', '$location',
   function ($scope, $location) {
-    if ($location.url() == "/risultato")
-    {
-        $scope.punteggioFinale = punti;
-            setInterval(function () {
-            Reset();
-            $.connection.hub.stop();
-            //faseDelGioco = 6;
-            $location.path('home');
-            $scope.$apply();
-        }, 10000); //timeout
-    }
-   
-    $scope.BtnReset = function () {
-        Reset();
-        $.connection.hub.stop();
-        //faseDelGioco = 6;
-        $location.path('home');
-        $scope.$apply();
-    }
+      if ($location.url() == "/risultato") {
+          $scope.punteggioFinale = punti;
+          setInterval(function () {
+              Reset();
+              $.connection.hub.stop();
+              //faseDelGioco = 6;
+              $location.path('home');
+              $scope.$apply();
+          }, 10000); //timeout
+      }
 
-    $scope.BtnReturn = function () {
+      $scope.BtnReset = function () {
+          Reset();
+          $.connection.hub.stop();
+          //faseDelGioco = 6;
+          $location.path('home');
+          $scope.$apply();
+      }
 
-    }
+      $scope.BtnReturn = function () {
+
+      }
   }]);
 
 
@@ -454,41 +460,41 @@ function rispostaGiustaAlQuiz(quizCorrente) {
 /* crea i gruppetti */
 function creaGruppetti(classe) {
     if (classe.length < 8) {
-        gruppetti = [shuffle(classe), shuffle(classe), shuffle(classe)];    //3 gruppetti
+        gruppetti = [shuffle(classe.slice()), shuffle(classe.slice()), shuffle(classe.slice())];    //3 gruppetti
     } else {
-        gruppetti = [shuffle(classe), shuffle(classe)];                     //2 gruppetti
+        gruppetti = [shuffle(classe.slice()), shuffle(classe.slice())];                     //2 gruppetti
     }
 }
 
 /* Prende il prossimo giocatore dato il gruppetti */
 function prendiProssimoGiocatore(gioco) {//dato il numero del gioco ti da il giocatore preso dal gruppo specifico
-
+    var giocatore;
     switch (numeroTotaleGiocatori) {
         case 6:
             {
                 switch (gioco) {
                     case 1: {
-                        var giocatore = gruppetti[0].pop();
+                        giocatore = gruppetti[0].pop();
                         break;
                     }
                     case 2: {
-                        var giocatore = gruppetti[1].pop();
+                        giocatore = gruppetti[1].pop();
                         break;
                     }
                     case 3: {
-                        var giocatore = gruppetti[2].pop();
+                        giocatore = gruppetti[2].pop();
                         break;
                     }
                     case 4: {
-                        var giocatore = gruppetti[2].pop();
+                        giocatore = gruppetti[2].pop();
                         break;
                     }
                     case 5: {
-                        var giocatore = gruppetti[1].pop();
+                        giocatore = gruppetti[1].pop();
                         break;
                     }
                     case 6: {
-                        var giocatore = gruppetti[0].pop();
+                        giocatore = gruppetti[0].pop();
                         break;
                     }
                 }
@@ -498,27 +504,27 @@ function prendiProssimoGiocatore(gioco) {//dato il numero del gioco ti da il gio
             {
                 switch (gioco) {
                     case 1: {
-                        var giocatore = gruppetti[0].pop();
+                        giocatore = gruppetti[0].pop();
                         break;
                     }
                     case 2: {
-                        var giocatore = gruppetti[1].pop();
+                        giocatore = gruppetti[1].pop();
                         break;
                     }
                     case 3: {
-                        var giocatore = gruppetti[2].pop();
+                        giocatore = gruppetti[2].pop();
                         break;
                     }
                     case 4: {
-                        var giocatore = gruppetti[1].pop();
+                        giocatore = gruppetti[1].pop();
                         break;
                     }
                     case 5: {
-                        var giocatore = gruppetti[2].pop();
+                        giocatore = gruppetti[2].pop();
                         break;
                     }
                     case 6: {
-                        var giocatore = gruppetti[0].pop();
+                        giocatore = gruppetti[0].pop();
                         break;
                     }
                 }
@@ -528,15 +534,15 @@ function prendiProssimoGiocatore(gioco) {//dato il numero del gioco ti da il gio
             {
                 switch (gioco) {
                     case 1: {
-                        var giocatore = gruppetti[0].pop();
+                        giocatore = gruppetti[0].pop();
                         break;
                     }
                     case 6: {
-                        var giocatore = gruppetti[0].pop();
+                        giocatore = gruppetti[0].pop();
                         break;
                     }
                     default: {
-                        var giocatore = gruppetti[1].pop();
+                        giocatore = gruppetti[1].pop();
                         break;
                     }
                 }
@@ -548,14 +554,14 @@ function prendiProssimoGiocatore(gioco) {//dato il numero del gioco ti da il gio
 }
 
 
-function Reset()
-{
-    var punti = 5;      /* Punti fatti durante i quiz/giochi */
-    var faseDelGioco =  null;   /* Fase del gioco - QuizA = 1, QuizB = 2 ecc. */
+function Reset() {
+    var punti = 0;      /* Punti fatti durante i quiz/giochi */
+    var faseDelGioco = null;   /* Fase del gioco - QuizA = 1, QuizB = 2 ecc. */
     var nDomandeDaFare = null;//domande da fare, prese dalla matrice riempita manualmente
     var domandeFatte = null;//domande fatte
     var domandeCaricate = null;//vettore contente le domande in ordine random caricate dal file json
     var devoRispondere = null;//indica se la pressone di uno dei pulsanti sulla base è per rispondere o per caricare la prossima domanda
     var numeroTotaleGiocatori = null;
     var gruppetti = null;//vettore con N volte classe
+    var classe = [];
 }

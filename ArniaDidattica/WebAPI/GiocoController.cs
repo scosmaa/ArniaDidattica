@@ -95,19 +95,23 @@ namespace ArniaDidattica.WebAPI
         #endregion
 
         #region GiocoC
-
-        public void finePallinaGiocoC()
-        {
-            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
-            hubContext.Clients.All.finePallinaGiocoC();
-        }
-
+        [Route("puntoC")]
+        [HttpGet]
         public void PuntoGiocoC()
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
             hubContext.Clients.All.puntoGiocoC();
         }
 
+        [Route("fineC")]
+        [HttpGet]
+        public void finePallinaGiocoC()
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
+            hubContext.Clients.All.finePallinaGiocoC();
+        }
+
+       
         #endregion
 
         #region Quadro3
@@ -118,7 +122,8 @@ namespace ArniaDidattica.WebAPI
             hubContext.Clients.All.AvvioVideo3();
         }
 
-
+        [Route("puntoE/{p}")]
+        [HttpGet]
         public void PuntoGiocoE(int p)
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
