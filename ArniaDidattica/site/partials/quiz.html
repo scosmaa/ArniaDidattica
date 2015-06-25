@@ -1,5 +1,5 @@
 <div id="textSmallRight">
-    <p style="font-size:1.5em">Giocatore: {{nomeBimbo}}</p>
+    <p style="font-size:2em">Tocca al giocatore: {{nomeBimbo}}</p>
 </div>
 <div id="textLarge">
     <p style="padding-top:10%;">{{domandaCorrente.domanda}}</p>
@@ -9,6 +9,7 @@
     <button value="risp1" ng-model="domandaCorrente.risposta2" id="risp1" class="textBorder"> {{domandaCorrente.risposta2}} </button>
 </div>
 <div id="textMedium">
-    <p id="prossimo" style="display:none;">Premi uno dei due pulsanti per passare al prossimo QUIZ</p>
+    <br /><br />
+    <p id="prossimo" style="display: none; position: relative; right: 280px;" class="blink_me">Premi uno dei due pulsanti per passare al prossimo quiz</p>
 </div>
 <audio src="../suoni/pulsante_premuto.mp3" id="suono"></audio>

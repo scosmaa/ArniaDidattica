@@ -11,7 +11,7 @@ var domandeCaricate;//vettore contente le domande in ordine random caricate dal 
 var devoRispondere;//indica se la pressone di uno dei pulsanti sulla base è per rispondere o per caricare la prossima domanda
 var numeroTotaleGiocatori;
 var gruppetti;//vettore con N volte classe
-var classe;
+var classe=[];
 
 //Costanti
 // Gestione dei punteggi per ogni tipo di gioco
@@ -97,7 +97,7 @@ function ($scope, $location, $http) {
 /* Primo Quadro */
 beehiveControllers.controller('newbee', ['$scope', '$location',
   function ($scope, $location) {
-      //  classe = [];
+       classe = [];
       document.getElementById("nomeApe").focus();
 
       $scope.AddNew = function () {
@@ -106,8 +106,10 @@ beehiveControllers.controller('newbee', ['$scope', '$location',
 
               if (n_bee == "" || n_bee == null) {
                   alert("Inserisci un nome!");
+                  document.getElementById("nomeApe").focus();
                   return false;
               }
+
               classe.push(n_bee);
 
               if ($scope.giocatore == "" || $scope.giocatore == null) {
@@ -242,6 +244,7 @@ function ($scope, $location, $http) {
         $scope.$apply();
         if ($scope.pallineRimanenti == 0 && nBambiniCheDevonoGiocare - 1 == 0) {//se era l'ultimo bimbo
             //passo al quadro 3
+            pallineGiocoE = Math.round(pallineGiocoE / 3);//ne verrebbero troppe quindi prendo palline/3
             $.connection.hub.stop();
             $location.path('quadro3');
             $scope.$apply();
@@ -288,7 +291,8 @@ function ($scope, $location, $http) {
     var nBambiniCheDevonoGiocare = GESTIONEGRUPPI[(10 - numeroTotaleGiocatori)][faseDelGioco - 1];
 
     $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
-    pallineGiocoE = Math.round(pallineGiocoE / 3);//ne verrebbero troppe quindi prendo palline/3
+   
+ 
     $scope.pallineRimanenti = pallineGiocoE;
 
     $http.get('api/invio/3/' + pallineGiocoE).success(function () { });//invio lo start all'arduino

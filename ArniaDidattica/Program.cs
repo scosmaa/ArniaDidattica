@@ -11,16 +11,18 @@ namespace ArniaDidattica
 {
     class Program
     {
+
         public const int NMAXQUADRI = 3;//numero massimo consentito di quadri
 
         static public Base arduinoBase;
         static public Quadro1 arduinoQuadro1;
         static public Quadro2 arduinoQuadro2;
         static public Quadro3 arduinoQuadro3;
+        static public bool base_connessa;
 
         static void Main(string[] args)
         {
-
+            base_connessa = false;
             int q_prec;
             int id = -1;
             string baseUrl = "http://localhost:9999";
@@ -52,6 +54,7 @@ namespace ArniaDidattica
             Console.WriteLine("Base connessa.");
             Console.WriteLine("Starting web Server...");
             Process.Start(baseUrl, "-fullscreen");     //avvio homepage
+            base_connessa = true;
 
             q_prec = 0;                 //Quadro precedente (base)
 
@@ -59,7 +62,15 @@ namespace ArniaDidattica
             {
                 connesso = server.AcceptTcpClient();
                 id = getId(connesso);
-
+                if(base_connessa == false)
+                {
+                    arduinoBase = new Base(connesso);
+                    Console.WriteLine("Base connessa.");
+                    Console.WriteLine("Starting web Server...");
+                    Process.Start(baseUrl, "-fullscreen");
+                    base_connessa = true;
+                }
+               
                 //Quadro connesso
                 switch (id)
                 {

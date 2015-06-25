@@ -159,6 +159,8 @@
     <Content Include="site\Scripts\jquery-1.6.4.min.js" />
     <Content Include="site\Scripts\jquery.signalR-2.0.3.js" />
     <Content Include="site\Scripts\jquery.signalR-2.0.3.min.js" />
+    <Content Include="site\video\video2.mp4" />
+    <Content Include="site\video\video3.mp4" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

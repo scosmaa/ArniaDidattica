@@ -68,6 +68,10 @@ namespace ArniaDidattica
 
             socket.Close();
             Console.WriteLine("Arduino " + nome + " disconnesso ");
+            if(nome == "base")
+            {
+                Program.base_connessa = false;
+            }
         }
 
         public abstract void gestioneMsg(string msg);
