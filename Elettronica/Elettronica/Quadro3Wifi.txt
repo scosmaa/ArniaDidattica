@@ -1,0 +1,201 @@
+#include "libohiboard.h"
+#include "libohigrove/ohigrove.h"
+#include "libohigrove/analog-in.h"
+#include "libohigrove/infrared-tx.h"
+#include "libohigrove/led.h"
+#include "libohigrove/oled112.h"
+#include "libohigrove/serial.h"
+
+#define DEBUG 0
+
+OhiGroveSerial_Device wifi =
+{
+        .connector = OHIGROVE_CONN_UART,
+};
+
+void sendData(char* command, const int timeout, char* response);
+
+ int16_t i = 0;
+
+    int16_t T = 0;              //Variabile tempo per servo
+    int16_t valstart = 0;       //Variabile registarzione stato pulsante
+    int16_t valIR = 0;          //Variabile per registrazione lettura dell'infrarosso
+    int16_t servo = 0;          //Variabile per tenere il servo aperto per un tempo
+    int16_t valsensore = 0;     //Variabile per lettura ricevitore infrarosso
+    int16_t caduta = 0;         //Variabile per tempo caduta pallina
+    char buffer[100];
+
+int main(void)
+{
+
+
+
+
+
+    OhiGroveInfraredTx_Device TX1 =
+    {
+            .connector = OHIGROVE_CONN_D2,
+    };
+
+    OhiGroveAnalogIn_Device RX1 =
+    {
+            .connector = OHIGROVE_CONN_A3,
+    };
+
+    Gpio_config(GPIO_PINS_PTD1, GPIO_PINS_OUTPUT);
+    Gpio_config(GPIO_PINS_PTD2, GPIO_PINS_OUTPUT);
+    Gpio_config(GPIO_PINS_PTD3, GPIO_PINS_OUTPUT);
+    Gpio_config(GPIO_PINS_PTA12, GPIO_PINS_OUTPUT);
+    Gpio_config(GPIO_PINS_PTC7, GPIO_PINS_OUTPUT);
+    Gpio_config(GPIO_PINS_PTC0, GPIO_PINS_INPUT);
+    Gpio_config(GPIO_PINS_PTB8, GPIO_PINS_OUTPUT);
+
+
+
+
+    OhiGrove_initBoard();
+    OhiGroveAnalogIn_init(&RX1);
+    OhiGroveInfraredTx_init(&TX1);
+
+    Gpio_set(GPIO_PINS_PTB8);
+
+    sendData( "AT+CWMODE=1", 1000, buffer);
+    sendData( "AT+CIPMUX=1", 1000, buffer);
+    sendData( "AT+CIPSTAMAC=\"02.00.00.00.00.03", 1000, buffer);
+    sendData( "AT+CWJAP=\"ArniaDidattica\",\"\"", 6000, buffer);
+    sendData( "AT+CIPSTART=0,\"TCP\",\"192.168.0.200\",2020",5000, buffer);
+
+
+    for(;;)
+    {
+        i++;
+
+
+
+        if((Gpio_get(GPIO_PINS_PTC0)) == GPIO_HIGH)
+        {
+            valstart = 1 ;
+            T = 0;
+            if(servo == 0 )
+            {
+                //Apertura-Chiusura servo motore
+                 while(T < 40)
+                {
+                    Gpio_set(GPIO_PINS_PTC7);
+                    OhiGrove_delay(2);
+                    Gpio_clear(GPIO_PINS_PTC7);
+                    OhiGrove_delay(2);
+                    T = T + 1;
+                }
+                T = 0;
+                OhiGrove_delay(100);
+                while(T < 40)
+                {
+                    Gpio_set(GPIO_PINS_PTC7);
+                    OhiGrove_delay(10);
+                    Gpio_clear(GPIO_PINS_PTC7);
+                    OhiGrove_delay(10);
+                    T = T + 1;
+                }
+                servo = 1 ;
+
+            }
+
+
+
+            valIR = 0;
+            //Controllo se è stato fatto punto
+            while(valIR == 0  && caduta < 2000)
+            {
+                OhiGroveInfraredTx_on(&TX1);
+                valsensore = OhiGroveAnalogIn_get(&RX1);
+                if(valsensore > 3945 )
+                {
+                    valIR = 1;
+                    sendData("AT+CIPSEND=0,2",500,buffer);
+                    sendData("1",500,buffer);
+                    // ha fatto punto
+                }
+                else
+                {
+                    valIR = 0;
+                    caduta = caduta + 1;
+                    OhiGrove_delay(1);
+                }
+            }
+             if(caduta > 1999)
+            {
+                sendData("AT+CIPSEND=0,2",500,buffer);
+                sendData("0",500,buffer);
+                //non ha fatto punto
+            }
+
+            valIR = 0;
+            servo = 0 ;
+            caduta = 0;
+
+
+
+        }
+        else
+        {
+
+            Gpio_clear(GPIO_PINS_PTD1);
+            Gpio_set(GPIO_PINS_PTD3);
+            Gpio_set(GPIO_PINS_PTD2);
+            Gpio_set(GPIO_PINS_PTA12);
+            OhiGrove_delay(1);
+            Gpio_clear(GPIO_PINS_PTD1);
+            Gpio_clear(GPIO_PINS_PTD3);
+            Gpio_set(GPIO_PINS_PTD2);
+            Gpio_set(GPIO_PINS_PTA12);
+            OhiGrove_delay(1);
+            Gpio_set(GPIO_PINS_PTD1);
+            Gpio_clear(GPIO_PINS_PTD3);
+            Gpio_set(GPIO_PINS_PTD2);
+            Gpio_set(GPIO_PINS_PTA12);
+            OhiGrove_delay(1);
+            Gpio_set(GPIO_PINS_PTD1);
+            Gpio_set(GPIO_PINS_PTD3);
+            Gpio_set(GPIO_PINS_PTD2);
+            Gpio_set(GPIO_PINS_PTA12);
+            OhiGrove_delay(1);
+
+
+
+        }
+    }
+}
+
+
+void sendData(char* command, const int timeout, char* response)
+{
+//    char response[50];
+    uint8_t i;
+
+    OhiGroveSerial_println(&wifi,command); // send the read character to the esp8266
+
+    uint32_t time = OhiGrove_currentTime ();
+
+    while( (time+timeout) > OhiGrove_currentTime ())
+    {
+      while(OhiGroveSerial_available(&wifi)>0)
+      {
+
+        // The esp has data so display its output to the serial window
+        *response = OhiGroveSerial_read(&wifi); // read the next character.
+//        i++;
+        response++;
+      }
+    }
+    *response++ = 'E';
+    *response++ = 'n';
+    *response++ = 'D';
+    *response = '\0';
+
+#if (DEBUG == 1)
+        OhiGroveSerial_println(&wifi,response);
+#endif
+
+//    return response;
+}

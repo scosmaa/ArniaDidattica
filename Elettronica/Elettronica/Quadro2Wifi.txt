@@ -1,0 +1,244 @@
+/******************************************************************************
+ * 
+ *
+ * Authors:
+ *  Enrico Giacomoni <enrico.giacomoni@outlook.it>
+ *
+ *
+ ******************************************************************************/
+
+#include "libohiboard.h"
+#include "libohigrove/ohigrove.h"
+#include "libohigrove/analog-in.h"
+#include "libohigrove/infrared-tx.h"
+#include "libohigrove/led.h"
+#include "libohigrove/oled112.h"
+#include "libohigrove/serial.h"
+#include "libohigrove/button.h"
+
+#define DEBUG 0
+
+OhiGroveSerial_Device wifi =
+{
+        .connector = OHIGROVE_CONN_UART,
+};
+
+void sendData(char* command, const int timeout, char* response);
+
+char buffer[100];
+
+
+int main(void)
+{
+
+    int16_t i = 0; // utilizzata per il ciclo for
+    int16_t val = 0;
+    //variabili di gioco
+
+    //variabili per il non far ripetere il punteggio dei punti
+    int16_t punteggio1 = 0;
+    int16_t punteggio2 = 0;
+    int16_t punteggio3 = 0;
+    int16_t punteggio4 = 0;
+    int16_t punteggio5 = 0;
+
+    //variabili per far rimanere i fiori accesi
+    int16_t fiore1 = 0;
+    int16_t fiore2 = 0;
+    int16_t fiore3 = 0;
+    int16_t fiore4 = 0;
+    int16_t fiore5 = 0;
+
+
+    // inserisco tutti i magneti
+    OhiGroveButton_Device  magnete_1 =
+    {
+            .connector = OHIGROVE_CONN_D8,
+    };
+    OhiGroveButton_Device  magnete_2 =
+        {
+                .connector = OHIGROVE_CONN_D7,
+     };
+    OhiGroveButton_Device  magnete_3 =
+        {
+                .connector = OHIGROVE_CONN_D6,
+    };
+    OhiGroveButton_Device  magnete_4 =
+        {
+                .connector = OHIGROVE_CONN_D5,
+    };
+    OhiGroveButton_Device  magnete_5 =
+        {
+                .connector = OHIGROVE_CONN_D2,
+    };
+    OhiGroveAnalogIn_Device ricevente =
+        {
+                .connector = OHIGROVE_CONN_A0,
+    };
+    OhiGroveInfraredTx_Device emettitore =
+    {
+            .connector = OHIGROVE_CONN_D3,
+    };
+//    OhiGroveSerial_Device comm =
+//    {
+//            .connector = OHIGROVE_CONN_UART,
+//    };
+
+
+
+
+
+    //settaggio led gialli
+
+    Gpio_config(GPIO_PINS_PTE30,GPIO_PINS_OUTPUT);
+    Gpio_config(GPIO_PINS_PTE29,GPIO_PINS_OUTPUT);
+    Gpio_config(GPIO_PINS_PTE23,GPIO_PINS_OUTPUT);
+    Gpio_config(GPIO_PINS_PTE22,GPIO_PINS_OUTPUT);
+    Gpio_config(GPIO_PINS_PTE21,GPIO_PINS_OUTPUT);
+    Gpio_config(GPIO_PINS_PTB8, GPIO_PINS_OUTPUT);//rele
+
+
+    // inizializzo tutti i conponenti
+    OhiGrove_initBoard();
+    OhiGroveButton_init(&magnete_1);
+    OhiGroveButton_init(&magnete_2);
+    OhiGroveButton_init(&magnete_3);
+
+    OhiGroveButton_init(&magnete_4);
+    OhiGroveButton_init(&magnete_5);
+    OhiGroveAnalogIn_init(&ricevente);
+    OhiGroveInfraredTx_init(&emettitore);
+//    OhiGroveSerial_init(&comm);
+
+    Gpio_set(GPIO_PINS_PTB8);//accendiamo il rele
+
+    sendData( "AT+CWMODE=1", 1000, buffer);
+    sendData( "AT+CIPMUX=1", 1000, buffer);
+    sendData( "AT+CIPSTAMAC=\"02.00.00.00.00.03", 1000, buffer);
+    sendData( "AT+CWJAP=\"ArniaDidattica\",\"\"", 6000, buffer);
+    sendData( "AT+CIPSTART=0,\"TCP\",\"192.168.0.200\",2020",5000, buffer);
+
+
+    for (;;)
+    {
+        i++;
+
+        OhiGroveInfraredTx_on (&emettitore);//accendo l'emettiotore del led
+        val = OhiGroveAnalogIn_get(&ricevente); // leggo dalla ricevente
+//        OhiGroveSerial_printlnInt(&comm,val);
+
+        if( val > 2800)
+        {
+            fiore1 = 0;
+            fiore2 = 0;
+            fiore3 = 0;
+            fiore4 = 0;
+            fiore5 = 0;
+        }
+        if((OhiGroveButton_get(&magnete_1))  == GPIO_HIGH || fiore1 == 1)// se ha premuto il fiore 1
+        {
+            Gpio_set(GPIO_PINS_PTE21);//accendo il led
+            fiore1 = 1;
+            if(punteggio1 == 0)
+            {
+                // mando che ho fatto punto
+                punteggio1 = 1;
+            }
+        }
+        else
+        {
+            Gpio_clear(GPIO_PINS_PTE21);
+        }
+        if((OhiGroveButton_get(&magnete_2))  == GPIO_HIGH || fiore2 == 1)// se ha premuto il fiore 2
+        {
+            Gpio_set(GPIO_PINS_PTE22);//accendo il led
+            fiore2 = 1;
+            if(punteggio2 == 0)
+            {
+                //mando che ho fatto un punto
+                punteggio2 = 1 ;
+            }
+        }
+        else
+        {
+            Gpio_clear(GPIO_PINS_PTE22);
+        }
+        if((OhiGroveButton_get(&magnete_3))  == GPIO_HIGH || fiore3 == 1)// se ha premuto il fiore 3
+        {
+            Gpio_set(GPIO_PINS_PTE23);//accendo il led
+            fiore3 = 1;
+            if(punteggio3 == 0 )
+            {
+                //mando che ha fatto punto
+                punteggio3 = 1 ;
+            }
+        }
+        else
+        {
+            Gpio_clear(GPIO_PINS_PTE23);
+        }
+        if((OhiGroveButton_get(&magnete_4))  == GPIO_HIGH || fiore4 == 1) // se ha premuto il fiore 4
+        {
+            Gpio_set(GPIO_PINS_PTE29);//accendo il led
+            fiore4 = 1;
+            if(punteggio4 == 0)
+            {
+                //mando che ho fatto un punto
+                punteggio4 = 1 ;
+            }
+        }
+        else
+        {
+            Gpio_clear(GPIO_PINS_PTE29);
+        }
+        if((OhiGroveButton_get(&magnete_5))  == GPIO_HIGH || fiore5 == 1) // se ha premuto il fiore 5
+        {
+            Gpio_set(GPIO_PINS_PTE30);//accendo il led
+            fiore5 = 1;
+            if(punteggio5 == 0)
+            {
+                //dico che ha fatto punto
+                punteggio5 = 1;
+            }
+
+        }
+        else
+        {
+            Gpio_clear(GPIO_PINS_PTE30);
+        }
+     }
+
+}
+
+
+void sendData(char* command, const int timeout, char* response)
+{
+//    char response[50];
+    uint8_t i;
+
+    OhiGroveSerial_println(&wifi,command); // send the read character to the esp8266
+
+    uint32_t time = OhiGrove_currentTime ();
+
+    while( (time+timeout) > OhiGrove_currentTime ())
+    {
+      while(OhiGroveSerial_available(&wifi)>0)
+      {
+
+        // The esp has data so display its output to the serial window
+        *response = OhiGroveSerial_read(&wifi); // read the next character.
+//        i++;
+        response++;
+      }
+    }
+    *response++ = 'E';
+    *response++ = 'n';
+    *response++ = 'D';
+    *response = '\0';
+
+#if (DEBUG == 1)
+        OhiGroveSerial_println(&wifi,response);
+#endif
+
+//    return response;
+}
