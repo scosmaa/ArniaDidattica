@@ -14,6 +14,10 @@ beehiveApp.config(['$routeProvider',
             templateUrl: 'partials/edu_beehive.html',
             controller: 'home'
         })
+          .when('/tid', {
+              templateUrl: 'partials/home.html',
+              controller: 'tid'
+          })
         .when('/newbee', {
             templateUrl: 'partials/new_bee.html',
             controller: 'newbee'

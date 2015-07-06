@@ -43,7 +43,14 @@ var hub = $.connection.arniaVirtualeHub;
 //numeroTotaleGiocatori = classe.length;
 //creaGruppetti(classe);
 
-/* Home page */
+/* Home page TID */
+beehiveControllers.controller('tid', ['$scope', '$location',
+  function ($scope, $location) {
+      document.body.style.backgroundColor = "none";
+  }]);
+
+
+/* Home page EDU BEEHIVE*/
 beehiveControllers.controller('home', ['$scope', '$location',
   function ($scope, $location) {
       /* Quando arriva l'evento  registrazioneGiocatori passo alla pagina successiva*/
@@ -215,7 +222,6 @@ function ($scope, $location, $http) {
         $scope.fioriPresi = $scope.fioriPresi + pallineVintePerPuntoGiocoC;
         $scope.$apply();
         setTimeout(function () {
-            //$scope.esitoTiro.style.display = "none";
             $scope.esitoTiro = "";
             $scope.$apply();
         }, 1000); //timeout
@@ -226,7 +232,6 @@ function ($scope, $location, $http) {
 
         if ($scope.pallineRimanenti == 0 && nBambiniCheDevonoGiocare > 1) {
             setTimeout(function () {
-                //$scope.esitoTiro.style.display = "none";
                 $scope.esitoTiro = "";
 
                 //cambio giocatore
