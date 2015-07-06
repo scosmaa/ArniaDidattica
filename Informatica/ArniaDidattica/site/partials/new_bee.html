@@ -1,10 +1,8 @@
-<div id="textLarge">
-    <p style="padding-top:5%;">Come ti chiami? </p>
+<div class="centrato">
+    <p class="testogrande blu">Come ti chiami? </p>
+    <p class="testomedio">  Nome: <input type="text" id="nomeApe" ng-model="nomeApe"> </p>
+    <button ng-click="AddNew()" id="btn0"> SALVA </button>
+    <button ng-click="End()" id="btn1">FINE</button>
 </div>
-<div id="textLarge">
-    Nome: <input type="text" style="height:80px; width:350px; font-size:xx-large;" id="nomeApe" ng-model="nomeApe" class="textBox"> <br>
-    <button style="height:80px; width:250px; font-size:xx-large;" value="Submit" ng-click="AddNew()" id="btn0"  class="button1"> SALVA APE </button>   <button style="height:80px; width:250px; font-size:xx-large;" value="End" ng-click="End()" id="btn1" class="button1">FINE </button>
- </div>
-<div id="textMedium"> 
-    <p>Giocatori Inseriti: {{giocatore}}</p>
-</div> 
+
+<p class="testomedio" style="display:block;" ng-model="giocatoriInseriti">Giocatori Inseriti:<br />{{giocatori}}</p>

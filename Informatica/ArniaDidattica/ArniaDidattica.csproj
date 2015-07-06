@@ -128,7 +128,7 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="domande\domande.txt" />
-    <Content Include="site\img\Logo.png" />
+    <Content Include="site\img\edu_beehive.png" />
     <Content Include="site\partials\reset.html" />
     <Content Include="site\partials\giocoC.html" />
     <Content Include="site\partials\giocoE.html" />
@@ -146,7 +146,7 @@
     <Content Include="site\default.htm" />
     <Content Include="site\img\Back.png" />
     <Content Include="site\partials\final_score.html" />
-    <Content Include="site\partials\home.html" />
+    <Content Include="site\partials\edu_beehive.html" />
     <Content Include="site\partials\new_bee.html" />
     <Content Include="site\partials\close_cells.html" />
     <Content Include="site\partials\quiz.html" />

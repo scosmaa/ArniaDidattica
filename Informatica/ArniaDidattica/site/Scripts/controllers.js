@@ -112,11 +112,13 @@ beehiveControllers.controller('newbee', ['$scope', '$location',
 
               classe.push(n_bee);
 
-              if ($scope.giocatore == "" || $scope.giocatore == null) {
-                  $scope.giocatore = n_bee;
+              if ($scope.giocatori == "" || $scope.giocatori == null) {
+                  //inserito il primo giocatore
+                  $scope.giocatori = n_bee;
+               //   $scope.giocatoriInseriti.style.display = "block";
               }
               else {
-                  $scope.giocatore += ', ' + n_bee;
+                  $scope.giocatori += ', ' + n_bee;
               }
 
               $scope.nomeApe = "";
