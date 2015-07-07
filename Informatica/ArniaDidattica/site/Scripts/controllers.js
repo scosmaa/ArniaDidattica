@@ -343,14 +343,14 @@ function ($scope, $location, $http) {
 beehiveControllers.controller('risultato', ['$scope', '$location',
   function ($scope, $location) {
       if ($location.url() == "/risultato") {
-          $scope.punteggioFinale = punti;
+          //$scope.punteggioFinale = punti;
           setTimeout(function () {
               Reset();
               $.connection.hub.stop();
               //faseDelGioco = 6;
               $location.path('home');
               $scope.$apply();
-          }, 10000); //timeout
+          }, 1000000); //timeout
       }
 
       $scope.BtnReset = function () {
