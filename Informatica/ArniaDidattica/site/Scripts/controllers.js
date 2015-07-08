@@ -11,7 +11,7 @@ var domandeCaricate;//vettore contente le domande in ordine random caricate dal 
 var devoRispondere;//indica se la pressone di uno dei pulsanti sulla base è per rispondere o per caricare la prossima domanda
 var numeroTotaleGiocatori;
 var gruppetti;//vettore con N volte classe
-var classe=[];
+var classe = [];
 
 //Costanti
 // Gestione dei punteggi per ogni tipo di gioco
@@ -104,7 +104,7 @@ function ($scope, $location, $http) {
 /* Primo Quadro */
 beehiveControllers.controller('newbee', ['$scope', '$location',
   function ($scope, $location) {
-       classe = [];
+      classe = [];
       document.getElementById("nomeApe").focus();
 
       $scope.AddNew = function () {
@@ -122,7 +122,7 @@ beehiveControllers.controller('newbee', ['$scope', '$location',
               if ($scope.giocatori == "" || $scope.giocatori == null) {
                   //inserito il primo giocatore
                   $scope.giocatori = n_bee;
-               //   $scope.giocatoriInseriti.style.display = "block";
+                  //   $scope.giocatoriInseriti.style.display = "block";
               }
               else {
                   $scope.giocatori += ', ' + n_bee;
@@ -154,11 +154,19 @@ beehiveControllers.controller('newbee', ['$scope', '$location',
 beehiveControllers.controller('cellclose', ['$scope', '$location',
   function ($scope, $location) {
 
-      hub.client.avvioVideo = function () {
+      /* Evento che viene chiamato se il giocatore ha premuto il bottone 0 */
+      hub.client.risposta0 = function () {
           $.connection.hub.stop();
           $location.path('video1');
           $scope.$apply();
-      }
+      };
+      /* Evento che viene chiamato se il giocatore ha premuto il bottone 1 */
+      hub.client.risposta1 = function () {
+          $.connection.hub.stop();
+          $location.path('video1');
+          $scope.$apply();
+      };
+
       // Start the connection.
       $.connection.hub.start()
   }]);
@@ -298,8 +306,8 @@ function ($scope, $location, $http) {
     var nBambiniCheDevonoGiocare = GESTIONEGRUPPI[(10 - numeroTotaleGiocatori)][faseDelGioco - 1];
 
     $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
-   
- 
+
+
     $scope.pallineRimanenti = pallineGiocoE;
 
     $http.get('api/invio/3/' + pallineGiocoE).success(function () { });//invio lo start all'arduino
