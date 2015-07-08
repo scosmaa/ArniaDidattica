@@ -14,10 +14,6 @@ namespace ArniaDidattica.SignalR
             Clients.All.registrazioneGiocatori();
         }
 
-        public void AvvioVideo()
-        {
-            Clients.All.avvioVideo();
-        }
 
         public void AvvioVideo2()
         {

@@ -23,14 +23,6 @@ namespace ArniaDidattica.WebAPI
             hubContext.Clients.All.RegistrazioneGiocatori();
         }
 
-        [Route("avvioVideo1")]
-        [HttpGet]
-        public void AvvioVideo()
-        {
-            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
-            hubContext.Clients.All.AvvioVideo();
-        }
-
         [Route("avvioVideo2")]
         [HttpGet]
         public void AvvioVideo2()
