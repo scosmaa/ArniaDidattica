@@ -10,14 +10,14 @@ var beehiveApp = angular.module('beehiveApp', [
 beehiveApp.config(['$routeProvider',
   function ($routeProvider) {
       $routeProvider
-        .when('/', {
+         .when('/', {
+               templateUrl: 'partials/home.html',
+               controller: 'tid'
+         })
+        .when('/edu_beehive', {
             templateUrl: 'partials/edu_beehive.html',
-            controller: 'home'
-        })
-          .when('/tid', {
-              templateUrl: 'partials/home.html',
-              controller: 'tid'
-          })
+            controller: 'eduBeehive'
+        })         
         .when('/newbee', {
             templateUrl: 'partials/new_bee.html',
             controller: 'newbee'
@@ -26,6 +26,10 @@ beehiveApp.config(['$routeProvider',
             templateUrl: 'partials/close_cells.html',
             controller: 'cellclose'
         })
+        .when('/video', {
+               templateUrl: 'partials/video.html',
+               controller: 'video'
+         })
         .when('/video1', {
             templateUrl: 'partials/video1.html',
             controller: 'video1'

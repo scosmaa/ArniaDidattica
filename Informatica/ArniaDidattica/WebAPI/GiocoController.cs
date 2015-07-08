@@ -7,14 +7,6 @@ namespace ArniaDidattica.WebAPI
     [RoutePrefix("api")]
     public class GiocoController : ApiController
     {
-        [Route("home")]
-        [HttpGet]
-        public void TornaHome()
-        {
-            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
-            hubContext.Clients.All.TornaHome();
-        }
-
         [Route("registrazioneGiocatori")]
         [HttpGet]
         public void RegistrazioneGiocatori()

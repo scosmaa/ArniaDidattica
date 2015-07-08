@@ -12,6 +12,7 @@ var devoRispondere;//indica se la pressone di uno dei pulsanti sulla base è per
 var numeroTotaleGiocatori;
 var gruppetti;//vettore con N volte classe
 var classe = [];
+var faseVideo=0;//indica il numero del prossimo video che andrà in esecuzione
 
 //Costanti
 // Gestione dei punteggi per ogni tipo di gioco
@@ -46,12 +47,35 @@ var hub = $.connection.arniaVirtualeHub;
 /* Home page TID */
 beehiveControllers.controller('tid', ['$scope', '$location',
   function ($scope, $location) {
-      document.body.style.backgroundColor = "none";
+
+      /* Quando arriva l'evento del click */
+      $scope.eduBeehive = function () {
+          // Interrompo la connessione signalR (migliora l'efficienza)
+          $.connection.hub.stop();
+          // Vado nella pagina successiva
+
+          faseVideo = 1;//prossimo video sarà la speigazione del eduBeehive
+          $location.path('video');
+
+          $scope.$apply();
+      }
+
+      /* Quando arriva l'evento  registrazioneGiocatori passo alla pagina successiva*/
+      hub.client.registrazioneGiocatori = function (name) {
+          // Interrompo la connessione signalR (migliora l'efficienza)
+          $.connection.hub.stop();
+          // Vado nella pagina successiva
+          $location.path('newbee');
+          $scope.$apply();
+      };
+
+      // Start the connection.
+      $.connection.hub.start();
   }]);
 
 
-/* Home page EDU BEEHIVE*/
-beehiveControllers.controller('home', ['$scope', '$location',
+/**** EDU BEEHIVE ****/
+beehiveControllers.controller('eduBeehive', ['$scope', '$location',
   function ($scope, $location) {
       /* Quando arriva l'evento  registrazioneGiocatori passo alla pagina successiva*/
       hub.client.registrazioneGiocatori = function (name) {
@@ -65,6 +89,7 @@ beehiveControllers.controller('home', ['$scope', '$location',
       $.connection.hub.start();
   }]);
 
+//pagina generica quiz
 beehiveControllers.controller('quiz', ['$scope', '$location', '$http',
 function ($scope, $location, $http) {
     // $.connection.hub.stop(); da chiedere a Simone
@@ -100,6 +125,86 @@ function ($scope, $location, $http) {
     // Apro la connessione con signalR
     $.connection.hub.start();
 }]);
+
+//pagina generica video
+beehiveControllers.controller('video', ['$scope', '$location', '$http',
+function ($scope, $location, $http) {
+
+    var video = document.getElementsByTagName('video')[0];
+    video.setAttribute('src','../video/v' + faseVideo + '.mp4');
+
+    video.focus();
+    video.play();
+    video.onended = function () {
+        $.connection.hub.stop();
+
+        switch (faseVideo) {
+            case 1:
+                {
+                    // Vado nella pagina successiva
+                    $location.path('edu_beehive');
+                    break;
+                }
+            case 2:
+                {
+                    $location.path('cellclose');
+                    break;
+                }
+            case 3:
+                {
+                    faseDelGioco = 1;
+                    $location.path('quiz');
+                    break;
+                }
+            case 4:
+                {
+                    faseDelGioco = 2;
+                    $location.path('quiz');
+                    break;
+                }
+            case 5:
+                {
+                    $location.path('giocoC');
+                    break;
+                }
+            case 6:
+                {
+                    faseDelGioco = 3;
+                    $location.path('quiz');
+                    break;
+                }
+            case 7:
+                {
+                    $location.path('giocoE');
+                    break;
+                }
+            case 8:
+                {
+                    $location.path('risultato');
+                    break;
+                }
+        }
+        $scope.$apply();
+    }
+
+    /*
+    v1	 intro
+    v2	 spiegazione larve celle
+    v3	 video api1
+    
+    v4	 video api2
+    v5	 spiegazione gioco1
+    
+    v6	 video api3
+    v7 	 spiegazione gioco2
+    
+    v8	 conclusione
+    */
+
+
+
+}]);
+
 
 /* Primo Quadro */
 beehiveControllers.controller('newbee', ['$scope', '$location',
@@ -141,7 +246,8 @@ beehiveControllers.controller('newbee', ['$scope', '$location',
               numeroTotaleGiocatori = classe.length;
               creaGruppetti(classe);
               $.connection.hub.stop();
-              $location.path('cellclose');
+              faseVideo = 2;//prossimo video sarà la speigazione dell'inserimento delle larve
+              $location.path('video');
               $scope.$apply();
           }
           else {
@@ -149,6 +255,8 @@ beehiveControllers.controller('newbee', ['$scope', '$location',
               document.getElementById("nomeApe").focus();
           }
       }
+
+      
   }]);
 
 beehiveControllers.controller('cellclose', ['$scope', '$location',
@@ -157,58 +265,36 @@ beehiveControllers.controller('cellclose', ['$scope', '$location',
       /* Evento che viene chiamato se il giocatore ha premuto il bottone 0 */
       hub.client.risposta0 = function () {
           $.connection.hub.stop();
-          $location.path('video1');
+          faseVideo = 3;//prossimo video sarà la speigazione dell'inserimento delle larve
+          $location.path('video');
           $scope.$apply();
       };
       /* Evento che viene chiamato se il giocatore ha premuto il bottone 1 */
       hub.client.risposta1 = function () {
           $.connection.hub.stop();
-          $location.path('video1');
+          faseVideo = 3;//prossimo video sarà la speigazione dell'inserimento delle larve
+          $location.path('video');
           $scope.$apply();
       };
 
+      
       // Start the connection.
       $.connection.hub.start()
   }]);
 
-beehiveControllers.controller('video1', ['$scope', '$location',
-  function ($scope, $location) {
-      var vid = document.getElementById("video1");
-      vid.focus();
-      vid.play();
-      vid.onended = function () {
-          $.connection.hub.stop();
-          faseDelGioco = 1;
-          $location.path('quiz');
-          $scope.$apply();
-      }
-
-  }]);
 
 /* Secondo Quadro */
 beehiveControllers.controller('quadro2', ['$scope', '$location',
   function ($scope, $location) {
       hub.client.avvioVideo2 = function () {
           $.connection.hub.stop();
-          $location.path('video2');
+          faseVideo = 4;//prossimo video sarà la speigazione dell'inserimento delle larve
+          $location.path('video');
           $scope.$apply();
       };
+
       // Apro la connessione con signalR
       $.connection.hub.start()
-  }]);
-
-beehiveControllers.controller('video2', ['$scope', '$location',
-  function ($scope, $location) {
-      var vid = document.getElementById("video2");
-      vid.focus();
-      vid.play();
-      vid.onended = function () {
-          $.connection.hub.stop();
-          faseDelGioco = 2;
-          $location.path('quiz');
-          $scope.$apply();
-      }
-
   }]);
 
 beehiveControllers.controller('giocoC', ['$scope', '$location', '$http',
@@ -271,31 +357,19 @@ function ($scope, $location, $http) {
     $.connection.hub.start()
 }]);
 
+
 /* Terzo Quadro */
 beehiveControllers.controller('quadro3', ['$scope', '$location',
   function ($scope, $location) {
       hub.client.avvioVideo3 = function () {
           $.connection.hub.stop();
-          $location.path('video3');
+          faseVideo = 6;//prossimo video sarà la speigazione dell'inserimento delle larve  
+          $location.path('video');
           $scope.$apply();
       };
 
       // Start the connection.
       $.connection.hub.start()
-  }]);
-
-beehiveControllers.controller('video3', ['$scope', '$location',
-  function ($scope, $location) {
-      var vid = document.getElementById("video3");
-      vid.focus();
-      vid.play();
-      vid.onended = function () {
-          $.connection.hub.stop();
-          faseDelGioco = 4;
-          $location.path('quiz');
-          $scope.$apply();
-      }
-
   }]);
 
 beehiveControllers.controller('giocoE', ['$scope', '$location', '$http',
@@ -306,7 +380,6 @@ function ($scope, $location, $http) {
     var nBambiniCheDevonoGiocare = GESTIONEGRUPPI[(10 - numeroTotaleGiocatori)][faseDelGioco - 1];
 
     $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
-
 
     $scope.pallineRimanenti = pallineGiocoE;
 
@@ -340,12 +413,12 @@ function ($scope, $location, $http) {
         }
         $scope.$apply();
     };
-    beehiveControllers.controller
-    //console.log(giocatoriCheDevonoGiocare);
+
     // Start the connection.
     $.connection.hub.start();
 
 }]);
+
 
 //Reset
 beehiveControllers.controller('risultato', ['$scope', '$location',
@@ -427,14 +500,20 @@ function calcolaPaginaSuccessivaAlQuiz(quadroCorrente) {
             return 'quadro2';
             break;
         case 2:
-            return 'giocoC';
-            break;
+            {
+                faseVideo = 5;//prossimo video sarà la speigazione dell'inserimento delle larve            
+                return 'video';
+            }
         case 4:
-            return 'giocoE';
-            break;
+            {
+                faseVideo = 7;//prossimo video sarà la speigazione dell'inserimento delle larve            
+                return 'video';
+            }
         case 6:
-            return 'risultato';
-            break;
+            {
+                faseVideo = 8;//prossimo video sarà la speigazione dell'inserimento delle larve            
+                return 'video';
+            }
     }
 }
 
@@ -583,7 +662,6 @@ function prendiProssimoGiocatore(gioco) {//dato il numero del gioco ti da il gio
 
     return giocatore;
 }
-
 
 function Reset() {
     punti = 0;      /* Punti fatti durante i quiz/giochi */

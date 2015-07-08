@@ -145,11 +145,16 @@
     <Content Include="site\img\Q3.png" />
     <Content Include="site\img\Q4.png" />
     <Content Include="site\partials\insert_q3.html" />
-    <Content Include="site\partials\video1.html" />
-    <Content Include="site\partials\video2.html" />
-    <Content Include="site\partials\video3.html" />
+    <Content Include="site\partials\video.html" />
     <Content Include="site\suoni\pulsante_premuto.mp3" />
-    <Content Include="site\video\video1.mp4" />
+    <Content Include="site\video\v1.mp4" />
+    <Content Include="site\video\v2.mp4" />
+    <Content Include="site\video\v3.mp4" />
+    <Content Include="site\video\v4.mp4" />
+    <Content Include="site\video\v5.mp4" />
+    <Content Include="site\video\v6.mp4" />
+    <Content Include="site\video\v7.mp4" />
+    <Content Include="site\video\v8.mp4" />
     <Content Include="site\default.htm" />
     <Content Include="site\img\Back.png" />
     <Content Include="site\partials\final_score.html" />
@@ -166,8 +171,6 @@
     <Content Include="site\Scripts\jquery-1.6.4.min.js" />
     <Content Include="site\Scripts\jquery.signalR-2.0.3.js" />
     <Content Include="site\Scripts\jquery.signalR-2.0.3.min.js" />
-    <Content Include="site\video\video2.mp4" />
-    <Content Include="site\video\video3.mp4" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
