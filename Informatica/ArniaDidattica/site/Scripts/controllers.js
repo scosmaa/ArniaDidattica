@@ -12,7 +12,7 @@ var devoRispondere;//indica se la pressone di uno dei pulsanti sulla base è per
 var numeroTotaleGiocatori;
 var gruppetti;//vettore con N volte classe
 var classe = [];
-var faseVideo=0;//indica il numero del prossimo video che andrà in esecuzione
+var faseVideo = 0;//indica il numero del prossimo video che andrà in esecuzione
 
 //Costanti
 // Gestione dei punteggi per ogni tipo di gioco
@@ -65,7 +65,9 @@ beehiveControllers.controller('tid', ['$scope', '$location',
           // Interrompo la connessione signalR (migliora l'efficienza)
           $.connection.hub.stop();
           // Vado nella pagina successiva
-          $location.path('newbee');
+          faseVideo = 0;//prossimo video sarà la speigazione del eduBeehive
+          $location.path('video');
+
           $scope.$apply();
       };
 
@@ -131,7 +133,13 @@ beehiveControllers.controller('video', ['$scope', '$location', '$http',
 function ($scope, $location, $http) {
 
     var video = document.getElementsByTagName('video')[0];
-    video.setAttribute('src','../video/v' + faseVideo + '.mp4');
+    var saltaQ1 = false;//se attacco q1 senza selezionare gioco in tid.html
+    if (faseVideo == 0)
+    {
+        saltaQ1 = true;
+        faseVideo = 1;
+    }
+    video.setAttribute('src', '../video/v' + faseVideo + '.mp4');
 
     video.focus();
     video.play();
@@ -142,7 +150,10 @@ function ($scope, $location, $http) {
             case 1:
                 {
                     // Vado nella pagina successiva
-                    $location.path('edu_beehive');
+                    if (saltaQ1)
+                        $location.path('newbee');
+                    else
+                        $location.path('edu_beehive');
                     break;
                 }
             case 2:
@@ -152,6 +163,7 @@ function ($scope, $location, $http) {
                 }
             case 3:
                 {
+                    $http.get('api/invio/1/a').success(function () { });//invio lo start all'arduino
                     faseDelGioco = 1;
                     $location.path('quiz');
                     break;
@@ -217,7 +229,12 @@ beehiveControllers.controller('newbee', ['$scope', '$location',
               var n_bee = $scope.nomeApe;
 
               if (n_bee == "" || n_bee == null) {
-                  alert("Inserisci un nome!");
+
+                  $scope.errore = "Inserire un nome valido!";
+                  setTimeout(function () {
+                      $scope.errore = "";
+                      $scope.$apply();
+                  }, 2000); //timeout
                   document.getElementById("nomeApe").focus();
                   return false;
               }
@@ -251,12 +268,17 @@ beehiveControllers.controller('newbee', ['$scope', '$location',
               $scope.$apply();
           }
           else {
-              alert("Inserire minimo 6 nomi!");
+             $scope.errore="Inserire minimo 6 nomi!";
+              setTimeout(function () {
+                  $scope.errore = "";
+                  $scope.$apply();
+              }, 2000); //timeout
+
               document.getElementById("nomeApe").focus();
           }
       }
 
-      
+
   }]);
 
 beehiveControllers.controller('cellclose', ['$scope', '$location',
@@ -277,7 +299,7 @@ beehiveControllers.controller('cellclose', ['$scope', '$location',
           $scope.$apply();
       };
 
-      
+
       // Start the connection.
       $.connection.hub.start()
   }]);
@@ -431,7 +453,7 @@ beehiveControllers.controller('risultato', ['$scope', '$location',
               //faseDelGioco = 6;
               $location.path('home');
               $scope.$apply();
-          }, 1000000); //timeout
+          },60000); //timeout
       }
 
       $scope.BtnReset = function () {
