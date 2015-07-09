@@ -1,8 +1,8 @@
 <div class="centrato">
     <p class="testogrande blu">Come ti chiami? </p>
     <p class="testopiccolo blink_me" style=" color: #F00; padding-left: 10%; margin-bottom: -45px; height: 23px; ">{{errore}}</p>
-    <p class="testomedio">  Nome: <input type="text" id="nomeApe" ng-model="nomeApe"> </p>
-    <button ng-click="AddNew()" id="btn0">INSERISCI</button>
+    <p class="testomedio">  Nome: <input type="text" id="nomeApe" ng-model="nomeApe" onkeydown="if (event.keyCode == 13) document.getElementById('btn0').click()"> </p>
+    <button ng-click="AddNew()" id="btn0"  >INSERISCI</button>
     <button ng-click="End()" id="btn1">FINE</button>
 </div>
 
