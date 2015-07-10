@@ -47,15 +47,7 @@ var hub = $.connection.arniaVirtualeHub;
 /* Home page TID */
 beehiveControllers.controller('tid', ['$scope', '$location', '$rootScope',
   function ($scope, $location, $rootScope) {
-
-      switch ($location.url()) {
-          case "/":
-              $rootScope.bodyClass = 'tid_back';
-              break;
-          default:
-              $rootScope.bodyClass = 'bee_back';
-              break;
-      }
+      $rootScope.bodyClass = 'tid_back';
 
       /* Quando arriva l'evento del click */
       $scope.eduBeehive = function () {
@@ -63,6 +55,7 @@ beehiveControllers.controller('tid', ['$scope', '$location', '$rootScope',
           $.connection.hub.stop();
           // Vado nella pagina successiva
 
+          $rootScope.bodyClass = '';
           faseVideo = 1;//prossimo video sarà la speigazione del eduBeehive
           $location.path('video');
 
@@ -89,14 +82,10 @@ beehiveControllers.controller('tid', ['$scope', '$location', '$rootScope',
 beehiveControllers.controller('eduBeehive', ['$scope', '$location', '$rootScope',
   function ($scope, $location, $rootScope) {
 
-      switch ($location.url()) {
-          case "/":
-              $rootScope.bodyClass = 'tid_back';
-              break;
-          default:
-              $rootScope.bodyClass = 'bee_back';
-              break;
-      }
+      $scope.statoQuadro = "Inserire quadro numero 1";
+      hub.client.qualcosaConnesso = function () { $scope.statoQuadro = "Connessione quadro in corso..."; $scope.$apply(); };
+      hub.client.qualcosaSconnesso = function () { $scope.statoQuadro = "Inserire quadro numero 1"; $scope.$apply(); };
+
       /* Quando arriva l'evento  registrazioneGiocatori passo alla pagina successiva*/
       hub.client.registrazioneGiocatori = function (name) {
           // Interrompo la connessione signalR (migliora l'efficienza)
@@ -147,13 +136,12 @@ function ($scope, $location, $http) {
 }]);
 
 //pagina generica video
-beehiveControllers.controller('video', ['$scope', '$location', '$http',
-function ($scope, $location, $http) {
+beehiveControllers.controller('video', ['$scope', '$location', '$http', '$rootScope',
+function ($scope, $location, $http, $rootScope) {
 
     var video = document.getElementsByTagName('video')[0];
     var saltaQ1 = false;//se attacco q1 senza selezionare gioco in tid.html
-    if (faseVideo == 0)
-    {
+    if (faseVideo == 0) {
         saltaQ1 = true;
         faseVideo = 1;
     }
@@ -286,7 +274,7 @@ beehiveControllers.controller('newbee', ['$scope', '$location',
               $scope.$apply();
           }
           else {
-             $scope.errore="Inserire minimo 6 nomi!";
+              $scope.errore = "Inserire minimo 6 nomi!";
               setTimeout(function () {
                   $scope.errore = "";
                   $scope.$apply();
@@ -326,6 +314,11 @@ beehiveControllers.controller('cellclose', ['$scope', '$location',
 /* Secondo Quadro */
 beehiveControllers.controller('quadro2', ['$scope', '$location',
   function ($scope, $location) {
+
+      $scope.statoQuadro = "Inserire quadro numero 2";
+      hub.client.qualcosaConnesso = function () { $scope.statoQuadro = "Connessione quadro in corso..."; $scope.$apply(); };
+      hub.client.qualcosaSconnesso = function () { $scope.statoQuadro = "Inserire quadro numero 2"; $scope.$apply(); };
+
       hub.client.avvioVideo2 = function () {
           $.connection.hub.stop();
           faseVideo = 4;//prossimo video sarà la speigazione dell'inserimento delle larve
@@ -341,24 +334,29 @@ beehiveControllers.controller('giocoC', ['$scope', '$location', '$http',
 function ($scope, $location, $http) {
 
     faseDelGioco = 3
-    $scope.fioriPresi = 0;
+    // $scope.fioriPresi = 0;
 
     var nBambiniCheDevonoGiocare = GESTIONEGRUPPI[(10 - numeroTotaleGiocatori)][faseDelGioco - 1];
 
     $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
     $scope.pallineRimanenti = pallineGiocoC;
+    var tentativi = pallineGiocoC;
+    var div = document.getElementById('fiori');
 
     $http.get('api/invio/2/' + pallineGiocoC).success(function () { });//invio lo start all'arduino
 
     hub.client.puntoGiocoC = function () {
         $scope.esitoTiro = "preso un fiore!";
         pallineGiocoE = pallineGiocoE + pallineVintePerPuntoGiocoC;
-        $scope.fioriPresi = $scope.fioriPresi + pallineVintePerPuntoGiocoC;
+        // $scope.fioriPresi = $scope.fioriPresi + pallineVintePerPuntoGiocoC;
+
+        div.innerHTML = div.innerHTML + '<img class="fiore" src="../img/fiore.png" />';//aggiungo un fiore
+
         $scope.$apply();
         setTimeout(function () {
             $scope.esitoTiro = "";
             $scope.$apply();
-        }, 1000); //timeout
+        }, 1500); //timeout
     };
 
     hub.client.finePallinaGiocoC = function () {
@@ -372,7 +370,8 @@ function ($scope, $location, $http) {
                 $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
 
                 //azzero scritte
-                $scope.fioriPresi = 0;
+                // $scope.fioriPresi = 0;
+                div.innerHTML = "";
                 $scope.pallineRimanenti = pallineGiocoC;
 
                 //da provare
@@ -385,7 +384,7 @@ function ($scope, $location, $http) {
         $scope.$apply();
         if ($scope.pallineRimanenti == 0 && nBambiniCheDevonoGiocare - 1 == 0) {//se era l'ultimo bimbo
             //passo al quadro 3
-            pallineGiocoE = Math.round(pallineGiocoE / 3);//ne verrebbero troppe quindi prendo palline/3
+            pallineGiocoE = Math.round(Math.round(pallineGiocoE / tentativi) / 3);//ne verrebbero troppe quindi prendo mediapalline/3
             $.connection.hub.stop();
             $location.path('quadro3');
             $scope.$apply();
@@ -401,6 +400,11 @@ function ($scope, $location, $http) {
 /* Terzo Quadro */
 beehiveControllers.controller('quadro3', ['$scope', '$location',
   function ($scope, $location) {
+
+      $scope.statoQuadro = "Inserire quadro numero 3";
+      hub.client.qualcosaConnesso = function () { $scope.statoQuadro = "Connessione quadro in corso..."; $scope.$apply(); };
+      hub.client.qualcosaSconnesso = function () { $scope.statoQuadro = "Inserire quadro numero 3"; $scope.$apply(); };
+
       hub.client.avvioVideo3 = function () {
           $.connection.hub.stop();
           faseVideo = 6;//prossimo video sarà la speigazione dell'inserimento delle larve  
@@ -471,7 +475,7 @@ beehiveControllers.controller('risultato', ['$scope', '$location',
               //faseDelGioco = 6;
               $location.path('home');
               $scope.$apply();
-          },60000000); //timeout
+          }, 60000000); //timeout
       }
 
       $scope.BtnReset = function () {
@@ -491,19 +495,23 @@ beehiveControllers.controller('risultato', ['$scope', '$location',
 // Utility
 // Gestisce la ripsosta della base (0 o 1)
 function gestioneRisposta($scope, $location, risp) {//risp è 0 o 1
+
+    var correct = document.getElementById("correct");
+    var wrong = document.getElementById("wrong");
+
     if (devoRispondere) {
         if ($scope.domandaCorrente.corretta == risp + 1) {
+            correct.play();
             document.getElementById("risp" + risp).style.backgroundColor = "green";
             //risposta corretta
             rispostaGiustaAlQuiz(faseDelGioco);
         }
         else {
+            wrong.play();
             document.getElementById("risp" + risp).style.backgroundColor = "red";
             //risposta sbagliata
         };
 
-        var sound = document.getElementById("suono");
-        sound.play();
 
         document.getElementById("prossimo").style.display = "block";
         devoRispondere = false;

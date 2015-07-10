@@ -30,6 +30,17 @@ namespace ArniaDidattica.SignalR
             Clients.All.risposta1();
         }
 
+        public void qualcosaConnesso()
+        {
+            Clients.All.qualcosaConnesso();
+        }
+      
+
+        public void qualcosaSconnesso()
+        {
+            Clients.All.qualcosaSconnesso();
+        }
+
         #region GiocoC
 
         public void finePallinaGiocoC()

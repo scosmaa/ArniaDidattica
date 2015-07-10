@@ -1,6 +1,7 @@
 ﻿using ArniaDidattica.WebAPI;
 using System;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -83,6 +84,26 @@ namespace ArniaDidattica
         {
             socket.Close();
         }
+
+        //public bool isConnected()
+        //{
+        //    IPGlobalProperties ipProperties = IPGlobalProperties.GetIPGlobalProperties();
+        //    TcpConnectionInformation[] tcpConnections = ipProperties.GetActiveTcpConnections().Where(x => x.LocalEndPoint.Equals(socket.Client.LocalEndPoint) && x.RemoteEndPoint.Equals(socket.Client.RemoteEndPoint)).ToArray();
+
+        //    if (tcpConnections != null && tcpConnections.Length > 0)
+        //    {
+        //        TcpState stateOfConnection = tcpConnections.First().State;
+        //        if (stateOfConnection == TcpState.Established)
+        //        {
+        //            // Connection is OK
+        //        }
+        //        else
+        //        {
+        //            // No active tcp Connection to hostName:port
+        //        }
+
+        //    }
+        //}
     }
 
 }

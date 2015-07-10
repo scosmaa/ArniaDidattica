@@ -8,10 +8,10 @@
         }
 
         .tid_back {
-            background: url("img/back_tid.png");
+            background: url("img/back_tid.png") !important;
         }
 
-        .bee_back {
+        .sfondo {
             background: url("img/Back.png");
         }
 
@@ -136,6 +136,12 @@
             animation-iteration-count: infinite;
         }
 
+        .fiore {
+            width: 55px;
+            height: 55px;
+            padding: 1px;
+        }
+
         @-moz-keyframes blinker {
             0% {
                 opacity: 1.0;
@@ -184,7 +190,7 @@
         }
     </style>
 </head>
-<body class="{{$root.bodyClass}}">
+<body class="sfondo {{$root.bodyClass}}" >
     <div class="view-container">
         <div ng-view class="view-frame"></div>
     </div>

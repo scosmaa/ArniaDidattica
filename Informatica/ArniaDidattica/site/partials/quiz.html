@@ -4,8 +4,11 @@
     <p class="testomedio">{{domandaCorrente.domanda}}</p>
     <button value="risp0" ng-model="domandaCorrente.risposta1" id="risp0" class="textBorder"> {{domandaCorrente.risposta1}} </button>
     <button value="risp1" ng-model="domandaCorrente.risposta2" id="risp1" class="textBorder"> {{domandaCorrente.risposta2}} </button>
+
+    <p  style="color:gray;" class=" testopiccolo">Per rispondere premi uno dei pulsanti neri sulla base</p>
 </div>
 
 <p id="prossimo" style="display: none;" class=" testomedio blink_me">Premi uno dei due pulsanti per procedere</p>
 
-<audio src="../suoni/pulsante_premuto.mp3" id="suono"></audio>
+<audio src="../suoni/correct.mp3" id="correct"></audio>
+<audio src="../suoni/wrong.mp3" id="wrong"></audio>

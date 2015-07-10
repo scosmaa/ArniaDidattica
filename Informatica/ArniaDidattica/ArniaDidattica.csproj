@@ -130,6 +130,7 @@
     <Content Include="site\img\ape.png" />
     <Content Include="site\img\back_tid.png" />
     <Content Include="site\img\edu_beehive.png" />
+    <Content Include="site\img\fiore.png" />
     <Content Include="site\img\Honey.png" />
     <Content Include="site\img\Jar.png" />
     <Content Include="site\img\logo_edubeehive.png" />
@@ -146,7 +147,8 @@
     <Content Include="site\img\Q4.png" />
     <Content Include="site\partials\insert_q3.html" />
     <Content Include="site\partials\video.html" />
-    <Content Include="site\suoni\pulsante_premuto.mp3" />
+    <Content Include="site\suoni\correct.mp3" />
+    <Content Include="site\suoni\wrong.mp3" />
     <Content Include="site\video\v1.mp4" />
     <Content Include="site\video\v2.mp4" />
     <Content Include="site\video\v3.mp4" />

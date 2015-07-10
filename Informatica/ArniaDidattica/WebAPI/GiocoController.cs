@@ -77,6 +77,21 @@ namespace ArniaDidattica.WebAPI
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
             hubContext.Clients.All.Risposta1();
         }
+
+        [Route("qualcosaConnesso")]
+        [HttpGet]
+        public void qualcosaConnesso()
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
+            hubContext.Clients.All.qualcosaConnesso();
+        }
+        [Route("qualcosaSconnesso")]
+        [HttpGet]
+        public void qualcosaSconnesso()
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
+            hubContext.Clients.All.qualcosaSconnesso();
+        }
         #endregion
 
         #region GiocoC

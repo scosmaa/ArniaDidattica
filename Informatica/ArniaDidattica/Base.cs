@@ -32,6 +32,16 @@ namespace ArniaDidattica
                         giocoController.risposta1();
                         break;
                     }
+                case "c"://connesso
+                    {
+                        giocoController.qualcosaConnesso();
+                        break;
+                    }
+                case "s"://sconnesso
+                    {
+                        //giocoController.qualcosaSconnesso();
+                        break;
+                    }
                 default:
                     {
                         Console.WriteLine("messaggio non riconosciuto ({0})", msg);
