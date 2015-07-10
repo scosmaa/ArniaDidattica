@@ -490,7 +490,7 @@ beehiveControllers.controller('risultato', ['$scope', '$location', '$http',
               $http.get('api/reset/0').success(function () { });
               $location.path('home');
               $scope.$apply();
-          }, 600000000); //timeout
+          }, 60000); //timeout
       }
       //fare vasetto
       $scope.BtnReset = function () {
