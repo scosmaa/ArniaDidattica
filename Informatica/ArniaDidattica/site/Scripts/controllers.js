@@ -371,12 +371,19 @@ function ($scope, $location, $http) {
             setTimeout(function () {
                 $scope.esitoTiro = "";
 
+                $scope.cambio = "CAMBIO TURNO!";
+                setTimeout(function () {
+                    $scope.cambio = "";
+                    $scope.$apply();
+                }, 1500); //timeout
+
+
                 //cambio giocatore
                 $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
 
                 //azzero scritte
                 // $scope.fioriPresi = 0;
-                div.innerHTML = "";
+                div.innerHTML = "<p class='testomedio' style='margin-bottom:1px'>Fiori presi:</p>";
                 $scope.pallineRimanenti = pallineGiocoC;
 
                 //da provare
@@ -483,7 +490,7 @@ beehiveControllers.controller('risultato', ['$scope', '$location', '$http',
               $http.get('api/reset/0').success(function () { });
               $location.path('home');
               $scope.$apply();
-          }, 60000); //timeout
+          }, 600000000); //timeout
       }
       //fare vasetto
       $scope.BtnReset = function () {

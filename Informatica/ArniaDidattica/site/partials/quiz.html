@@ -1,11 +1,11 @@
 <p class="testopiccolo dx">Tocca al giocatore: {{nomeBimbo}}</p>
 
-<div class="centrato">
-    <p class="testomedio">{{domandaCorrente.domanda}}</p>
+<div class="centrato boxdomanda">
+    <p class="testomedio bluscuro blink_me">{{domandaCorrente.domanda}}</p>
     <button value="risp0" ng-model="domandaCorrente.risposta1" id="risp0" class="textBorder"> {{domandaCorrente.risposta1}} </button>
     <button value="risp1" ng-model="domandaCorrente.risposta2" id="risp1" class="textBorder"> {{domandaCorrente.risposta2}} </button>
 
-    <p  style="color:gray;" class=" testopiccolo">Per rispondere premi uno dei pulsanti neri sulla base</p>
+    <p style="color:gray;" class=" testopiccolo">Per rispondere premi uno dei pulsanti neri sulla base</p>
 </div>
 
 <p id="prossimo" style="display: none;" class=" testomedio blink_me">Premi uno dei due pulsanti per procedere</p>
