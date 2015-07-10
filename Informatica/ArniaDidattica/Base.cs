@@ -39,7 +39,7 @@ namespace ArniaDidattica
                     }
                 case "s"://sconnesso
                     {
-                        //giocoController.qualcosaSconnesso();
+                        giocoController.qualcosaSconnesso();
                         break;
                     }
                 default:

@@ -84,7 +84,7 @@
         button {
             height: 80px;
             width: 250px;
-            font-size: xx-large;
+            font-size:30px;
             color: #14396A;
             border-radius: 28px;
             padding: 10px 25px;
@@ -103,6 +103,7 @@
             z-index: -100;
             transform: translateX(-50%) translateY(-50%);
             width: auto;
+            z-index: 1;
         }
 
         img.cambio {
@@ -190,8 +191,11 @@
         }
     </style>
 </head>
-<body class="sfondo {{$root.bodyClass}}" >
+<body class="sfondo {{$root.bodyClass}}">
     <div class="view-container">
+        <button title ='Cliccando qui resetterai il TID' style=" font-size: 10px; padding: 4px 3px; height: auto; background: rgba(255, 231, 10, 0.25) none repeat scroll 0% 0%;" onclick="location.href='#/reset'">
+            RESET
+        </button>
         <div ng-view class="view-frame"></div>
     </div>
     <!--Script references. -->

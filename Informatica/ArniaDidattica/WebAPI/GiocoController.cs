@@ -85,12 +85,22 @@ namespace ArniaDidattica.WebAPI
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
             hubContext.Clients.All.qualcosaConnesso();
         }
+
         [Route("qualcosaSconnesso")]
         [HttpGet]
         public void qualcosaSconnesso()
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
             hubContext.Clients.All.qualcosaSconnesso();
+        }
+
+
+        [Route("quadroErrato")]
+        [HttpGet]
+        public void quadroErrato()
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
+            hubContext.Clients.All.quadroErrato();
         }
         #endregion
 
@@ -134,16 +144,12 @@ namespace ArniaDidattica.WebAPI
 
         #endregion
 
-        public void ResetConfirm()
+        [Route("reset/{n}")]
+        [HttpGet]
+        public void modificaQ_prec(int n)
         {
-            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
-            hubContext.Clients.All.resetcofirm();
+            Program.q_prec = (n);
         }
 
-        public void Reset()
-        {
-            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
-            hubContext.Clients.All.reset();
-        }
     }
 }

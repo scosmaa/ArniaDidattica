@@ -67,6 +67,8 @@ beehiveControllers.controller('tid', ['$scope', '$location', '$rootScope',
           // Interrompo la connessione signalR (migliora l'efficienza)
           $.connection.hub.stop();
           // Vado nella pagina successiva
+
+          $rootScope.bodyClass = '';
           faseVideo = 0;//prossimo video sarà la speigazione del eduBeehive
           $location.path('video');
 
@@ -83,6 +85,8 @@ beehiveControllers.controller('eduBeehive', ['$scope', '$location', '$rootScope'
   function ($scope, $location, $rootScope) {
 
       $scope.statoQuadro = "Inserire quadro numero 1";
+      //quadroErrato
+      hub.client.quadroErrato = function () { $scope.statoQuadro = "Inserito quadro errato!"; $scope.$apply(); };
       hub.client.qualcosaConnesso = function () { $scope.statoQuadro = "Connessione quadro in corso..."; $scope.$apply(); };
       hub.client.qualcosaSconnesso = function () { $scope.statoQuadro = "Inserire quadro numero 1"; $scope.$apply(); };
 
@@ -316,6 +320,7 @@ beehiveControllers.controller('quadro2', ['$scope', '$location',
   function ($scope, $location) {
 
       $scope.statoQuadro = "Inserire quadro numero 2";
+      hub.client.quadroErrato = function () { $scope.statoQuadro = "Inserito quadro errato!"; $scope.$apply(); };
       hub.client.qualcosaConnesso = function () { $scope.statoQuadro = "Connessione quadro in corso..."; $scope.$apply(); };
       hub.client.qualcosaSconnesso = function () { $scope.statoQuadro = "Inserire quadro numero 2"; $scope.$apply(); };
 
@@ -402,6 +407,7 @@ beehiveControllers.controller('quadro3', ['$scope', '$location',
   function ($scope, $location) {
 
       $scope.statoQuadro = "Inserire quadro numero 3";
+      hub.client.quadroErrato = function () { $scope.statoQuadro = "Inserito quadro errato!"; $scope.$apply(); };
       hub.client.qualcosaConnesso = function () { $scope.statoQuadro = "Connessione quadro in corso..."; $scope.$apply(); };
       hub.client.qualcosaSconnesso = function () { $scope.statoQuadro = "Inserire quadro numero 3"; $scope.$apply(); };
 
@@ -465,29 +471,33 @@ function ($scope, $location, $http) {
 
 
 //Reset
-beehiveControllers.controller('risultato', ['$scope', '$location',
-  function ($scope, $location) {
+beehiveControllers.controller('risultato', ['$scope', '$location', '$http',
+  function ($scope, $location, $http) {
       if ($location.url() == "/risultato") {
           //$scope.punteggioFinale = punti;
           setTimeout(function () {
               Reset();
               $.connection.hub.stop();
               //faseDelGioco = 6;
+
+              $http.get('api/reset/0').success(function () { });
               $location.path('home');
               $scope.$apply();
-          }, 60000000); //timeout
+          }, 60000); //timeout
       }
-
+      //fare vasetto
       $scope.BtnReset = function () {
           Reset();
           $.connection.hub.stop();
           //faseDelGioco = 6;
+
+          $http.get('api/reset/0').success(function () { });
           $location.path('home');
           $scope.$apply();
       }
 
       $scope.BtnReturn = function () {
-
+          window.history.back();
       }
   }]);
 

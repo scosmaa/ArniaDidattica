@@ -20,10 +20,11 @@ namespace ArniaDidattica
         static public Quadro3 arduinoQuadro3;
         static public bool base_connessa;
 
+        static public int q_prec;
+
         static void Main(string[] args)
         {
             base_connessa = false;
-            int q_prec;
             int id = -1;
             string baseUrl = "http://localhost:9999";
             TcpListener server;
@@ -68,7 +69,7 @@ namespace ArniaDidattica
                     Console.WriteLine("Base connessa.");
                     Console.WriteLine("Starting web Server...");
                     ////foreach (Process p in Process.GetProcessesByName("firefox"))
-                   // { p.Kill(); }
+                    // { p.Kill(); }
                     Process.Start(baseUrl);
                     base_connessa = true;
                 }
@@ -98,8 +99,8 @@ namespace ArniaDidattica
                             else if (q_prec > 0)
                             {//attaccato quadro 1 dopo altro quadro
                                 //chiedo conferma
-                                giocoController.Reset();
-                                q_prec = 0;
+                                giocoController.quadroErrato();
+                                Console.WriteLine("Inserito quadro sbagliato.");
                                 break;
                             }
                             break;
@@ -114,7 +115,10 @@ namespace ArniaDidattica
                                 giocoController.AvvioVideo2();
                             }
                             else
+                            {
+                                giocoController.quadroErrato();
                                 Console.WriteLine("Inserito quadro sbagliato.");
+                            }
                             break;
                         }
                     case 3:
@@ -127,7 +131,10 @@ namespace ArniaDidattica
                                 giocoController.AvvioVideo3();
                             }
                             else
+                            {
+                                giocoController.quadroErrato();
                                 Console.WriteLine("Inserito quadro sbagliato.");
+                            }
                             break;
                         }
                 }

@@ -14,7 +14,6 @@ namespace ArniaDidattica.SignalR
             Clients.All.registrazioneGiocatori();
         }
 
-
         public void AvvioVideo2()
         {
             Clients.All.avvioVideo2();
@@ -24,7 +23,6 @@ namespace ArniaDidattica.SignalR
         {
             Clients.All.risposta0();
         }
-
         public void Risposta1()
         {
             Clients.All.risposta1();
@@ -34,12 +32,17 @@ namespace ArniaDidattica.SignalR
         {
             Clients.All.qualcosaConnesso();
         }
-      
-
         public void qualcosaSconnesso()
         {
             Clients.All.qualcosaSconnesso();
         }
+
+        public void quadroErrato()
+        {
+            Clients.All.quadroErrato();
+        }
+
+
 
         #region GiocoC
 
@@ -68,12 +71,6 @@ namespace ArniaDidattica.SignalR
         }
 
         #endregion
-
-        public void reset()
-        {
-            Clients.All.reset();
-        }
-
 
     }
 }
