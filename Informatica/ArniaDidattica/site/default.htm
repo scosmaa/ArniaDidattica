@@ -4,9 +4,17 @@
     <title>Arnia Didattica</title>
     <style type="text/css">
         body {
-            background: url("img/Back.png") repeat;
             font-family: 'Code Bold';
         }
+
+        .tid_back {
+            background: url("img/back_tid.png");
+        }
+
+        .bee_back {
+            background: url("img/Back.png");
+        }
+
 
         h2 {
             font-size: 35px;
@@ -176,7 +184,7 @@
         }
     </style>
 </head>
-<body>
+<body class="{{$root.bodyClass}}">
     <div class="view-container">
         <div ng-view class="view-frame"></div>
     </div>

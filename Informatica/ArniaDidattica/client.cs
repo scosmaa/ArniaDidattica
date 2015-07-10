@@ -45,6 +45,8 @@ namespace ArniaDidattica
 
         void ricezioneMsgs()//thread
         {
+            // stream.ReadTimeout = 3000;
+
             try
             {
                 while (stream.CanRead)
@@ -66,9 +68,10 @@ namespace ArniaDidattica
             catch (System.IO.IOException)
             { }
 
+
             socket.Close();
             Console.WriteLine("Arduino " + nome + " disconnesso ");
-            if(nome == "base")
+            if (nome == "base")
             {
                 Program.base_connessa = false;
             }

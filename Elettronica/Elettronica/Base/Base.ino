@@ -3,10 +3,13 @@
 
 const int button0 = 6;
 const int button1 = 7;
+const int button2 = 8;
 int button0state = 0;
 int button1state = 0;
+int button2state = 0;
 int var = 2;
 
+boolean invioAppoggiato=true;
 
 EthernetClient server;
 byte mac[] = { 0x02, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -19,6 +22,7 @@ void setup()
 {
   pinMode (button0, INPUT);
   pinMode (button1, INPUT);
+  pinMode (button2, INPUT);
   Serial.begin(9600);
 
 
@@ -44,23 +48,29 @@ void loop()
 {
   button0state = digitalRead (button0);
   button1state = digitalRead (button1);
+  button2state = digitalRead (button2);
 
   if (button0state == LOW)
   {
-
     Invia('0');
     delay(1000);
-
-
   }
 
   if (button1state == LOW)     //PULSABTE FALSO
   {
     Invia('1');
-
     delay(1000);
-
+  }  
+  
+  if (button2state == LOW&& invioAppoggiato)     //qualcosa appoggiato
+  {
+    Invia('2');
+    delay(1000);
+    invioAppoggiato=false;
   }
+  else
+  {invioAppoggiato=true;}
+  
   if (server.connected() == false)
   {
     Serial.println("Disconnesso");

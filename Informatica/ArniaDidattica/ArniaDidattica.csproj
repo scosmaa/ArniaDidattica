@@ -128,7 +128,7 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="site\img\ape.png" />
-    <Content Include="site\img\backg_tid.png" />
+    <Content Include="site\img\back_tid.png" />
     <Content Include="site\img\edu_beehive.png" />
     <Content Include="site\img\Honey.png" />
     <Content Include="site\img\Jar.png" />

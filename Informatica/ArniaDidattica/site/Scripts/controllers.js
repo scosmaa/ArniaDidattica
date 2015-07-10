@@ -45,8 +45,17 @@ var hub = $.connection.arniaVirtualeHub;
 //creaGruppetti(classe);
 
 /* Home page TID */
-beehiveControllers.controller('tid', ['$scope', '$location',
-  function ($scope, $location) {
+beehiveControllers.controller('tid', ['$scope', '$location', '$rootScope',
+  function ($scope, $location, $rootScope) {
+
+      switch ($location.url()) {
+          case "/":
+              $rootScope.bodyClass = 'tid_back';
+              break;
+          default:
+              $rootScope.bodyClass = 'bee_back';
+              break;
+      }
 
       /* Quando arriva l'evento del click */
       $scope.eduBeehive = function () {
@@ -77,8 +86,17 @@ beehiveControllers.controller('tid', ['$scope', '$location',
 
 
 /**** EDU BEEHIVE ****/
-beehiveControllers.controller('eduBeehive', ['$scope', '$location',
-  function ($scope, $location) {
+beehiveControllers.controller('eduBeehive', ['$scope', '$location', '$rootScope',
+  function ($scope, $location, $rootScope) {
+
+      switch ($location.url()) {
+          case "/":
+              $rootScope.bodyClass = 'tid_back';
+              break;
+          default:
+              $rootScope.bodyClass = 'bee_back';
+              break;
+      }
       /* Quando arriva l'evento  registrazioneGiocatori passo alla pagina successiva*/
       hub.client.registrazioneGiocatori = function (name) {
           // Interrompo la connessione signalR (migliora l'efficienza)
@@ -453,7 +471,7 @@ beehiveControllers.controller('risultato', ['$scope', '$location',
               //faseDelGioco = 6;
               $location.path('home');
               $scope.$apply();
-          },60000); //timeout
+          },60000000); //timeout
       }
 
       $scope.BtnReset = function () {

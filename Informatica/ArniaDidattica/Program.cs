@@ -53,7 +53,7 @@ namespace ArniaDidattica
             arduinoBase = new Base(connesso);
             Console.WriteLine("Base connessa.");
             Console.WriteLine("Starting web Server...");
-            Process.Start(baseUrl, "-fullscreen");     //avvio homepage
+            Process.Start(baseUrl);     //avvio homepage
             base_connessa = true;
 
             q_prec = 0;                 //Quadro precedente (base)
@@ -62,21 +62,23 @@ namespace ArniaDidattica
             {
                 connesso = server.AcceptTcpClient();
                 id = getId(connesso);
-                if(base_connessa == false)
+                if (base_connessa == false)
                 {
                     arduinoBase = new Base(connesso);
                     Console.WriteLine("Base connessa.");
                     Console.WriteLine("Starting web Server...");
-                    Process.Start(baseUrl, "-fullscreen");
+                    ////foreach (Process p in Process.GetProcessesByName("firefox"))
+                   // { p.Kill(); }
+                    Process.Start(baseUrl);
                     base_connessa = true;
                 }
-               
+
                 //Quadro connesso
                 switch (id)
                 {
                     case 0:
                         {//base connessa
-                            if (arduinoBase==null)
+                            // if (arduinoBase==null)
                             {
                                 arduinoBase = new Base(connesso);
                                 Console.WriteLine("Base connessa.");

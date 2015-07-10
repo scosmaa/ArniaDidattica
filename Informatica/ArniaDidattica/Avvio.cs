@@ -26,7 +26,7 @@ namespace ArniaDidattica
             var fileServerOptions = new FileServerOptions()
             {
                 RequestPath = PathString.Empty,
-                FileSystem = new PhysicalFileSystem(@"..\..\site")
+                FileSystem = new PhysicalFileSystem(@"../../site")
             };
 
             fileServerOptions.StaticFileOptions.ServeUnknownFileTypes = true;
