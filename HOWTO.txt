@@ -1,9 +1,8 @@
-1. Installa Firefox e estensione Fullscreen
+1. Installa Firefox e estensione Fullscreen (noi abbiamo usato Full Fullscreen 7.1 di "zedadiboy")
 2. Disabilitare screensaver
-3. Impostare risoluzione 1920x1080
-4. Impostare casse predefinite
-5. Mettere IP Statico al ethernet (192.168.0,200/24)
-6. Metti in autorun ArniaDidattica.exe e RunStandAlone.exe (DHCP)
+3. Impostare casse predefinite
+4. Mettere IP Statico al ethernet (192.168.0,200/24)
+5. Metti in autorun ArniaDidattica.exe e RunStandAlone.exe (DHCP)
 
 
 NB: Nello switch la rete è attivato il filtro per MAC
