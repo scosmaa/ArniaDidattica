@@ -65,12 +65,13 @@ namespace ArniaDidattica.SignalR
             Clients.All.avvioVideo3();
         }
 
-        public void PuntoGiocoE(int p)
+        public void PuntoGiocoE()
         {
-            Clients.All.puntoGiocoC(p);
+            Clients.All.puntoGiocoC();
         }
 
         #endregion
+
 
     }
 }

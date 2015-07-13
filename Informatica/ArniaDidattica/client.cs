@@ -37,9 +37,10 @@ namespace ArniaDidattica
                 Byte[] sendBytes = Encoding.UTF8.GetBytes(msg);
                 stream.Write(sendBytes, 0, sendBytes.Length);
             }
-            catch (System.NullReferenceException)
+            catch
             {
-                //quadro non connesso
+                Console.WriteLine("errore");
+                //quadro non connesso System.NullReferenceException || System.ObjectDisposedException
             }
         }
 
@@ -61,13 +62,14 @@ namespace ArniaDidattica
                     // mando il messaggio su console 
                     string msg = Encoding.UTF8.GetString(bytes);
                     msg = msg.Substring(0, msg.IndexOf("\0"));
-                    Console.WriteLine("Arduino " + nome + " > " + msg);
+                    Console.Write("Arduino " + nome + " > " + msg + " -> ");
 
                     gestioneMsg(msg);
                 }
             }
             catch (System.IO.IOException)
-            { }
+            {
+            }
 
 
             socket.Close();

@@ -22,17 +22,18 @@ namespace ArniaDidattica
             {
                 case "0":
                     {
-                        giocoController.PuntoGiocoE(0);
+                        Console.WriteLine("fine partita");
                         break;
                     }
                 case "1":
                     {
-                        giocoController.PuntoGiocoE(1);
+                        Console.WriteLine("punto fatto");
+                        giocoController.PuntoGiocoE();
                         break;
                     }
                 default:
                     {
-                        Console.WriteLine("messaggio non riconosciuto ({0})", msg);
+                        Console.WriteLine("messaggio non riconosciuto");
                         break;
                     }
             }

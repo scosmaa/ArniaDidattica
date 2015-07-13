@@ -23,17 +23,19 @@ namespace ArniaDidattica
             {
                 case "0":
                     {//fine pallina
+                        Console.WriteLine("fine partita");
                         giocoController.finePallinaGiocoC();
                         break;
                     }
                 case "1":
                     {//preso un fiore
+                        Console.WriteLine("fiore preso");
                         giocoController.PuntoGiocoC();
                         break;
                     }
                 default:
                     {
-                        Console.WriteLine("messaggio non riconosciuto ({0})", msg);
+                        Console.WriteLine("messaggio non riconosciuto");
                         break;
                     }
             }

@@ -11,7 +11,6 @@ namespace ArniaDidattica
 {
     class Program
     {
-
         public const int NMAXQUADRI = 3;//numero massimo consentito di quadri
 
         static public Base arduinoBase;
@@ -24,7 +23,8 @@ namespace ArniaDidattica
 
         static void Main(string[] args)
         {
-            Process.Start(@"..\..\..\serverDHCP\OpenDHCPServer.exe","-v");//avvio dhcp
+            AppDomain.CurrentDomain.ProcessExit += uscita;
+            Process.Start(@"..\..\..\serverDHCP\OpenDHCPServer.exe", "-v");//avvio dhcp
             base_connessa = false;
             int id = -1;
             string baseUrl = "http://localhost:9999";
@@ -54,7 +54,9 @@ namespace ArniaDidattica
 
             arduinoBase = new Base(connesso);
             Console.WriteLine("Base connessa.");
-            Console.WriteLine("Starting web Server...");
+            Console.WriteLine("Avviando l'interfaccia...");
+            foreach (Process p in Process.GetProcessesByName("firefox"))
+            { p.Kill(); }
             Process.Start(baseUrl);     //avvio homepage
             base_connessa = true;
 
@@ -68,9 +70,9 @@ namespace ArniaDidattica
                 {
                     arduinoBase = new Base(connesso);
                     Console.WriteLine("Base connessa.");
-                    Console.WriteLine("Starting web Server...");
-                    ////foreach (Process p in Process.GetProcessesByName("firefox"))
-                    // { p.Kill(); }
+                    Console.WriteLine("Avviando l'interfaccia...");
+                    foreach (Process p in Process.GetProcessesByName("firefox"))
+                    { p.Kill(); }
                     Process.Start(baseUrl);
                     base_connessa = true;
                 }
@@ -275,6 +277,12 @@ namespace ArniaDidattica
 
             //secondo quadro
             #endregion
+        }
+
+        private static void uscita(object sender, EventArgs e)
+        {
+            Process[] proc = Process.GetProcessesByName("OpenDHCPServer");
+            proc[0].Kill();
         }
 
         static int getId(TcpClient socket)//da socket a id dell'arduino

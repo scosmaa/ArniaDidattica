@@ -134,12 +134,12 @@ namespace ArniaDidattica.WebAPI
             hubContext.Clients.All.AvvioVideo3();
         }
 
-        [Route("puntoE/{p}")]
+        [Route("puntoE")]
         [HttpGet]
-        public void PuntoGiocoE(int p)
+        public void PuntoGiocoE()
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
-            hubContext.Clients.All.puntoGiocoE(p);
+            hubContext.Clients.All.puntoGiocoE();
         }
 
         #endregion
@@ -150,6 +150,5 @@ namespace ArniaDidattica.WebAPI
         {
             Program.q_prec = (n);
         }
-
     }
 }
