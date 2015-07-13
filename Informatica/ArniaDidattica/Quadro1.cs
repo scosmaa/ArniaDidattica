@@ -19,7 +19,7 @@ namespace ArniaDidattica
             {
                 default:
                     {
-                        Console.WriteLine("messaggio non riconosciuto");
+                        Console.Write("messaggio non riconosciuto");
                         break;
                     }
             }

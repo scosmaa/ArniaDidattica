@@ -19,7 +19,7 @@ namespace ArniaDidattica
 
         public override void gestioneMsg(string msg)
         {
-            switch (msg.Substring(0,1))
+            switch (msg)
             {
                 case "0":
                     {//fine pallina

@@ -61,7 +61,7 @@ namespace ArniaDidattica
 
                     // mando il messaggio su console 
                     string msg = Encoding.UTF8.GetString(bytes);
-                    msg = msg.Substring(0, msg.IndexOf("\0"));
+                    msg = msg.Substring(0, 1);
                     Console.Write("Arduino " + nome + " > " + msg + " -> ");
 
                     gestioneMsg(msg);
