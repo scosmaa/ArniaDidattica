@@ -1,17 +1,5 @@
 ﻿[
-    {
-        "domanda": "Le api producono marmellata",
-        "risposta1": "Vero",
-        "risposta2": "Falso",
-        "corretta": 1
-    },
-    {
-        "domanda": "Le api impollinano i fiori",
-        "risposta1": "Vero",
-        "risposta2": "Falso",
-        "corretta": 1
-    },
-    {
+   {
         "domanda": "L'ape regina si alimenta con ....",
         "risposta1": "Polline",
         "risposta2": "Pappa Reale",
@@ -35,13 +23,7 @@
         "risposta2": "Falso",
         "corretta": 1
     },
-    {
-        "domanda": "Il fuco è maschio o femmina?",
-        "risposta1": "Maschio",
-        "risposta2": "Femmina",
-        "corretta": 1
-    },
-    {
+   {
         "domanda": "L'ape regina non depone le uova",
         "risposta1": "Vero",
         "risposta2": "Falso",
@@ -57,6 +39,18 @@
         "domanda": "Con cosa viene nutrita la larva nel secondo periodo di vita?",
         "risposta1": "Misto polline e miele",
         "risposta2":  "Pappa Reale",
+        "corretta" : 1
+    },
+    {
+        "domanda": "Le api mangiano il miele",
+        "risposta1": "Vero",
+        "risposta2": "Falso",
+        "corretta" : 1
+    },
+    {
+        "domanda": "Quante api regine ci sono in un alveare?",
+        "risposta1": "Una sola",
+        "risposta2":  "Tante",
         "corretta" : 1
     }
 ]
