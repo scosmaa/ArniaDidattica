@@ -24,6 +24,7 @@ namespace ArniaDidattica
 
         static void Main(string[] args)
         {
+            Process.Start(@"..\..\..\serverDHCP\OpenDHCPServer.exe","-v");//avvio dhcp
             base_connessa = false;
             int id = -1;
             string baseUrl = "http://localhost:9999";

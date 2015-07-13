@@ -191,7 +191,7 @@ function ($scope, $location, $http, $rootScope) {
                 }
             case 6:
                 {
-                    faseDelGioco = 3;
+                    faseDelGioco = 4;
                     $location.path('quiz');
                     break;
                 }
@@ -440,11 +440,11 @@ function ($scope, $location, $http) {
 
     $scope.pallineRimanenti = pallineGiocoE;
 
-    $http.get('api/invio/3/' + pallineGiocoE).success(function () { });//invio lo start all'arduino
+   // $http.get('api/invio/3/' + pallineGiocoE).success(function () { });//invio lo start all'arduino
 
-    hub.client.puntoGiocoE = function (punto) {
-        punti = punti + valorePuntoGiocoE * punto;
-        $scope.puntiFatti = $scope.puntiFatti + valorePuntoGiocoE * punto;
+    /* Evento che viene chiamato se il giocatore ha premuto il bottone 0 */
+    hub.client.risposta0 = function () {
+        $http.get('api/invio/3/0').success(function () { });
         $scope.pallineRimanenti--;
 
         if ($scope.pallineRimanenti == 0 && nBambiniCheDevonoGiocare > 1) {
@@ -464,11 +464,48 @@ function ($scope, $location, $http) {
         }
         if ($scope.pallineRimanenti == 0 && nBambiniCheDevonoGiocare - 1 == 0) {
             //fine gioco
-            $.connection.hub.stop();
-            faseDelGioco = 6;
-            $location.path('quiz');
+            setTimeout(function () {
+                $.connection.hub.stop();
+                faseDelGioco = 6;
+                $location.path('quiz');
+            }, 2000); //pausa prima della fine            
         }
         $scope.$apply();
+    };
+    /* Evento che viene chiamato se il giocatore ha premuto il bottone 1 */
+    hub.client.risposta1 = function () {
+        $http.get('api/invio/3/1').success(function () { });
+        $scope.pallineRimanenti--;
+
+        if ($scope.pallineRimanenti == 0 && nBambiniCheDevonoGiocare > 1) {
+            //cambio giocatore
+            setTimeout(function () {
+                $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
+
+                $scope.puntiFatti = 0;
+                $scope.pallineRimanenti = pallineGiocoE;
+
+                $http.get('api/invio/3/' + pallineGiocoE).success(function () { });//invio lo start all'arduino
+
+                nBambiniCheDevonoGiocare--;
+                $scope.$apply();
+            }, 2000); //pausa prima del cambio del giocatore
+
+        }
+        if ($scope.pallineRimanenti == 0 && nBambiniCheDevonoGiocare - 1 == 0) {
+            //fine gioco
+            setTimeout(function () {
+                $.connection.hub.stop();
+                faseDelGioco = 6;
+                $location.path('quiz');
+            }, 2000); //pausa prima della fine 
+        }
+        $scope.$apply();
+    };
+
+    hub.client.puntoGiocoE = function (punto) {
+        punti = punti + valorePuntoGiocoE * punto;
+        $scope.puntiFatti = $scope.puntiFatti + valorePuntoGiocoE * punto;
     };
 
     // Start the connection.
