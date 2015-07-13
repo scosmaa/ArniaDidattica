@@ -9,12 +9,18 @@ int button1state = 0;
 int button2state = 0;
 int var = 2;
 
-boolean invioAppoggiato=true;
+boolean invioAppoggiato = true;
+boolean invioSconnesso = false;
+
 
 EthernetClient server;
-byte mac[] = { 0x02, 0x00, 0x00, 0x00, 0x00, 0x00 };
+byte mac[] = {
+  0x02, 0x00, 0x00, 0x00, 0x00, 0x00
+};
 
-byte ipserver[] = { 192, 168, 0, 200};
+byte ipserver[] = {
+  192, 168, 0, 200
+};
 byte buffer[1];
 void(* Riavvia)(void) = 0;
 
@@ -37,7 +43,7 @@ void setup()
 
     Serial.println("connessione fallita");
     delay(1000);
-  
+
   }
 
   Serial.println("connessione riuscita");
@@ -60,25 +66,34 @@ void loop()
   {
     Invia('1');
     delay(1000);
-  }  
-  
-  if (button2state == LOW&& invioAppoggiato)     //qualcosa appoggiato
-  {
-    Invia('2');
-    delay(1000);
-    invioAppoggiato=false;
+  }
+
+  if (button2state == LOW)     //qualcosa appoggiato
+  { //qualcosa
+    if ( invioAppoggiato)
+    {
+      Invia('c');
+      invioAppoggiato = false;
+      delay(1000);
+    }
+    invioSconnesso = true;   
   }
   else
-  {invioAppoggiato=true;}
-  
+  { //niente
+    if ( invioSconnesso)
+    {
+      Invia('s');
+      invioSconnesso = false;
+      delay(1000);
+    }
+    invioAppoggiato = true;
+  }
+
   if (server.connected() == false)
   {
     Serial.println("Disconnesso");
     Riavvia();
-
-
   }
-
 }
 
 
@@ -88,3 +103,5 @@ void Invia(char mess)
   Serial.println(mess);
   server.write(mess);
 }
+
+

@@ -1,0 +1,126 @@
+// INCLUSIONE LIBRERIE
+
+#include "libohiboard.h"
+#include "libohigrove/ohigrove.h"
+#include "libohigrove/led.h"
+#include "libohigrove/button.h"
+#include "libohigrove/analog-in.h"
+#include "libohigrove/serial.h"
+#include "libohigrove/digital-out.h"
+#include "gpio.h"
+
+
+#define DEBUG 0
+
+
+OhiGroveSerial_Device wifi =
+    {
+            .connector = OHIGROVE_CONN_UART,
+    };
+
+ void sendData(char* command, const int timeout, char* response);
+
+ char buffer[100];
+
+int main(void)
+{
+
+    // DICHIARAZIONE VARIABILI
+    int16_t i = 0;
+    int16_t BUTTON_1_STATE;
+    int16_t BUTTON_2_STATE;
+    int16_t SERVO = 0;
+    int16_t T = 0;
+
+    OhiGroveLed_Device rel =
+        {
+                .connector = OHIGROVE_CONN_D2,
+        };
+
+
+    // CONFIGURAZIONE PIN SERVO
+    Gpio_config (GPIO_PINS_PTE30, GPIO_PINS_OUTPUT);
+    Gpio_config (GPIO_PINS_PTB8, GPIO_PINS_OUTPUT);
+
+    //CONFIGURAZIONE PULSANTI
+    Gpio_config (GPIO_PINS_PTC0, GPIO_PINS_INPUT);
+    Gpio_config (GPIO_PINS_PTC3, GPIO_PINS_INPUT);
+
+
+    // INIZIALIZZAZIONE
+    OhiGrove_initBoard();
+    OhiGroveSerial_init(&wifi);
+    OhiGroveLed_init(&rel);
+
+        OhiGrove_delay(2000);
+        OhiGroveLed_on(&rel);
+        OhiGrove_delay(2000);
+
+
+        sendData( "AT+CWMODE=1", 1000, buffer);
+        sendData( "AT+CIPMUX=1", 1000, buffer);
+        sendData( "AT+CIPSTAMAC=\"02.00.00.00.00.01\"", 1000, buffer);
+        sendData( "AT+CWJAP=\"ArniaDidattica\",\"\"", 6000, buffer);
+        sendData( "AT+CIPSTART=0,\"TCP\",\"192.168.0.200\",2020",6000, buffer);
+
+
+
+
+    // CICLO FOR
+    for(;;)
+    {
+        i++;   // IMPLEMENTO DEL CICLO
+
+
+        while(1)
+        {
+            if(OhiGroveSerial_available(&wifi) > 0)
+                break;
+        }
+
+        while (T < 45)
+        {
+            Gpio_set(GPIO_PINS_PTE30);
+            OhiGrove_delay(3.5);
+            Gpio_clear(GPIO_PINS_PTE30);
+            OhiGrove_delay(16.5);
+            T = T + 1;
+        }
+        SERVO = 1;
+
+        }
+}
+
+
+
+void sendData(char* command, const int timeout, char* response)
+{
+//    char response[50];
+    uint8_t i;
+
+    OhiGroveSerial_println(&wifi,command); // send the read character to the esp8266
+
+    uint32_t time = OhiGrove_currentTime ();
+
+    while( (time+timeout) > OhiGrove_currentTime ())
+    {
+      while(OhiGroveSerial_available(&wifi)>0)
+      {
+
+        // The esp has data so display its output to the serial window
+        *response = OhiGroveSerial_read(&wifi); // read the next character.
+//        i++;
+        response++;
+      }
+    }
+    *response++ = 'E';
+    *response++ = 'n';
+    *response++ = 'D';
+    *response = '\0';
+
+#if (DEBUG == 1)
+        OhiGroveSerial_println(&wifi,response);
+#endif
+
+//    return response;
+}

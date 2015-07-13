@@ -1,0 +1,9 @@
+1. Installa Firefox e estensione Fullscreen (noi abbiamo usato Full Fullscreen 7.1 di "zedadiboy")
+2. Disabilitare screensaver
+3. Impostare casse predefinite
+4. Mettere IP Statico al ethernet (192.168.0,200/24)
+5. Compila e metti in autorun ArniaDidattica.exe e RunStandAlone.exe (DHCP)
+
+
+NB: Nello switch la rete è attivato il filtro wifi per MAC
+    Su Windows 8 abilitare l'apertura automatica del desktop
