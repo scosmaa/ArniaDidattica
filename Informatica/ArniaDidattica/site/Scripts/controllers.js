@@ -528,16 +528,29 @@ function ($scope, $location, $http) {
 beehiveControllers.controller('risultato', ['$scope', '$location', '$http',
   function ($scope, $location, $http) {
       if ($location.url() == "/risultato") {
-          //$scope.punteggioFinale = punti;
-          setTimeout(function () {
-              Reset();
-              $.connection.hub.stop();
-              //faseDelGioco = 6;
+          
+			var currentPercent = 0;
+			var puntiPerc = ((punti/75)*100);
 
-              $http.get('api/reset/0').success(function () { });
-              $location.path('home');
-              $scope.$apply();
-          }, 60000); //timeout
+			window.setInterval(function() {
+			  if(currentPercent < puntiPerc)
+			  {
+			    currentPercent += 1;
+			  }
+			  else {
+			    document.getElementById('honey').style.MozAnimationPlayState = "paused";
+			  }
+			}, 100);
+
+	      setTimeout(function () {
+	          Reset();
+	          $.connection.hub.stop();
+	          //faseDelGioco = 6;
+
+	          $http.get('api/reset/0').success(function () { });
+	          $location.path('home');
+	          $scope.$apply();
+	      }, 6000000); //timeout
       }
       //fare vasetto
       $scope.BtnReset = function () {

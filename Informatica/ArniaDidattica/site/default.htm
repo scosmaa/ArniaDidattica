@@ -55,22 +55,22 @@
             font-variant: small-caps;
         }
 
-            p.inserisci_quadro {
-                margin: 27px;
-                font-size: 40px;
-            }
+        p.inserisci_quadro {
+            margin: 27px;
+            font-size: 40px;
+        }
 
-            p.testogrande {
-                font-size: 90px;
-            }
+        p.testogrande {
+            font-size: 90px;
+        }
 
-            p.testomedio {
-                font-size: 50px;
-            }
+        p.testomedio {
+            font-size: 50px;
+        }
 
-            p.testopiccolo {
-                font-size: 30px;
-            }
+        p.testopiccolo {
+            font-size: 30px;
+        }
 
         .blu {
             color: #2C76B1;
@@ -135,67 +135,59 @@
             width: auto;
         }
 
-        .blink_me {
-            -webkit-animation-name: blinker;
-            -webkit-animation-duration: 2s;
-            -webkit-animation-timing-function: linear;
-            -webkit-animation-iteration-count: infinite;
-            -moz-animation-name: blinker;
-            -moz-animation-duration: 2s;
-            -moz-animation-timing-function: linear;
-            -moz-animation-iteration-count: infinite;
-            animation-name: blinker;
-            animation-duration: 2s;
-            animation-timing-function: linear;
-            animation-iteration-count: infinite;
-        }
-
-        .fiore {
+         .fiore {
             width: 55px;
             height: 55px;
             padding: 1px;
         }
 
-        @-moz-keyframes blinker {
-            0% {
-                opacity: 1.0;
-            }
-
-            50% {
-                opacity: 0.0;
-            }
-
-            100% {
-                opacity: 1.0;
-            }
+        .fill_jar {
+            -moz-animation-name: fill_jar;
+            -moz-animation-duration: 10s;
+            -moz-animation-timing-function: linear;
+            -moz-animation-iteration-count: 1;
         }
 
-        @-webkit-keyframes blinker {
-            0% {
-                opacity: 1.0;
-            }
+       
+        @-moz-keyframes fill_jar 
+        {
+            0% 	{ background: 0% -300%; }
 
-            50% {
-                opacity: 0.0;
-            }
+            10% { background: 0% -(300-38)%; }
 
-            100% {
-                opacity: 1.0;
-            }
+            20% { background: 0% -(300-76)%; }
+
+            30% { background: 0% -(300-114)%; }
+
+            40% { background: 0% -(300-152)%; }
+
+            50% { background: 0% -(300-190)%; }
+
+            60% { background: 0% -(300-228)%; }
+
+            70% { background: 0% -(300-256)%; }
+
+            80% { background: 0% -(300-284)%; }
+
+            90% { background: 0% -(300-322)%; }
+
+            100% { background: 0% 40%; }
         }
 
-        @keyframes blinker {
-            0% {
-                opacity: 1.0;
-            }
+        .blink_me {
+            -moz-animation-name: blinker;
+            -moz-animation-duration: 2s;
+            -moz-animation-timing-function: linear;
+            -moz-animation-iteration-count: infinite;
+        }
 
-            50% {
-                opacity: 0.0;
-            }
+        @-moz-keyframes blinker 
+        {
+            0% 		{ opacity: 1.0; }
 
-            100% {
-                opacity: 1.0;
-            }
+            50% 	{ opacity: 0.0; }
+
+            100% 	{ opacity: 1.0; }
         }
 
         @font-face {
