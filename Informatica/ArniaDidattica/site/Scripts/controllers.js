@@ -529,8 +529,9 @@ beehiveControllers.controller('risultato', ['$scope', '$location', '$http',
   function ($scope, $location, $http) {
       if ($location.url() == "/risultato") {
           
+          punti = 75;
 			var currentPercent = 0;
-			var puntiPerc = ((punti/75)*100);
+			var puntiPerc = ((punti/76)*100);
 
 			window.setInterval(function() {
 			  if(currentPercent < puntiPerc)
