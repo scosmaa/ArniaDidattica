@@ -67,8 +67,13 @@ namespace ArniaDidattica.SignalR
 
         public void PuntoGiocoE()
         {
-            Clients.All.puntoGiocoC();
+            Clients.All.puntoGiocoE();
         }
+
+		public void PallaGiocoE()
+		{
+			Clients.All.pallaGiocoE();
+		}
 
         #endregion
 

@@ -149,6 +149,7 @@ function ($scope, $location, $http, $rootScope) {
         saltaQ1 = true;
         faseVideo = 1;
     }
+
     video.setAttribute('src', '../video/v' + faseVideo + '.mp4');
 
     video.focus();
@@ -348,7 +349,7 @@ function ($scope, $location, $http) {
     var tentativi = pallineGiocoC;
     var div = document.getElementById('fiori');
 
-    $http.get('api/invio/2/' + pallineGiocoC).success(function () { });//invio lo start all'arduino
+    //$http.get('api/invio/2/' + pallineGiocoC).success(function () { });//invio lo start all'arduino
 
     hub.client.puntoGiocoC = function () {
         $scope.esitoTiro = "preso un fiore!";
@@ -432,90 +433,49 @@ beehiveControllers.controller('quadro3', ['$scope', '$location',
 beehiveControllers.controller('giocoE', ['$scope', '$location', '$http',
 function ($scope, $location, $http) {
     faseDelGioco = 5;
-    $scope.puntiFatti = 0;
-
     var nBambiniCheDevonoGiocare = GESTIONEGRUPPI[(10 - numeroTotaleGiocatori)][faseDelGioco - 1];
+    var pallineRim = pallineGiocoE;
 
+    $scope.puntiFatti = 0;
     $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
+    $scope.pallineRimanenti = pallineRim;
+    $scope.$apply();
 
-    $scope.pallineRimanenti = pallineGiocoE;
+    /* Evento che viene chiamato premendo il pulsante sul quadro 3 */
+    hub.client.pallaGiocoE = function () {
+    	pallineRim--;
+    	$scope.pallineRimanenti = pallineRim;
+    	$scope.$apply();
 
-    /* Evento che viene chiamato se il giocatore ha premuto il bottone 0 */
-    hub.client.risposta0 = function () {
-        if ($scope.pallineRimanenti >= 1)// && nBambiniCheDevonoGiocare > 1) {
+        if (pallineRim <= 0)
         {
-            $scope.pallineRimanenti--;
+	        if (nBambiniCheDevonoGiocare <= 0) {
+	                $.connection.hub.stop();
+	                faseDelGioco = 6;
+	                $location.path('quiz');
+	                $scope.$apply();
+	        	 	//fine gioco
+	            }
+	        }
 
-            if (nBambiniCheDevonoGiocare > 1) {//cambio giocatore
-
-                $scope.cambio = "CAMBIO TURNO!";
-                $scope.$apply();
-                setTimeout(function () {
-                    $scope.cambio = "";
-                    $scope.$apply();
-                }, 1500); //timeout
-
-                setTimeout(function () {
-                    $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
-
-                    $scope.puntiFatti = 0;
-                    $scope.pallineRimanenti = pallineGiocoE;
-
-                    // $http.get('api/invio/3/').success(function () { });//invio lo start all'arduino
-
-                    nBambiniCheDevonoGiocare--;
-                    $scope.$apply();
-                }, 1000); //pausa prima del cambio del giocatore
-            }
-            else {//fine gioco
-                setTimeout(function () {
-                    $.connection.hub.stop();
-                    faseDelGioco = 6;
-                    $location.path('quiz');
-                    $scope.$apply();
-                }, 2000); //pausa prima della fine 
-            }
-        }
-        $scope.$apply();
-    };
-    /* Evento che viene chiamato se il giocatore ha premuto il bottone 1 */
-    hub.client.risposta1 = function () {
-        $scope.pallineRimanenti--;
-
-        if (nBambiniCheDevonoGiocare > 1) {//cambio giocatore
-
-            $scope.cambio = "CAMBIO TURNO!";
+	        $scope.cambio = "CAMBIO TURNO!";
             $scope.$apply();
+
             setTimeout(function () {
                 $scope.cambio = "";
-                $scope.$apply();
-            }, 1500); //timeout
-
-            setTimeout(function () {
                 $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
-
                 $scope.puntiFatti = 0;
-                $scope.pallineRimanenti = pallineGiocoE;
-
-                // $http.get('api/invio/3/').success(function () { });//invio lo start all'arduino
-
+                pallineRim = pallineGiocoE;
+                $scope.pallineRimanenti = pallineRim;
                 nBambiniCheDevonoGiocare--;
                 $scope.$apply();
-            }, 1000); //pausa prima del cambio del giocatore
-        }
-        else {//fine gioco
-            setTimeout(function () {
-                $.connection.hub.stop();
-                faseDelGioco = 6;
-                $location.path('quiz');
-                $scope.$apply();
-            }, 2000); //pausa prima della fine 
-        }
+            }, 4000); //timeout
     };
 
-    hub.client.puntoGiocoE = function (punto) {
-        punti = punti + valorePuntoGiocoE * punto;
-        $scope.puntiFatti = $scope.puntiFatti + valorePuntoGiocoE * punto;
+    hub.client.puntoGiocoE = function () {
+        punti += valorePuntoGiocoE;
+        $scope.puntiFatti += valorePuntoGiocoE ;
+        $scope.$apply();
     };
 
     // Start the connection.

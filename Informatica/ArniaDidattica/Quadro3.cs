@@ -20,12 +20,13 @@ namespace ArniaDidattica
         {
             switch (msg)
             {
-                case "0":
+                case "2":
                     {
-                        Console.WriteLine("fine partita");
+                        Console.WriteLine("pallina partita");
+						giocoController.PallaGiocoE();
                         break;
                     }
-                case "1":
+                case "3":
                     {
                         Console.WriteLine("punto fatto");
                         giocoController.PuntoGiocoE();

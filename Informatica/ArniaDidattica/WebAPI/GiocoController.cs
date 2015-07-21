@@ -134,6 +134,14 @@ namespace ArniaDidattica.WebAPI
             hubContext.Clients.All.AvvioVideo3();
         }
 
+		[Route("pallaE")]
+		[HttpGet]
+		public void PallaGiocoE()
+		{
+			var hubContext = GlobalHost.ConnectionManager.GetHubContext<ArniaVirtualeHub>();
+			hubContext.Clients.All.pallaGiocoE();
+		}
+
         [Route("puntoE")]
         [HttpGet]
         public void PuntoGiocoE()

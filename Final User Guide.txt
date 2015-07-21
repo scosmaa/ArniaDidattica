@@ -3,7 +3,7 @@
 3. Disabilitare screensaver
 4. Impostare casse predefinite
 5. Mettere IP Statico al ethernet (192.168.0,200/24)
-6. Copia la cartella ArniaDidattica e metti in autorun collegamento a ArniaDidattica.exe
+6. Copia la cartella ArniaDidatticaCompiled da qualche parte al sicuro e metti in autorun collegamento a ArniaDidattica.exe
 
 
 NB: Nello switch la rete è attivato il filtro wifi per MAC
