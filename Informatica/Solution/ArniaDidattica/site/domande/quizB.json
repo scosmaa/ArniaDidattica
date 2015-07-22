@@ -1,0 +1,32 @@
+﻿[
+    {
+        "domanda": "Cosa trasportano le api di pianta in pianta?",
+        "risposta1": "Polline",
+        "risposta2": "Nettare",
+        "corretta": 1
+    },
+    {
+        "domanda": "Con che cosa raccolgono il polline le api?",
+        "risposta1": "Bocca",
+        "risposta2": "Zampe",
+        "corretta": 2
+    },
+    {
+        "domanda": "Le api operaie raggruppano il polline in palline o in quadratini?",
+        "risposta1": "Quadratini",
+        "risposta2": "Palline",
+        "corretta": 2
+    },
+    {
+        "domanda": "Le api sono dotate di particolari attrezzi nelle zampe?",
+        "risposta1": "Vero",
+        "risposta2": "Falso",
+        "corretta": 1
+    },
+    {
+        "domanda": "Le spazzole composte da un pelo rigido sono sulle zampe anteriori",
+        "risposta1": "Vero",
+        "risposta2": "Falso",
+        "corretta": 2
+    }
+]

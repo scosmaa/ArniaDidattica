@@ -1,0 +1,17 @@
+﻿<Properties StartupItem="ArniaDidattica/ArniaDidattica.csproj">
+  <AuthorInfo Name="Classe Virtuale 2015" Email="" Copyright="GPL-3.0" Company="Loccioni" Trademark="" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="ArniaDidattica/site/Scripts/controllers.js">
+    <Files>
+      <File FileName="ArniaDidattica/SignalR/ArniaVirtualeHub.cs" Line="1" Column="1" />
+      <File FileName="ArniaDidattica/Program.cs" Line="1" Column="1" />
+      <File FileName="ArniaDidattica/site/Scripts/controllers.js" Line="484" Column="1" />
+      <File FileName="ArniaDidattica/WebAPI/GiocoController.cs" Line="1" Column="1" />
+      <File FileName="ArniaDidattica/site/default.htm" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
