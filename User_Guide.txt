@@ -5,7 +5,7 @@ Configurazione PC Bas
 4. Impostare casse predefinite
 5. Mettere IP Statico al ethernet (192.168.0,200/24)
 6. Copia la cartella ArniaDidattica_C da qualche parte al sicuro e metti in autorun collegamento a ArniaDidattica.exe
-	(si trova in ArniaDidattica_C/bin/Relase)
+	(si trova in ArniaDidattica_C/ArniaDidattica/Program/Arnia1.0)
 
 NB: Nello switch la rete è attivato il filtro wifi per MAC
     Su Windows 8 abilitare l'apertura automatica del desktop
