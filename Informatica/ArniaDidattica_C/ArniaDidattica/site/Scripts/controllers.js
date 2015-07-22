@@ -450,6 +450,7 @@ function ($scope, $location, $http) {
 
 		if (pallineRim <= 0)
         {
+<<<<<<< HEAD:Informatica/ArniaDidattica_C/ArniaDidattica/site/Scripts/controllers.js
             $scope.cambio = "CAMBIO TURNO!";
             
             $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
@@ -472,6 +473,32 @@ function ($scope, $location, $http) {
             $scope.$apply();
     	 	//fine gioco
         }
+=======
+	        if (nBambiniCheDevonoGiocare <= 0) 
+	        {
+                $.connection.hub.stop();
+                faseDelGioco = 6;
+                $location.path('quiz');
+                $scope.$apply();
+        	 	//fine gioco
+            }
+            else
+            {
+		        $scope.cambio = "CAMBIO TURNO!";
+	            $scope.$apply();
+
+	            setTimeout(function () {
+	                $scope.cambio = "";
+	                $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
+	                $scope.puntiFatti = 0;
+	                pallineRim = pallineGiocoE;
+	                $scope.pallineRimanenti = pallineRim;
+	                nBambiniCheDevonoGiocare--;
+	                $scope.$apply();
+	            }, 4000); //timeout
+        	}
+      	}
+>>>>>>> 10e10586b141279101bb294a4b99c081286ec1b5:Informatica/ArniaDidattica/site/Scripts/controllers.js
     };
 
     hub.client.puntoGiocoE = function () {
