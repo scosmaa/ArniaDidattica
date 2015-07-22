@@ -1,0 +1,28 @@
+﻿<Properties StartupItem="ArniaDidattica/ArniaDidattica.csproj">
+  <AuthorInfo Name="Classe Virtuale 2015" Email="" Copyright="GPL-3.0" Company="Loccioni" Trademark="" />
+<<<<<<< HEAD:Informatica/Solution/ArniaDidattica.userprefs
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="ArniaDidattica/site/Scripts/controllers.js">
+    <Files>
+      <File FileName="ArniaDidattica/SignalR/ArniaVirtualeHub.cs" Line="1" Column="1" />
+      <File FileName="ArniaDidattica/Program.cs" Line="1" Column="1" />
+      <File FileName="ArniaDidattica/site/Scripts/controllers.js" Line="484" Column="1" />
+      <File FileName="ArniaDidattica/WebAPI/GiocoController.cs" Line="1" Column="1" />
+      <File FileName="ArniaDidattica/site/default.htm" Line="1" Column="1" />
+=======
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="ArniaDidattica/site/default.htm">
+    <Files>
+      <File FileName="ArniaDidattica/SignalR/ArniaVirtualeHub.cs" Line="1" Column="1" />
+      <File FileName="ArniaDidattica/Program.cs" Line="1" Column="1" />
+      <File FileName="ArniaDidattica/site/Scripts/controllers.js" Line="485" Column="30" />
+      <File FileName="ArniaDidattica/WebAPI/GiocoController.cs" Line="1" Column="1" />
+      <File FileName="ArniaDidattica/site/default.htm" Line="4" Column="35" />
+>>>>>>> 10e10586b141279101bb294a4b99c081286ec1b5:Informatica/ArniaDidattica.userprefs
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
