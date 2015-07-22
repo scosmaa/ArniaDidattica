@@ -449,27 +449,30 @@ function ($scope, $location, $http) {
 
         if (pallineRim <= 0)
         {
-	        if (nBambiniCheDevonoGiocare <= 0) {
-	                $.connection.hub.stop();
-	                faseDelGioco = 6;
-	                $location.path('quiz');
-	                $scope.$apply();
-	        	 	//fine gioco
-	            }
-	        }
-
-	        $scope.cambio = "CAMBIO TURNO!";
-            $scope.$apply();
-
-            setTimeout(function () {
-                $scope.cambio = "";
-                $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
-                $scope.puntiFatti = 0;
-                pallineRim = pallineGiocoE;
-                $scope.pallineRimanenti = pallineRim;
-                nBambiniCheDevonoGiocare--;
+	        if (nBambiniCheDevonoGiocare <= 0) 
+	        {
+                $.connection.hub.stop();
+                faseDelGioco = 6;
+                $location.path('quiz');
                 $scope.$apply();
-            }, 4000); //timeout
+        	 	//fine gioco
+            }
+            else
+            {
+		        $scope.cambio = "CAMBIO TURNO!";
+	            $scope.$apply();
+
+	            setTimeout(function () {
+	                $scope.cambio = "";
+	                $scope.giocatore = prendiProssimoGiocatore(faseDelGioco);
+	                $scope.puntiFatti = 0;
+	                pallineRim = pallineGiocoE;
+	                $scope.pallineRimanenti = pallineRim;
+	                nBambiniCheDevonoGiocare--;
+	                $scope.$apply();
+	            }, 4000); //timeout
+        	}
+      	}
     };
 
     hub.client.puntoGiocoE = function () {
@@ -480,7 +483,6 @@ function ($scope, $location, $http) {
 
     // Start the connection.
     $.connection.hub.start();
-
 }]);
 
 
