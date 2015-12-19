@@ -1,0 +1,3 @@
+#!/bin/bash
+sudo ./opendhcpd -v -i opendhcp.ini
+

@@ -1,1 +1,0 @@
-@OpenDHCPServer.exe -v

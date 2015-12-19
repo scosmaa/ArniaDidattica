@@ -23,10 +23,24 @@ namespace ArniaDidattica
 
         static void Main(string[] args)
         {
-            AppDomain.CurrentDomain.ProcessExit += uscita;
+			AppDomain.CurrentDomain.ProcessExit += uscita;
 
-			Process.Start(@"..\..\serverDHCP\OpenDHCPServer.exe", "-v");//avvio dhcp
-			
+			//Avvio DHCP in base al OS
+
+			int sis = (int) Environment.OSVersion.Platform;
+			if ((sis == 4) || (sis == 128)) 
+			{
+				Process proc = new Process();
+				proc.StartInfo.FileName = "/usr/bin/sudo";
+				proc.StartInfo.Arguments = "DHCP_Linux/opendhcpd -v -i DHCP_Linux/opendhcp.ini";
+				proc.Start();
+			} 
+			else 
+			{
+				Process.Start(@"DHCP_Win\OpenDHCPServer.exe", "-v");
+			}
+
+
             base_connessa = false;
             int id = -1;
             string baseUrl = "http://localhost:9999";
@@ -34,9 +48,10 @@ namespace ArniaDidattica
             int porta = 2020;
             GiocoController giocoController = new GiocoController();
 
-            WebApp.Start<Avvio>(baseUrl);//debug
+            
+            WebApp.Start<Avvio>(baseUrl);
 
-            server = new TcpListener(porta);//in ascolto
+			server = new TcpListener(porta);//in ascolto
             server.Start();
 
             //Attendo base
@@ -283,8 +298,21 @@ namespace ArniaDidattica
 
         private static void uscita(object sender, EventArgs e)
         {
-            Process[] proc = Process.GetProcessesByName("OpenDHCPServer");
-            proc[0].Kill();
+			Process proc = new Process();
+
+			int sis = (int) Environment.OSVersion.Platform;
+			if ((sis == 4) || (sis == 128)) 
+			{
+				proc.StartInfo.FileName = "sudo";
+				proc.StartInfo.Arguments = "killall opendhcpd";
+				proc.StartInfo.UseShellExecute = false;
+				proc.StartInfo.CreateNoWindow = true;
+			} 
+			else 
+			{
+				Process[] proc_win = Process.GetProcessesByName("OpenDHCPServer");
+				proc_win[0].Kill();
+			}
         }
 
         static int getId(TcpClient socket)//da socket a id dell'arduino
