@@ -1,9 +1,9 @@
-# T.I.D. - ArniaDidattica
+# T.I.D. - ArniaDidattica #
 
 Technologic Interactive Desk (TID):
 uno strumento totalmente open source col quale i docenti delle scuole elementari potranno fare lezioni ai bambini in modo smart e divertente. 
 
-Configurazione PC Base
+## Configurazione PC Base ##
 1. Installare Firefox e l'estensione R-Kiosk
 2. Disabilitare notifica crash firefox (About:Config -> browser.sessionstore.resume_from_crash = false;)
 3. Disabilitare screensaver
@@ -13,5 +13,4 @@ Configurazione PC Base
 
 NB: Su Windows 8 abilitare l'apertura automatica del desktop
 
-Classe Virtuale 2k15
-~                       
+### Classe Virtuale 2k15 ###
